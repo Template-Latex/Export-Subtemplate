@@ -1,6 +1,6 @@
 ﻿# coding=utf-8
 """
-EXPORT
+EXPORT-SUBTEMPLATE
 Genera distintos sub-releases.
 
 Autor: PABLO PIZARRO @ github.com/ppizarror
@@ -34,7 +34,7 @@ TITLE_UPLOADING = 'Export Template | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.1'
+__version__ = '2.1.1'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal

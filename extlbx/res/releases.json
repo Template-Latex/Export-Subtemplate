@@ -57,7 +57,7 @@
     "MESSAGE": "\nCREANDO TEMPLATE-AUXILIARES v{0}",
     "NAME": "Template-Auxiliares",
     "PAGECONFFILE": "lib/pageconf.tex",
-    "PDF_FOLDER": "../pdf-version/Auxiliares/Template v{0}.pdf",
+    "PDF_FOLDER": "../pdf-version/Auxiliares/Template-Auxiliares v{0}.pdf",
     "ROOT": "../Template-Auxiliares/",
     "SINGLEFILE": "auxiliar.tex",
     "STATS": {
@@ -167,7 +167,7 @@
     "MESSAGE": "\nCREANDO TEMPLATE-CONTROLES v{0}",
     "NAME": "Template-Controles",
     "PAGECONFFILE": "lib/pageconf.tex",
-    "PDF_FOLDER": "../pdf-version/Controles/Template v{0}.pdf",
+    "PDF_FOLDER": "../pdf-version/Controles/Template-Controles v{0}.pdf",
     "ROOT": "../Template-Controles/",
     "SINGLEFILE": "control.tex",
     "STATS": {
@@ -281,7 +281,7 @@
     "MAINFILE": "main.tex",
     "MESSAGE": "\nCREANDO TEMPLATE-INFORME v{0}",
     "NAME": "Template-Informe",
-    "PDF_FOLDER": "../pdf-version/Informe/Template v{0}.pdf",
+    "PDF_FOLDER": "../pdf-version/Informe/Template-Informe v{0}.pdf",
     "ROOT": "",
     "SINGLEFILE": "informe.tex",
     "STATS": {
