@@ -49,6 +49,7 @@
       "main.tex": false
     },
     "FUNCTIONS": "lib/function/auxiliar.tex",
+    "GIT": "../Template-Auxiliares/",
     "ID": 2,
     "IMPORTSFILE": "lib/imports.tex",
     "INITCONFFILE": "lib/initconf.tex",
@@ -158,6 +159,7 @@
       "main.tex": false
     },
     "FUNCTIONS": "lib/function/control.tex",
+    "GIT": "../Template-Controles/",
     "ID": 3,
     "IMPORTSFILE": "lib/imports.tex",
     "INITCONFFILE": "lib/initconf.tex",
@@ -273,6 +275,7 @@
       "lib/styles.tex": true,
       "main.tex": false
     },
+    "GIT": "../Template-Informe/",
     "ID": 1,
     "INITCONFFILE": "lib/initconf.tex",
     "MAINFILE": "main.tex",

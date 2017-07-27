@@ -12,9 +12,13 @@ from releases import RELEASES
 # noinspection PyUnresolvedReferences
 import convert
 # noinspection PyUnresolvedReferences
+from convert import call, CREATE_NO_WINDOW, MSG_FOKTIMER
+# noinspection PyUnresolvedReferences
 from version import *
 # noinspection PyUnresolvedReferences
 from sound import Sound
+# noinspection PyUnresolvedReferences
+from resources import *
 
 # noinspection PyCompatibility,PyUnresolvedReferences
 from Tkinter import *
@@ -28,13 +32,6 @@ from vframe import VerticalScrolledFrame
 
 # noinspection PyUnresolvedReferences
 from pyperclip import copy as extlbcbpaste
-
-# Archivo de configuraciones
-__actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace('\\', '/')
-EXTLBX_CONFIGS = __actualpath + '/config.json'
-
-# Archivo de licencia
-EXTLBX_LICENSE = __actualpath + '/LICENSE'
 
 
 # noinspection PyCompatibility

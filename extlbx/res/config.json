@@ -26,7 +26,7 @@
   },
   "WINDOW_SIZE": {
     "EVENT": false,
-    "WIDTH": 420,
+    "WIDTH": 440,
     "HEIGHT": 180
   },
   "CLIPBOARD_FORMAT": {
@@ -41,5 +41,9 @@
   "INFORME_ROOT": {
     "EVENT": false,
     "VALUE": "../Template-Informe/"
+  },
+  "PDF_ROOT": {
+    "EVENT": false,
+    "VALUE": "../pdf-version/"
   }
 }

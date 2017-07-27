@@ -761,7 +761,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             export_single.set_ghostpath(czip['GHOST'])
             export_single.add_file(release['SINGLEFILE'])
             export_single.add_folder('images')
-            export_single.add_file('lib/example.tex', subrlfolder + 'lib/')
+            export_single.add_file('lib/example.tex', 'lib/')
         export_single.save()
 
     # Limpia el diccionario

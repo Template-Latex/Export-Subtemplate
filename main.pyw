@@ -11,11 +11,14 @@ Licencia: MIT
 # Importación de librerías
 from extlbx import *
 from functools import partial
+from PIL import ImageTk
 import json
 import signal
 import traceback
 
 # Constantes
+GITHUB_PDF_COMMIT = 'Se agrega pdf v{0} de {1}'
+GITHUB_REP_COMMIT = 'Version {0}'
 HELP = {
     'ESC': 'Cierra la aplicación',
     'F1': 'Muestra esta ayuda',
@@ -27,10 +30,11 @@ HELP = {
 LIMIT_MESSAGES_CONSOLE = 1000
 TITLE = 'Export Template'
 TITLE_LOADING = 'Export Template | Espere ...'
+TITLE_UPLOADING = 'Export Template | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.0.0'
+__version__ = '2.1'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -214,9 +218,14 @@ class CreateVersion(object):
             self._clearconsole()
             for j in RELEASES.keys():
                 if self._release.get() == RELEASES[j]['NAME']:
+                    v = get_last_ver(RELEASES[j]['STATS']['FILE'])
                     self._versiontxt.configure(state='normal')
                     self._print('SELECCIONADO: {0}'.format(RELEASES[j]['NAME']))
-                    self._print('ÚLTIMA VERSIÓN: {0}'.format(get_last_ver(RELEASES[j]['STATS']['FILE'])))
+                    self._print('ÚLTIMA VERSIÓN: {0}'.format(v))
+                    if self._uploaded[j] != v.split(' ')[0]:
+                        self._uploadstatebtn('on')
+                    else:
+                        self._uploadstatebtn('off')
                     return
 
         self._root = Tk()
@@ -241,7 +250,7 @@ class CreateVersion(object):
 
         # Estilo ventana
         self._root.title(TITLE)
-        self._root.iconbitmap('extlbx/icon.ico')
+        self._root.iconbitmap(EXTLBX_ICON)
         fonts = [tkFont.Font(family='Courier', size=8),
                  tkFont.Font(family='Verdana', size=6),
                  tkFont.Font(family='Times', size=10),
@@ -280,12 +289,21 @@ class CreateVersion(object):
         self._versionstr.trace('w', lambda name, index, mode, sv=self._versionstr: _checkver(sv))
         self._versiontxt = Entry(f1, relief=GROOVE, width=10, font=fonts[5], textvariable=self._versionstr)
         self._versiontxt.configure(state='disabled')
-        self._versiontxt.pack(side=LEFT, padx=5)
+        self._versiontxt.pack(side=LEFT, padx=5, pady=2)
         self._versiontxt.focus()
 
         # Botón iniciar
         self._startbutton = Button(f1, text='Iniciar', state='disabled', relief=GROOVE, command=self._start)
-        self._startbutton.pack(side=RIGHT, padx=0, anchor=E)
+        self._startbutton.pack(side=LEFT, padx=5, anchor=W)
+
+        # Uploads
+        upimg = ImageTk.PhotoImage(file=EXTLBX_BTN_UPLOAD)
+        self._uploadbutton = Button(f1, image=upimg, relief=GROOVE, height=20, width=20,
+                                    command=self._upload_github, border=0)
+        self._uploadbutton.image = upimg
+        self._uploadbutton.pack(side=RIGHT, padx=1, anchor=E)
+        self._uploadstatebtn('off')
+        self._checkuploaded()
 
         # Consola
         self._info_slider = VerticalScrolledFrame(f2)
@@ -313,6 +331,19 @@ class CreateVersion(object):
                 HELP[self._configs[i]['KEY'].replace('<', '').replace('>', '')] = 'Activa/Desactiva {0}'.format(i)
         self._root.bind('<Control-z>', _copyver)
         self._root.bind('<Control-q>', _kill)
+
+    def _checkuploaded(self):
+        """
+        Chequea los archivos cargados a github.
+
+        :return:
+        """
+        with open(EXTLBX_UPLOAD) as json_data:
+            self._uploaded = json.load(json_data)
+
+        for j in RELEASES.keys():
+            if j not in self._uploaded:
+                self._uploaded[j] = '0.0.0'
 
     def _clearconsole(self, scrolldir=1):
         """
@@ -412,6 +443,15 @@ class CreateVersion(object):
         """
         self._root.mainloop()
 
+    def _saveupload(self):
+        """
+        Guarda los uploads en el json.
+
+        :return:
+        """
+        with open(EXTLBX_UPLOAD, 'w') as outfile:
+            json.dump(self._uploaded, outfile)
+
     def _start(self, *args):
         """
         Retorna el valor ingresado
@@ -430,6 +470,7 @@ class CreateVersion(object):
                     t = RELEASES[j]['ID']
                     lastv = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     msg = RELEASES[j]['MESSAGE']
+                    break
 
             # Se crea la versión
             ver, versiondev, versionhash = mk_version(self._versionstr.get())
@@ -466,6 +507,8 @@ class CreateVersion(object):
                                                  informeroot=self._getconfig('INFORME_ROOT'))
                     else:
                         raise Exception('ERROR: ID INCORRECTO')
+                    self._print(' ')
+                    self._uploadstatebtn('on')
                 except Exception as e:
                     tkMessageBox.showerror('Error fatal', 'Ocurrio un error inesperado al procesar la solicitud.')
                     self._print('ERROR: EXCEPCIÓN INESPERADA')
@@ -488,7 +531,100 @@ class CreateVersion(object):
         self._root.update()
         self._root.after(500, _callback)
         self._startbutton.configure(state='disabled')
+        self._uploadstatebtn('off')
         return
+
+    def _uploadstatebtn(self, state):
+        """
+        Cambia el estado del botón upload.
+
+        :param state: Estado
+        :return:
+        """
+        if state is 'on':
+            self._uploadbutton.configure(state='normal')
+            self._uploadbutton.configure(cursor='hand2')
+        else:
+            self._uploadbutton.configure(state='disabled')
+            self._uploadbutton.configure(cursor='arrow')
+
+    def _upload_github(self, *args):
+        """
+        Sube la versión a github.
+
+        :param args: Argumentos opcionales
+        :return: None
+        """
+
+        def _scroll():
+            self._info_slider.canv.yview_scroll(1000, 'units')
+
+        def _callback():
+            t = 0
+            lastv = ''
+            jver = ''
+            lastvup = ''
+            for j in RELEASES.keys():
+                if self._release.get() == RELEASES[j]['NAME']:
+                    lastv = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
+                    lastvup = lastv.split('-')[0]
+                    jver = j
+                    break
+
+            # Sube el contenido a la plataforma
+            try:
+                # Se cambia el path
+                os.chdir(self._getconfig('MAIN_ROOT'))
+                cmsg = GITHUB_REP_COMMIT.format(lastv)
+
+                # Se llama a consola para añadir carpeta a git
+                t = time.time()
+                with open(os.devnull, 'w') as FNULL:
+                    with Cd(RELEASES[jver]['GIT']):
+                        call(['git', 'add', '--all'], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+                        call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+                        call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
+
+                # Se sube archivo pdf
+                pdf_file = RELEASES[jver]['PDF_FOLDER'].format(lastvup)
+                cmsg = GITHUB_PDF_COMMIT.format(lastv, RELEASES[jver]['NAME'])
+                if os.path.isfile(pdf_file):
+                    with open(os.devnull, 'w') as FNULL:
+                        with Cd(self._getconfig('PDF_ROOT')):
+                            pdf_file = pdf_file.replace(self._getconfig('PDF_ROOT'), '')
+                            call(['git', 'add', pdf_file], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+                            call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+                            call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
+                self._print(MSG_FOKTIMER.format((time.time() - t)))
+
+                # Se guarda la versión
+                self._uploaded[jver] = lastv
+                self._saveupload()
+                self._uploadstatebtn('off')
+            except Exception as e:
+                tkMessageBox.showerror('Error fatal', 'Ocurrio un error inesperado al procesar la solicitud.')
+                self._print('ERROR: EXCEPCIÓN INESPERADA')
+                self._print(str(e))
+                self._print(traceback.format_exc())
+                self._sounds.alert()
+
+            self._uploadstatebtn('on')
+            self._root.configure(cursor='arrow')
+            self._root.title(TITLE)
+            self._root.update()
+            self._root.after(50, _scroll)
+            return
+
+        self._root.title(TITLE_UPLOADING)
+        self._root.configure(cursor='wait')
+        self._root.update()
+        for k in RELEASES.keys():
+            if self._release.get() == RELEASES[k]['NAME']:
+                v = get_last_ver(RELEASES[k]['STATS']['FILE']).split(' ')[0]
+                self._print('SUBIENDO VERSIÓN {0} DE {1} ... '.format(v, RELEASES[k]['NAME']), end='')
+                break
+        self._root.after(500, _callback)
+        self._uploadstatebtn('off')
 
 
 if __name__ == '__main__':
