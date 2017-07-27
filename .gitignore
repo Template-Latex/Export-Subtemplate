@@ -1,0 +1,16 @@
+# Archivos compilados python
+*.pyc
+
+# Pycharm
+.idea/
+
+# Gráficos
+*.png
+
+# Subreleases
+subreleases/
+.releases/
+release/*.zip
+
+# Logs
+*.log
