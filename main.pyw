@@ -346,15 +346,15 @@ class CreateVersion(object):
         self._cnextnl = False
 
         # Eventos
-        self._root.bind('<MouseWheel>', _scroll_console)
+        self._root.bind('<Control-q>', _kill)
+        self._root.bind('<Control-z>', _copyver)
+        self._root.bind('<Down>', _create_ver_d)
         self._root.bind('<Escape>', _kill)
         self._root.bind('<F1>', _show_help)
         self._root.bind('<F2>', _printconfig)
         self._root.bind('<F3>', _show_about)
         self._root.bind('<F4>', _clear)
-        self._root.bind('<Control-z>', _copyver)
-        self._root.bind('<Control-q>', _kill)
-        self._root.bind('<Down>', _create_ver_d)
+        self._root.bind('<MouseWheel>', _scroll_console)
         self._root.bind('<Up>', _create_ver_u)
         for i in self._configs.keys():
             if self._configs[i]['EVENT']:
