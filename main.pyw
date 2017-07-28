@@ -34,7 +34,7 @@ TITLE_UPLOADING = 'Export Template | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.1.5'
+__version__ = '2.1.6'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -57,9 +57,11 @@ class CreateVersion(object):
                 mk_version(ver)
                 self._startbutton.configure(state='normal', cursor='hand2')
                 self._versiontxt.bind('<Return>', self._start)
+                self._validversion = True
             except:
                 self._startbutton.configure(state='disabled', cursor='arrow')
                 self._versiontxt.bind('<Return>')
+                self._validversion = False
 
         def _create_ver_d(*args):
             """
@@ -321,6 +323,7 @@ class CreateVersion(object):
         self._versiontxt.configure(state='disabled')
         self._versiontxt.pack(side=LEFT, padx=5, pady=2)
         self._versiontxt.focus()
+        self._validversion = False
 
         # Botón iniciar
         self._startbutton = Button(f1, text='Iniciar', state='disabled', relief=GROOVE, command=self._start)
@@ -357,6 +360,7 @@ class CreateVersion(object):
         self._root.bind('<F3>', _show_about)
         self._root.bind('<F4>', _clear)
         self._root.bind('<MouseWheel>', _scroll_console)
+        self._root.bind('<Return>', self._start)
         self._root.bind('<Up>', _create_ver_u)
         for i in self._configs.keys():
             if self._configs[i]['EVENT']:
@@ -561,6 +565,8 @@ class CreateVersion(object):
             self._root.after(50, _scroll)
             return
 
+        if not self._validversion:
+            return
         self._root.title(TITLE_LOADING)
         self._root.configure(cursor='wait')
         self._root.update()
