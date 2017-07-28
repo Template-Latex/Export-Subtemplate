@@ -34,7 +34,7 @@ TITLE_UPLOADING = 'Export Template | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.1.3'
+__version__ = '2.1.4'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -483,7 +483,8 @@ class CreateVersion(object):
 
     def _start(self, *args):
         """
-        Retorna el valor ingresado
+        Genera la versión ingresada.
+
         :return:
         """
 
