@@ -34,7 +34,7 @@ TITLE_UPLOADING = 'Export Template | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.1.2'
+__version__ = '2.1.3'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -343,24 +343,23 @@ class CreateVersion(object):
         self._info.pack(anchor=NW, fill=BOTH)
         self._info_slider.scroller.pack_forget()
         self._console = []
-        self._root.bind('<MouseWheel>', _scroll_console)
         self._cnextnl = False
 
-        self._root.bind('<Escape>', _kill)
-
         # Eventos
+        self._root.bind('<MouseWheel>', _scroll_console)
+        self._root.bind('<Escape>', _kill)
         self._root.bind('<F1>', _show_help)
         self._root.bind('<F2>', _printconfig)
         self._root.bind('<F3>', _show_about)
         self._root.bind('<F4>', _clear)
-        for i in self._configs.keys():
-            if self._configs[i]['EVENT']:
-                self._root.bind(self._configs[i]['KEY'], partial(_set_config, i, '!'))
-                HELP[self._configs[i]['KEY'].replace('<', '').replace('>', '')] = 'Activa/Desactiva {0}'.format(i)
         self._root.bind('<Control-z>', _copyver)
         self._root.bind('<Control-q>', _kill)
         self._root.bind('<Down>', _create_ver_d)
         self._root.bind('<Up>', _create_ver_u)
+        for i in self._configs.keys():
+            if self._configs[i]['EVENT']:
+                self._root.bind(self._configs[i]['KEY'], partial(_set_config, i, '!'))
+                HELP[self._configs[i]['KEY'].replace('<', '').replace('>', '')] = 'Activa/Desactiva {0}'.format(i)
 
     def _checkuploaded(self):
         """
