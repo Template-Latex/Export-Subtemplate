@@ -165,3 +165,43 @@ def validate_ver(newver, lastver):
                             return int(nv2.split('-')[1]) > int(lv2.split('-')[1])
                         else:
                             return False
+
+
+def v_down(v):
+    """
+    Crea una subversión superior a partir de v.
+
+    :param v: Versión
+    :return: Subversión superior
+    """
+    _v = v.split('-')
+    if len(_v) == 1:
+        nv = v + '-1'
+    else:
+        if int(_v[1][0]) < 9:
+            nv = _v[0] + '-' + str(int(_v[1][0]) + 1)
+        else:
+            return v_up(v)
+    return nv.replace('.', '').replace('-', '')
+
+
+def v_up(v):
+    """
+    Crea una versión superior a partir de v.
+
+    :param v: Versión
+    :return: Versión superior
+    """
+    _v = v.split('-')[0].split('.')
+    x = int(_v[0])
+    y = int(_v[1])
+    z = int(_v[2])
+
+    z += 1
+    if z == 10:
+        z = 0
+        y += 1
+    if y == 10:
+        y = 0
+        x += 1
+    return str(x) + str(y) + str(z)

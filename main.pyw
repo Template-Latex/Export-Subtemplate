@@ -34,7 +34,7 @@ TITLE_UPLOADING = 'Export Template | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.1.1'
+__version__ = '2.1.2'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -60,6 +60,32 @@ class CreateVersion(object):
             except:
                 self._startbutton.configure(state='disabled', cursor='arrow')
                 self._versiontxt.bind('<Return>')
+
+        def _create_ver_d(*args):
+            """
+            Crea una subversión mayor.
+
+            :param args: Argumentos opcionales
+            :return:
+            """
+            for j in RELEASES.keys():
+                if self._release.get() == RELEASES[j]['NAME']:
+                    v = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
+                    self._versionstr.set(v_down(v))
+                    self._startbutton.focus_force()
+
+        def _create_ver_u(*args):
+            """
+            Crea una versión mayor.
+
+            :param args: Argumentos opcionales
+            :return:
+            """
+            for j in RELEASES.keys():
+                if self._release.get() == RELEASES[j]['NAME']:
+                    v = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
+                    self._versionstr.set(v_up(v))
+                    self._startbutton.focus_force()
 
         def _copyver(*args):
             """
@@ -236,6 +262,8 @@ class CreateVersion(object):
         with open(EXTLBX_CONFIGS) as json_data:
             d = json.load(json_data)
             self._configs = d
+        self._lascpdf = True
+        self._lastsav = True
 
         # Se obtiene el root del archivo actual
         self._configs["MAIN_ROOT"]["VALUE"] = str(os.path.abspath(os.path.dirname(__file__))).replace('\\', '/') + '/'
@@ -301,7 +329,7 @@ class CreateVersion(object):
         self._uploadbutton = Button(f1, image=upimg, relief=GROOVE, height=20, width=20,
                                     command=self._upload_github, border=0)
         self._uploadbutton.image = upimg
-        self._uploadbutton.pack(side=RIGHT, padx=1, anchor=E)
+        self._uploadbutton.pack(side=RIGHT, padx=2, anchor=E)
         self._uploadstatebtn('off')
         self._checkuploaded()
 
@@ -331,6 +359,8 @@ class CreateVersion(object):
                 HELP[self._configs[i]['KEY'].replace('<', '').replace('>', '')] = 'Activa/Desactiva {0}'.format(i)
         self._root.bind('<Control-z>', _copyver)
         self._root.bind('<Control-q>', _kill)
+        self._root.bind('<Down>', _create_ver_d)
+        self._root.bind('<Up>', _create_ver_u)
 
     def _checkuploaded(self):
         """
@@ -507,8 +537,11 @@ class CreateVersion(object):
                                                  informeroot=self._getconfig('INFORME_ROOT'))
                     else:
                         raise Exception('ERROR: ID INCORRECTO')
+                    self._lastsav = self._getconfig('SAVE')
+                    self._lascpdf = self._getconfig('COMPILE') and self._getconfig('SAVE_PDF')
                     self._print(' ')
-                    self._uploadstatebtn('on')
+                    if self._lastsav:
+                        self._uploadstatebtn('on')
                 except Exception as e:
                     tkMessageBox.showerror('Error fatal', 'Ocurrio un error inesperado al procesar la solicitud.')
                     self._print('ERROR: EXCEPCIÓN INESPERADA')
@@ -588,7 +621,7 @@ class CreateVersion(object):
                 # Se sube archivo pdf
                 pdf_file = RELEASES[jver]['PDF_FOLDER'].format(lastvup)
                 cmsg = GITHUB_PDF_COMMIT.format(lastv, RELEASES[jver]['NAME'])
-                if os.path.isfile(pdf_file):
+                if os.path.isfile(pdf_file) and self._lascpdf:
                     with open(os.devnull, 'w') as FNULL:
                         with Cd(self._getconfig('PDF_ROOT')):
                             pdf_file = pdf_file.replace(self._getconfig('PDF_ROOT'), '')
@@ -607,8 +640,8 @@ class CreateVersion(object):
                 self._print(str(e))
                 self._print(traceback.format_exc())
                 self._sounds.alert()
+                self._uploadstatebtn('on')
 
-            self._uploadstatebtn('on')
             self._root.configure(cursor='arrow')
             self._root.title(TITLE)
             self._root.update()
