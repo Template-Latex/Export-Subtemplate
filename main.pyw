@@ -18,6 +18,7 @@ import traceback
 
 # Constantes
 GITHUB_PDF_COMMIT = 'Se agrega pdf v{0} de {1}'
+GITHUB_PRINT_MSG = 'SUBIENDO v{0} DE {1} ... '
 GITHUB_REP_COMMIT = 'Version {0}'
 HELP = {
     'ESC': 'Cierra la aplicación',
@@ -28,13 +29,13 @@ HELP = {
     'ENTER': 'Inicia la rutina'
 }
 LIMIT_MESSAGES_CONSOLE = 1000
-TITLE = 'Export Template'
-TITLE_LOADING = 'Export Template | Espere ...'
-TITLE_UPLOADING = 'Export Template | Cargando a GitHub ...'
+TITLE = 'Export-Subtemplate'
+TITLE_LOADING = '{0} | Espere ...'
+TITLE_UPLOADING = '{0} | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.1.6'
+__version__ = '2.1.7'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -54,7 +55,9 @@ class CreateVersion(object):
             """
             ver = sv.get()
             try:
-                mk_version(ver)
+                v, dev, h = mk_version(ver)
+                if not validate_ver(dev, self._lastloadedv):
+                    raise Exception('Version invalida')
                 self._startbutton.configure(state='normal', cursor='hand2')
                 self._versiontxt.bind('<Return>', self._start)
                 self._validversion = True
@@ -256,6 +259,7 @@ class CreateVersion(object):
                         self._uploadstatebtn('on')
                     else:
                         self._uploadstatebtn('off')
+                    self._lastloadedv = v.split(' ')[0]
                     return
 
         self._root = Tk()
@@ -324,6 +328,7 @@ class CreateVersion(object):
         self._versiontxt.pack(side=LEFT, padx=5, pady=2)
         self._versiontxt.focus()
         self._validversion = False
+        self._lastloadedv = ''
 
         # Botón iniciar
         self._startbutton = Button(f1, text='Iniciar', state='disabled', relief=GROOVE, command=self._start)
@@ -567,7 +572,7 @@ class CreateVersion(object):
 
         if not self._validversion:
             return
-        self._root.title(TITLE_LOADING)
+        self._root.title(TITLE_LOADING.format(TITLE))
         self._root.configure(cursor='wait')
         self._root.update()
         self._root.after(500, _callback)
@@ -656,13 +661,13 @@ class CreateVersion(object):
             self._root.after(50, _scroll)
             return
 
-        self._root.title(TITLE_UPLOADING)
+        self._root.title(TITLE_UPLOADING.format(TITLE))
         self._root.configure(cursor='wait')
         self._root.update()
         for k in RELEASES.keys():
             if self._release.get() == RELEASES[k]['NAME']:
                 v = get_last_ver(RELEASES[k]['STATS']['FILE']).split(' ')[0]
-                self._print('SUBIENDO VERSIÓN {0} DE {1} ... '.format(v, RELEASES[k]['NAME']), end='')
+                self._print(GITHUB_PRINT_MSG.format(v, RELEASES[k]['NAME']), end='')
                 break
         self._root.after(500, _callback)
         self._uploadstatebtn('off')

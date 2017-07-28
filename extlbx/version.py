@@ -123,7 +123,13 @@ def validate_ver(newver, lastver):
         a = u[0] == v[0] and u[1] == v[1] and u[2] > v[2]
         b = u[0] == v[0] and u[1] > v[1]
         c = u[0] > v[0]
-        return a or b or c
+        if not a and not b and not c:
+            return False
+        return (a and not b and not c) or (not a and b and not c) or (not a and not b and c)
+
+    # noinspection PyUnusedLocal
+    def _check2(u, v):
+        return u[0] == v[0] and u[1] == v[1] and u[2] == v[2]
 
     if len(lastver) == 5:
         lastver += '-0'
@@ -140,31 +146,34 @@ def validate_ver(newver, lastver):
     if _check1(nv1, lv1):
         return True
     else:
-        lv2 = lastver[1]
-        nv2 = newver[1]
-        if len(nv2) > 1 and len(lv2) == 1:
-            return True
-        elif len(nv2) == 1 and len(lv2) > 1:
-            return False
-        else:
-            if len(nv2) == 1 and len(lv2) == 1:
-                return int(nv2) > int(lv2)
+        if _check2(nv1, lv1):
+            lv2 = lastver[1]
+            nv2 = newver[1]
+            if len(nv2) > 1 and len(lv2) == 1:
+                return True
+            elif len(nv2) == 1 and len(lv2) > 1:
+                return False
             else:
-                lv3 = lv2.split('-')[0]
-                nv3 = nv2.split('-')[0]
-
-                if nv3 == 'pre' and lv3 != 'pre':
-                    return True
-                if nv3 == 'pre' and lv3 == 'pre':
-                    return int(nv2.split('-')[1]) > int(lv2.split('-')[1])
+                if len(nv2) == 1 and len(lv2) == 1:
+                    return int(nv2) > int(lv2)
                 else:
-                    if nv3 == 'beta' and lv3 == 'alpha':
+                    lv3 = lv2.split('-')[0]
+                    nv3 = nv2.split('-')[0]
+
+                    if nv3 == 'pre' and lv3 != 'pre':
                         return True
+                    if nv3 == 'pre' and lv3 == 'pre':
+                        return int(nv2.split('-')[1]) > int(lv2.split('-')[1])
                     else:
-                        if nv3 == 'alpha' and lv3 == 'alpha':
-                            return int(nv2.split('-')[1]) > int(lv2.split('-')[1])
+                        if nv3 == 'beta' and lv3 == 'alpha':
+                            return True
                         else:
-                            return False
+                            if nv3 == 'alpha' and lv3 == 'alpha':
+                                return int(nv2.split('-')[1]) > int(lv2.split('-')[1])
+                            else:
+                                return False
+        else:
+            return False
 
 
 def v_down(v):
