@@ -34,7 +34,7 @@ TITLE_UPLOADING = 'Export Template | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.1.4'
+__version__ = '2.1.5'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -73,6 +73,7 @@ class CreateVersion(object):
                     v = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     self._versionstr.set(v_down(v))
                     self._startbutton.focus_force()
+                    return
 
         def _create_ver_u(*args):
             """
@@ -86,6 +87,7 @@ class CreateVersion(object):
                     v = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     self._versionstr.set(v_up(v))
                     self._startbutton.focus_force()
+                    return
 
         def _copyver(*args):
             """
@@ -216,7 +218,7 @@ class CreateVersion(object):
             self._print('\tAutor: {0}\n'.format(__author__))
             license = file_to_list(EXTLBX_LICENSE)
             for line in license:
-                self._print(line, scrolldir=-1)
+                self._print(line.strip(), scrolldir=-1)
 
         def _show_help(*args):
             """
