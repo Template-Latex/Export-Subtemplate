@@ -34,6 +34,7 @@ LOG_MSG = {
     'CHANGED': 'Cambiando subrelease a {0} v{1}',
     'COPY': 'Copiando versión {0} de {1} al portapapeles',
     'CREATE_V': 'Creando versión {0} de {1}',
+    'CREATE_V_COMPLETE': 'Proceso finalizado',
     'END': 'Programa cerrado',
     'OPEN': 'Inicio Export-Subtemplate v{0}',
     'OTHER': '{0}',
@@ -42,7 +43,8 @@ LOG_MSG = {
     'SHOWHELP': 'Mostrando la ayuda',
     'SUBV+': 'Creando subversión mayor de {0} a {1}',
     'SUBV-': 'Creando subversión menor de {0} a {1}',
-    'UPLOAD_V': 'Subiendo versión {0} de {1} a GitHub'
+    'UPLOAD_COMPLETE': 'Carga completa',
+    'UPLOAD_V': 'Subiendo versión {0} de {1} a GitHub',
 }
 TITLE = 'Export-Subtemplate'
 TITLE_LOADING = '{0} | Espere ...'
@@ -50,7 +52,7 @@ TITLE_UPLOADING = '{0} | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.1.8'
+__version__ = '2.2.0'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -617,6 +619,7 @@ class CreateVersion(object):
             self._versiontxt.delete(0, 'end')
             self._root.update()
             self._root.after(50, _scroll)
+            self._log('CREATE_V_COMPLETE')
             return
 
         if not self._validversion:
@@ -664,7 +667,7 @@ class CreateVersion(object):
                     lastv = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     lastvup = lastv.split('-')[0]
                     jver = j
-                    self._log('UPLOAD_V', text=[RELEASES[j]['NAME'], lastvup])
+                    self._log('UPLOAD_V', text=[lastvup, RELEASES[j]['NAME']])
                     break
 
             # Sube el contenido a la plataforma
@@ -706,6 +709,7 @@ class CreateVersion(object):
                 self._sounds.alert()
                 self._uploadstatebtn('on')
 
+            self._log('UPLOAD_COMPLETE')
             self._root.configure(cursor='arrow')
             self._root.title(TITLE)
             self._root.update()
