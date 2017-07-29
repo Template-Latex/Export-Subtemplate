@@ -380,6 +380,9 @@ class CreateVersion(object):
                 self._root.bind(self._configs[i]['KEY'], partial(_set_config, i, '!'))
                 HELP[self._configs[i]['KEY'].replace('<', '').replace('>', '')] = 'Activa/Desactiva {0}'.format(i)
 
+        # Se agrega entrada al log
+        self._log('OPEN')
+
     def _checkuploaded(self):
         """
         Chequea los archivos cargados a github.
@@ -492,7 +495,7 @@ class CreateVersion(object):
         self._root.mainloop()
 
     @staticmethod
-    def _log(msg, txt):
+    def _log(msg, txt=''):
         """
         Crea una entrada en el log.
 
@@ -500,7 +503,7 @@ class CreateVersion(object):
         """
         try:
             with open(LOG_FILE, 'a') as logfile:
-                logfile.write(msg.format(txt))
+                logfile.write('[{0}] {1}\n'.format(time.strftime('%d/%m/%Y %H:%M:%S'), LOG_MSG[msg].format(txt)))
         except:
             dt = open(LOG_FILE, 'w')
             dt.close()
