@@ -29,13 +29,21 @@ HELP = {
     'ENTER': 'Inicia la rutina'
 }
 LIMIT_MESSAGES_CONSOLE = 1000
+LOG_FILE = 'log.txt'
+LOG_MSG = {
+    'CHANGED': 'Cambiando subrelease a {0}',
+    'CREATE_V': 'Creando versión {0} de {1}',
+    'END': 'Programa cerrado',
+    'OPEN': 'Inicio programa',
+    'UPLOAD_V': 'Subiendo versión {0} de {1}'
+}
 TITLE = 'Export-Subtemplate'
 TITLE_LOADING = '{0} | Espere ...'
 TITLE_UPLOADING = '{0} | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.1.7'
+__version__ = '2.1.8'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -482,6 +490,20 @@ class CreateVersion(object):
         :return:
         """
         self._root.mainloop()
+
+    @staticmethod
+    def _log(msg, txt):
+        """
+        Crea una entrada en el log.
+
+        :return:
+        """
+        try:
+            with open(LOG_FILE, 'a') as logfile:
+                logfile.write(msg.format(txt))
+        except:
+            dt = open(LOG_FILE, 'w')
+            dt.close()
 
     def _saveupload(self):
         """

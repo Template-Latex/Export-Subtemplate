@@ -471,7 +471,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[mainfile] = find_delete(files[mainfile], '% TABLA DE CONTENIDOS - ÍNDICE', white_end_block=True)
     files[mainfile] = find_delete(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
     files[mainfile] = find_delete(files[mainfile], '% CONFIGURACIONES FINALES', white_end_block=True)
-    ra = find_line(files[mainfile], 'nombredelinforme')
+    ra = find_line(files[mainfile], 'titulodelinforme')
     files[mainfile][ra] = '\def\\tituloauxiliar {Título de la auxiliar}\n'
     ra = find_line(files[mainfile], 'temaatratar')
     files[mainfile][ra] = '\def\\temaatratar {Tema de la auxiliar}\n'
@@ -523,9 +523,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
     # CAMBIO INITCONF
     fl = release['INITCONFFILE']
-    ra, _ = find_block(files[fl], '\checkvardefined{\\nombredelinforme}')
+    ra, _ = find_block(files[fl], '\checkvardefined{\\titulodelinforme}')
     files[fl][ra] = '\checkvardefined{\\tituloauxiliar}\n'
-    ra, _ = find_block(files[fl], '\g@addto@macro\\nombredelinforme\\xspace')
+    ra, _ = find_block(files[fl], '\g@addto@macro\\titulodelinforme\\xspace')
     files[fl][ra] = '\t\g@addto@macro\\tituloauxiliar\\xspace\n'
     ra, _ = find_block(files[fl], '\ifthenelse{\isundefined{\\tablaintegrantes}}{')
     files[fl][ra] = '\ifthenelse{\isundefined{\\equipodocente}}{\n'
