@@ -31,11 +31,18 @@ HELP = {
 LIMIT_MESSAGES_CONSOLE = 1000
 LOG_FILE = 'log.txt'
 LOG_MSG = {
-    'CHANGED': 'Cambiando subrelease a {0}',
+    'CHANGED': 'Cambiando subrelease a {0} v{1}',
+    'COPY': 'Copiando versión {0} de {1} al portapapeles',
     'CREATE_V': 'Creando versión {0} de {1}',
     'END': 'Programa cerrado',
-    'OPEN': 'Inicio programa',
-    'UPLOAD_V': 'Subiendo versión {0} de {1}'
+    'OPEN': 'Inicio Export-Subtemplate v{0}',
+    'OTHER': '{0}',
+    'PRINTCONFIG': 'Mostrando configuraciones',
+    'SHOWABOUT': 'Mostrando acerca de',
+    'SHOWHELP': 'Mostrando la ayuda',
+    'SUBV+': 'Creando subversión mayor de {0} a {1}',
+    'SUBV-': 'Creando subversión menor de {0} a {1}',
+    'UPLOAD_V': 'Subiendo versión {0} de {1} a GitHub'
 }
 TITLE = 'Export-Subtemplate'
 TITLE_LOADING = '{0} | Espere ...'
@@ -86,6 +93,7 @@ class CreateVersion(object):
                     v = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     self._versionstr.set(v_down(v))
                     self._startbutton.focus_force()
+                    self._log('SUBV-', text=[RELEASES[j]['NAME'], v])
                     return
 
         def _create_ver_u(*args):
@@ -100,6 +108,7 @@ class CreateVersion(object):
                     v = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     self._versionstr.set(v_up(v))
                     self._startbutton.focus_force()
+                    self._log('SUBV+', text=[RELEASES[j]['NAME'], v])
                     return
 
         def _copyver(*args):
@@ -115,6 +124,7 @@ class CreateVersion(object):
                     extlbcbpaste(self._getconfig('CLIPBOARD_FORMAT').format(v))
                     if self._getconfig('INFOCONSOLE'):
                         self._print('INFO: VERSION COPIADA')
+                    self._log('COPY', text=[v, RELEASES[j]['NAME']])
                     return
             if self._getconfig('INFOCONSOLE'):
                 self._print('ERROR: TEMPLATE NO ESCOGIDO')
@@ -146,6 +156,7 @@ class CreateVersion(object):
                 else:
                     os.kill(os.getpid(), signal.SIGKILL)
 
+            self._log('END')
             self._root.destroy()
             exit()
 
@@ -167,6 +178,7 @@ class CreateVersion(object):
             for j in key:
                 if self._configs[j]['EVENT']:
                     self._print('\t{0} [{1}]'.format(j.ljust(maxlen), self._getconfig(j)))
+            self._log('PRINTCONFIG')
 
         def _scroll_console(event):
             """
@@ -232,6 +244,7 @@ class CreateVersion(object):
             license = file_to_list(EXTLBX_LICENSE)
             for line in license:
                 self._print(line.strip(), scrolldir=-1)
+            self._log('SHOWABOUT')
 
         def _show_help(*args):
             """
@@ -246,6 +259,7 @@ class CreateVersion(object):
             keys.sort()
             for k in keys:
                 self._print('\t{0}: {1}'.format(k, HELP[k]), scrolldir=-1)
+            self._log('SHOWHELP')
 
         def _update_ver(*args):
             """
@@ -268,6 +282,7 @@ class CreateVersion(object):
                     else:
                         self._uploadstatebtn('off')
                     self._lastloadedv = v.split(' ')[0]
+                    self._log('CHANGED', text=[RELEASES[j]['NAME'], v])
                     return
 
         self._root = Tk()
@@ -381,7 +396,7 @@ class CreateVersion(object):
                 HELP[self._configs[i]['KEY'].replace('<', '').replace('>', '')] = 'Activa/Desactiva {0}'.format(i)
 
         # Se agrega entrada al log
-        self._log('OPEN')
+        self._log('OPEN', text=__version__)
 
     def _checkuploaded(self):
         """
@@ -495,15 +510,20 @@ class CreateVersion(object):
         self._root.mainloop()
 
     @staticmethod
-    def _log(msg, txt=''):
+    def _log(msg, mode='INFO', text=''):
         """
         Crea una entrada en el log.
 
+        :type text: str, list
         :return:
         """
         try:
+            d = time.strftime('%d/%m/%Y %H:%M:%S')
             with open(LOG_FILE, 'a') as logfile:
-                logfile.write('[{0}] {1}\n'.format(time.strftime('%d/%m/%Y %H:%M:%S'), LOG_MSG[msg].format(txt)))
+                if isinstance(text, list):
+                    logfile.write('{1} [{0}] {2}\n'.format(d, mode, LOG_MSG[msg].format(*text)))
+                else:
+                    logfile.write('{1} [{0}] {2}\n'.format(d, mode, LOG_MSG[msg].format(text)))
         except:
             dt = open(LOG_FILE, 'w')
             dt.close()
@@ -531,11 +551,13 @@ class CreateVersion(object):
             t = 0
             lastv = ''
             msg = ''
+            relnm = ''
             for j in RELEASES.keys():
                 if self._release.get() == RELEASES[j]['NAME']:
                     t = RELEASES[j]['ID']
                     lastv = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     msg = RELEASES[j]['MESSAGE']
+                    relnm = RELEASES[j]['NAME']
                     break
 
             # Se crea la versión
@@ -548,6 +570,7 @@ class CreateVersion(object):
             else:
                 try:
                     self._print(msg.format(versiondev))
+                    self._log('CREATE_V', text=[versiondev, relnm])
                     if t == 1:
                         convert.export_informe(ver, versiondev, versionhash, printfun=self._print, doclean=True,
                                                dosave=self._getconfig('SAVE'), docompile=self._getconfig('COMPILE'),
@@ -580,6 +603,7 @@ class CreateVersion(object):
                         self._uploadstatebtn('on')
                 except Exception as e:
                     tkMessageBox.showerror('Error fatal', 'Ocurrio un error inesperado al procesar la solicitud.')
+                    self._log('OTHER', text=str(e), mode='ERROR')
                     self._print('ERROR: EXCEPCIÓN INESPERADA')
                     self._print(str(e))
                     self._print(traceback.format_exc())
@@ -640,6 +664,7 @@ class CreateVersion(object):
                     lastv = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     lastvup = lastv.split('-')[0]
                     jver = j
+                    self._log('UPLOAD_V', text=[RELEASES[j]['NAME'], lastvup])
                     break
 
             # Sube el contenido a la plataforma
@@ -674,6 +699,7 @@ class CreateVersion(object):
                 self._uploadstatebtn('off')
             except Exception as e:
                 tkMessageBox.showerror('Error fatal', 'Ocurrio un error inesperado al procesar la solicitud.')
+                self._log('OTHER', text=str(e), mode='ERROR')
                 self._print('ERROR: EXCEPCIÓN INESPERADA')
                 self._print(str(e))
                 self._print(traceback.format_exc())

@@ -14,4 +14,4 @@ release/*.zip
 
 # Logs
 *.log
-log
+log.txt
