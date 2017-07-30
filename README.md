@@ -12,7 +12,7 @@ Aplicación que permite generar subtemplates a partir de Template-Informe.
 [![Template-Informes](http://latex.ppizarror.com/Template-Informe/resources/templates/informe.svg)](https://github.com/Template-Latex/Template-Informe/)
 
 <p align="center">
-  <img src="http://latex.ppizarror.com/Template-Informe/resources/export-subtemplate.PNG" alt="Informe" width="70%px" />
+  <img src="http://latex.ppizarror.com/Template-Informe/resources/export-subtemplate.PNG" alt="Informe" width="35%px" />
 </p>
 
 ## Licencia
