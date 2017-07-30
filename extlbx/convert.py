@@ -489,7 +489,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
     files[fl] = find_delete(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
-    ra, rb = find_block(files[fl], '% CONFIGURACIÓN PORTADA Y HEADERS', True)
+    ra, rb = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
     files[fl] = del_block_from_list(files[fl], ra, rb)
     for cdel in ['namereferences', 'nomltwsrc', 'nomltwfigure', 'nomltwtable', 'nameappendixsection',
                  'nomltappendixsection']:
