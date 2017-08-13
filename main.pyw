@@ -32,8 +32,9 @@ LIMIT_MESSAGES_CONSOLE = 1000
 LOG_FILE = 'log.txt'
 LOG_MSG = {
     'CHANGED': 'Cambiando subrelease a {0} v{1}',
-    'COPY': 'Copiando versión {0} de {1} al portapapeles',
-    'CREATE_V': 'Creando versión {0} de {1}',
+    'CONFIG': 'Estableciendo parametro <{0}> en <{1}>',
+    'COPY': 'Copiando version {0} de {1} al portapapeles',
+    'CREATE_V': 'Creando version {0} de {1}',
     'CREATE_V_COMPLETE': 'Proceso finalizado',
     'END': 'Programa cerrado',
     'OPEN': 'Inicio Export-Subtemplate v{0}',
@@ -41,10 +42,10 @@ LOG_MSG = {
     'PRINTCONFIG': 'Mostrando configuraciones',
     'SHOWABOUT': 'Mostrando acerca de',
     'SHOWHELP': 'Mostrando la ayuda',
-    'SUBV+': 'Creando subversión mayor de {0} a {1}',
-    'SUBV-': 'Creando subversión menor de {0} a {1}',
+    'SUBV+': 'Creando subversion mayor de {0} a {1}',
+    'SUBV-': 'Creando subversion menor de {0} a {1}',
     'UPLOAD_COMPLETE': 'Carga completa',
-    'UPLOAD_V': 'Subiendo versión {0} de {1} a GitHub',
+    'UPLOAD_V': 'Subiendo version {0} de {1} a GitHub',
 }
 TITLE = 'Export-Subtemplate'
 TITLE_LOADING = '{0} | Espere ...'
@@ -52,7 +53,7 @@ TITLE_UPLOADING = '{0} | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.2.1'
+__version__ = '2.2.3'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -221,7 +222,9 @@ class CreateVersion(object):
                 self._configs[paramname]['VALUE'] = not self._configs[paramname]['VALUE']
             else:
                 self._configs[paramname]['VALUE'] = paramvalue
-            self._print('SE ESTABLECIO <{0}> EN {1}'.format(paramname, self._configs[paramname]['VALUE']))
+            vl = [paramname, self._configs[paramname]['VALUE']]
+            self._print('SE ESTABLECIO <{0}> EN {1}'.format(*vl))
+            self._log('CONFIG', text=vl, mode='CFG')
 
         def _set_templatever(template_name, *args):
             """

@@ -285,7 +285,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                                     if libr == configfile:
                                         try:
                                             if libdata[libdatapos + 1][0] == '%' and srclin.strip() is '':
-                                                srclin = ''
+                                                srclin = '\n'
                                         except:
                                             pass
 
@@ -297,7 +297,8 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                                     else:
                                         fl.write(srclin)
 
-                            fl.write('\n')  # Se agrega espacio vacío
+                            if libr != configfile:
+                                fl.write('\n')  # Se agrega espacio vacío
                         else:
                             fl.write(d.replace('lib/', ''))
                         write = False
@@ -691,7 +692,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                                     else:
                                         fl.write(srclin)
 
-                            fl.write('\n')  # Se agrega espacio vacío
+                            if libr != configfile:
+                                fl.write('\n')  # Se agrega espacio vacío
                         else:
                             fl.write(d.replace('lib/', ''))
                         write = False
@@ -1037,7 +1039,8 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                                     else:
                                         fl.write(srclin)
 
-                            fl.write('\n')  # Se agrega espacio vacío
+                            if libr != configfile:
+                                fl.write('\n')  # Se agrega espacio vacío
                         else:
                             fl.write(d.replace('lib/', ''))
                         write = False
