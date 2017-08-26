@@ -326,7 +326,10 @@
           "auxiliar_main.tex",
           "auxiliar.tex",
           "auxiliar_pageconf.tex",
-          "auxiliar_title.tex"
+          "auxiliar_title.tex",
+          "auxiliar_imports.tex",
+          "control_example.tex",
+          "control_pageconf.tex"
         ],
         "FILE": "release/Template-Informe.zip",
         "GHOST": ""
