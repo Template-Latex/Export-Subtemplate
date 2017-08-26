@@ -127,6 +127,7 @@ def plot_stats(statfile, statplotctime, statplotlcode):
         # Tiempo de compilación
         tme = stats.tmean(timecomp)
         trc = stats.trim_mean(timecomp, 0.15)
+
         plt.figure(1)
         fig, ax = plt.subplots()
         ax.plot(numcomp, timecomp, 'c', label=u'Tiempo compilación (s)')
