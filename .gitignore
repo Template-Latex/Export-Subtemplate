@@ -15,3 +15,6 @@ release/*.zip
 # Logs
 *.log
 log.txt
+
+# Test file
+_test

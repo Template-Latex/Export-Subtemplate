@@ -229,7 +229,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         data.insert(1,
                     '% Advertencia:  Documento generado automáticamente a partir del main.tex y\n%               los '
                     'archivos .tex de la carpeta lib/\n')
-        data[codetablewidthpos] = data[codetablewidthpos].replace(itableoriginal, itablenew)
+        # data[codetablewidthpos] = data[codetablewidthpos].replace(itableoriginal, itablenew)
         line = 0
         stconfig = False  # Indica si se han escrito comentarios en configuraciones
 
@@ -485,7 +485,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     cdel = ['addemptypagetwosides', 'nomlttable', 'nomltsrc', 'nomltfigure',
             'nomltcont', 'nameportraitpage', 'nameabstract', 'indextitlecolor',
             'portraittitlecolor', 'fontsizetitlei', 'styletitlei',
-            'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex']
+            'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
+            'nomchapter']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -495,7 +496,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     for cdel in ['namereferences', 'nomltwsrc', 'nomltwfigure', 'nomltwtable', 'nameappendixsection',
                  'nomltappendixsection']:
         ra, rb = find_block(files[fl], cdel, True)
-        files[fl][ra] = files[fl][ra].replace('   %', '%')
+        files[fl][ra] = files[fl][ra].replace('    %', '%')
     ra, rb = find_block(files[fl], 'showdotontitles', True)
     nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     files[fl][ra] = nconf
@@ -503,13 +504,13 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     nconf = replace_argument(files[fl][ra], 1, '2.30').replace(' %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'cfgshowbookmarkmenu', True)
-    nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, 'false').replace('%', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'cfgbookmarksopenlevel', True)
     nconf = replace_argument(files[fl][ra], 1, '1')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'tablepadding', True)
-    files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1,style2\n')
+    files[fl].insert(ra + 1, '\def\\templatestyle {style1}       % Estilo del template: style1,style2\n')
 
     # CAMBIA IMPORTS
     fl = release['IMPORTSFILE']
