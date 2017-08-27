@@ -70,7 +70,7 @@ def find_replace(data, block, newblock, white_end_block=False, iadd=0, jadd=0, v
     return replace_block_from_list(data, newblock, i + iadd, j + jadd)
 
 
-def find_delete(data, block, white_end_block=False, iadd=0, jadd=0):
+def find_delete(data, block, white_end_block=False, iadd=0, jadd=0, altending=None):
     """
     Busca el bloque en una lista de datos y lo elimina.
 
@@ -79,9 +79,10 @@ def find_delete(data, block, white_end_block=False, iadd=0, jadd=0):
     :param iadd: Agrega líneas al inicio del bloque
     :param jadd: Agrega líneas al término del bloque
     :param white_end_block: Indica si el bloque termina en espacio en blanco o con llave
+    :param altending: Final alternativo bloque
     :return:
     """
-    ra, rb = find_block(data, block, white_end_block)
+    ra, rb = find_block(data, block, blankend=white_end_block, altend=altending)
     return del_block_from_list(data, ra + iadd, rb + jadd)
 
 
@@ -131,11 +132,11 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     main_data = open(mainfile)
     main_data.read()
     initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
-    codetablewidthpos = find_line(main_data, '\\begin{minipage}{0.976\\textwidth}')
+    # codetablewidthpos = find_line(main_data, '\\begin{minipage}{0.976\\textwidth}')
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
-    itableoriginal = '0.976\\textwidth'
-    itablenew = '1.0126\\textwidth'
+    # itableoriginal = '0.976\\textwidth'
+    # itablenew = '1.0126\\textwidth'
     versionheader = '% Versión:      {0} ({1})\n'
     main_data.close()
 
@@ -221,6 +222,17 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         data[l_thash] = d_thash
         data[l_ttype] = d_ttype
         data[l_tvdev] = d_tvdev
+
+        # Se buscan funciones no válidas en compacto
+        delfile = 'lib/function/core.tex'
+        fl = files[delfile]
+        files[delfile] = find_delete(fl, '\\newcommand{\\bgtemplatetestimg}{')
+        delfile = 'lib/portrait.tex'
+        fl = files[delfile]
+        a, b = find_block(fl, '\ifthenelse{\equal{\portraitstyle}{doge}}{', altend='}{')
+        files[delfile] = del_block_from_list(fl, a, b)
+        a, b = find_block(files[delfile], '\\throwbadconfigondoc{Estilo de portada incorrecto}')
+        files[delfile][a] = files[delfile][a][:-2]
 
         # Se crea el archivo unificado
         fl = open(mainsinglefile, 'w')
@@ -582,6 +594,11 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     nl = find_extract(aux_fun, '% Crea una sección de anexos', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+
+    # CORE FUN
+    delfile = 'lib/function/core.tex'
+    fl = files[delfile]
+    files[delfile] = find_delete(fl, '\\newcommand{\\bgtemplatetestimg}{')
 
     # Cambia encabezado archivos
     for fl in files.keys():
