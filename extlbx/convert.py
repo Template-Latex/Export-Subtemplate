@@ -229,7 +229,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         files[delfile] = find_delete(fl, '\\newcommand{\\bgtemplatetestimg}{')
         delfile = 'lib/portrait.tex'
         fl = files[delfile]
-        a, b = find_block(fl, '\ifthenelse{\equal{\portraitstyle}{doge}}{', altend='}{')
+        a, b = find_block(fl, '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{', altend='}{')
         files[delfile] = del_block_from_list(fl, a, b)
         a, b = find_block(files[delfile], '\\throwbadconfigondoc{Estilo de portada incorrecto}')
         files[delfile][a] = files[delfile][a][:-2]
@@ -345,9 +345,9 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         with open(os.devnull, 'w') as FNULL:
             printfun(MSG_DCOMPILE, end='')
 
-            call(['pdflatex', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t1 = time.time() - t
-            call(['pdflatex', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t2 = time.time() - t
             tmean = (t1 + t2) / 2
             printfun(MSG_FOKTIMER.format(tmean))
@@ -533,7 +533,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     aux_imports = file_to_list(subrelfile['IMPORTS'])
     nl = find_extract(aux_imports, '% Anexos/Apéndices', True)
     files[fl] = find_replace(files[fl], '\ifthenelse{\equal{\showappendixsecindex}', nl, jadd=-1, white_end_block=True)
-    files[fl].append('\n')
 
     # CAMBIO INITCONF
     fl = release['INITCONFFILE']
@@ -564,6 +563,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
     files[fl] = find_delete(files[fl], '% Se añade listings a tocloft', white_end_block=True)
+    files[fl] = find_delete(files[fl], '% Se revisa si se importa tikz', white_end_block=True)
 
     # PAGECONF
     fl = release['PAGECONFFILE']
@@ -594,11 +594,14 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     nl = find_extract(aux_fun, '% Crea una sección de anexos', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+    files[fl].pop()
 
     # CORE FUN
     delfile = 'lib/function/core.tex'
     fl = files[delfile]
     files[delfile] = find_delete(fl, '\\newcommand{\\bgtemplatetestimg}{')
+    fl = files[delfile]
+    files[delfile] = find_delete(fl, '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
 
     # Cambia encabezado archivos
     for fl in files.keys():
@@ -742,9 +745,11 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         with open(os.devnull, 'w') as FNULL:
             printfun(MSG_DCOMPILE, end='')
             with Cd(subrlfolder):
-                call(['pdflatex', release['SINGLEFILE']], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
                 t1 = time.time() - t
-                call(['pdflatex', release['SINGLEFILE']], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
                 tmean = (t1 + t2) / 2
                 printfun(MSG_FOKTIMER.format(tmean))
@@ -908,7 +913,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # CONFIGS
     fl = release['CONFIGFILE']
     ra = find_line(files[fl], 'anumsecaddtocounter')
-    files[fl][ra] += '\def\\bolditempto {true}            % Puntaje item en negrita\n'
+    files[fl][ra] += '\def\\bolditempto {true}           % Puntaje item en negrita\n'
     cdel = ['templatestyle']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
@@ -1089,9 +1094,11 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
         with open(os.devnull, 'w') as FNULL:
             printfun(MSG_DCOMPILE, end='')
             with Cd(subrlfolder):
-                call(['pdflatex', release['SINGLEFILE']], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
                 t1 = time.time() - t
-                call(['pdflatex', release['SINGLEFILE']], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
                 tmean = (t1 + t2) / 2
                 printfun(MSG_FOKTIMER.format(tmean))
