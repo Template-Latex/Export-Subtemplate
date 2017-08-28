@@ -2,7 +2,8 @@
 Aplicación que permite generar subtemplates a partir de Template-Informe.
 
 [![@ppizarror](http://latex.ppizarror.com/Template-Informe/resources/autor2.svg)](http://ppizarror.com)
-[![Licencia MiT](http://latex.ppizarror.com/Template-Informe/resources/Licencia-MIT-blue.svg)](https://opensource.org/licenses/MIT/)<br>
+[![Licencia MiT](http://latex.ppizarror.com/Template-Informe/resources/Licencia-MIT-blue.svg)](https://opensource.org/licenses/MIT/)
+[![Python](http://ppizarror.com/resources/images/github-homework-downloader/python.svg)](https://www.python.org/downloads/)<br>
 [![Template-Tesis](http://latex.ppizarror.com/Template-Informe/resources/templates/tesis.svg)](https://github.com/Template-Latex/Template-Tesis/)
 [![Template-Apunte](http://latex.ppizarror.com/Template-Informe/resources/templates/apunte.svg)](https://github.com/Template-Latex/Template-Apunte/)
 [![Template-Tareas](http://latex.ppizarror.com/Template-Informe/resources/templates/tareas.svg)](https://github.com/Template-Latex/Template-Tareas/)
