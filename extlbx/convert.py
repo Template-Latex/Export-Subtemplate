@@ -89,7 +89,7 @@ def find_delete(data, block, white_end_block=False, iadd=0, jadd=0, altending=No
 # noinspection PyBroadException
 def export_informe(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
                    addwhitespace=False, deletecoments=True, plotstats=True, doclean=False, addstat=True, savepdf=True,
-                   informeroot=None, mainroot=None, backtoroot=False):
+                   informeroot=None, mainroot=None, backtoroot=False, statsroot=None):
     """
     Exporta el archivo principal, actualiza version.
 
@@ -105,6 +105,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     :param plotstats: Plotea las estadísticas
     :param printfun: Función que imprime en consola
     :param savepdf: Guarda el pdf generado
+    :param statsroot: Raíz de la carpeta de estadísticas
     :param version: Versión
     :param versiondev: Versión developer
     :param versionhash: Hash de la versión
@@ -358,11 +359,11 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
         # Se agregan las estadísticas
         if addstat:
-            add_stat(mainroot + stat['FILE'], versiondev, tmean, dia, lc, versionhash)
+            add_stat(statsroot + stat['FILE'], versiondev, tmean, dia, lc, versionhash)
 
         # Se plotean las estadísticas
         if plotstats:
-            plot_stats(mainroot + stat['FILE'], mainroot + stat['CTIME'], mainroot + stat['LCODE'])
+            plot_stats(statsroot + stat['FILE'], statsroot + stat['CTIME'], statsroot + stat['LCODE'])
 
     # Se exporta el proyecto normal
     if dosave:
@@ -397,7 +398,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
 def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
                       addwhitespace=False, deletecoments=True, plotstats=True, addstat=True, doclean=True,
-                      savepdf=True, informeroot=None, mainroot=None):
+                      savepdf=True, informeroot=None, mainroot=None, statsroot=None):
     """
     Exporta las auxiliares.
 
@@ -412,6 +413,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     :param plotstats: Plotea las estadísticas
     :param printfun: Función que imprime en consola
     :param savepdf: Guarda el pdf generado
+    :param statsroot: Raíz de la carpeta de estadísticas
     :param version: Versión
     :param versiondev: Versión developer
     :param versionhash: Hash de la versión
@@ -760,11 +762,11 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
         # Se agregan las estadísticas
         if addstat:
-            add_stat(mainroot + stat['FILE'], versiondev, tmean, dia, lc, versionhash)
+            add_stat(statsroot + stat['FILE'], versiondev, tmean, dia, lc, versionhash)
 
         # Se plotean las estadísticas
         if plotstats:
-            plot_stats(mainroot + stat['FILE'], mainroot + stat['CTIME'], mainroot + stat['LCODE'])
+            plot_stats(statsroot + stat['FILE'], statsroot + stat['CTIME'], statsroot + stat['LCODE'])
 
     # Se exporta el proyecto normal
     if dosave:
@@ -799,7 +801,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
 def export_controles(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
                      addwhitespace=False, deletecoments=True, plotstats=True, addstat=True, savepdf=True,
-                     informeroot=None, mainroot=None):
+                     informeroot=None, mainroot=None, statsroot=None):
     """
     Exporta las auxiliares.
 
@@ -813,6 +815,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     :param plotstats: Plotea las estadísticas
     :param printfun: Función que imprime en consola
     :param savepdf: Guarda el pdf generado
+    :param statsroot: Raíz de la carpeta de estadísticas
     :param version: Versión
     :param versiondev: Versión developer
     :param versionhash: Hash de la versión
@@ -1109,11 +1112,11 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
 
         # Se agregan las estadísticas
         if addstat:
-            add_stat(mainroot + stat['FILE'], versiondev, tmean, dia, lc, versionhash)
+            add_stat(statsroot + stat['FILE'], versiondev, tmean, dia, lc, versionhash)
 
         # Se plotean las estadísticas
         if plotstats:
-            plot_stats(mainroot + stat['FILE'], mainroot + stat['CTIME'], mainroot + stat['LCODE'])
+            plot_stats(statsroot + stat['FILE'], statsroot + stat['CTIME'], statsroot + stat['LCODE'])
 
     # Se exporta el proyecto normal
     if dosave:

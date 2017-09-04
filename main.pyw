@@ -93,7 +93,7 @@ class CreateVersion(object):
             """
             for j in RELEASES.keys():
                 if self._release.get() == RELEASES[j]['NAME']:
-                    v = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
+                    v = get_last_ver(self._getconfig('STATS_ROOT') + RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     self._versionstr.set(v_down(v))
                     self._startbutton.focus_force()
                     self._log('SUBV-', text=[RELEASES[j]['NAME'], v])
@@ -108,7 +108,7 @@ class CreateVersion(object):
             """
             for j in RELEASES.keys():
                 if self._release.get() == RELEASES[j]['NAME']:
-                    v = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
+                    v = get_last_ver(self._getconfig('STATS_ROOT') + RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     self._versionstr.set(v_up(v))
                     self._startbutton.focus_force()
                     self._log('SUBV+', text=[RELEASES[j]['NAME'], v])
@@ -123,7 +123,7 @@ class CreateVersion(object):
             """
             for j in RELEASES.keys():
                 if self._release.get() == RELEASES[j]['NAME']:
-                    v = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
+                    v = get_last_ver(self._getconfig('STATS_ROOT') + RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     extlbcbpaste(self._getconfig('CLIPBOARD_FORMAT').format(v))
                     if self._getconfig('INFOCONSOLE'):
                         self._print('INFO: VERSION COPIADA')
@@ -278,7 +278,7 @@ class CreateVersion(object):
             self._clearconsole()
             for j in RELEASES.keys():
                 if self._release.get() == RELEASES[j]['NAME']:
-                    v = get_last_ver(RELEASES[j]['STATS']['FILE'])
+                    v = get_last_ver(self._getconfig('STATS_ROOT') + RELEASES[j]['STATS']['FILE'])
                     self._versiontxt.configure(state='normal')
                     self._print('SELECCIONADO: {0}'.format(RELEASES[j]['NAME']))
                     self._print('ÚLTIMA VERSIÓN: {0}'.format(v))
@@ -560,7 +560,7 @@ class CreateVersion(object):
             for j in RELEASES.keys():
                 if self._release.get() == RELEASES[j]['NAME']:
                     t = RELEASES[j]['ID']
-                    lastv = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
+                    lastv = get_last_ver(self._getconfig('STATS_ROOT') + RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     msg = RELEASES[j]['MESSAGE']
                     relnm = RELEASES[j]['NAME']
                     break
@@ -582,7 +582,8 @@ class CreateVersion(object):
                                                addstat=self._getconfig('SAVE_STAT'), backtoroot=True,
                                                plotstats=self._getconfig('PLOT_STAT'),
                                                mainroot=self._getconfig('MAIN_ROOT'),
-                                               informeroot=self._getconfig('INFORME_ROOT'))
+                                               informeroot=self._getconfig('INFORME_ROOT'),
+                                               statsroot=self._getconfig('STATS_ROOT'))
                     elif t == 2:
                         convert.export_auxiliares(ver, versiondev, versionhash, printfun=self._print,
                                                   dosave=self._getconfig('SAVE'), docompile=self._getconfig('COMPILE'),
@@ -590,7 +591,9 @@ class CreateVersion(object):
                                                   plotstats=self._getconfig('PLOT_STAT'),
                                                   savepdf=self._getconfig('SAVE_PDF'),
                                                   mainroot=self._getconfig('MAIN_ROOT'),
-                                                  informeroot=self._getconfig('INFORME_ROOT'))
+                                                  informeroot=self._getconfig('INFORME_ROOT'),
+                                                  statsroot=self._getconfig('STATS_ROOT')
+                                                  )
                     elif t == 3:
                         convert.export_controles(ver, versiondev, versionhash, printfun=self._print,
                                                  dosave=self._getconfig('SAVE'), docompile=self._getconfig('COMPILE'),
@@ -598,7 +601,8 @@ class CreateVersion(object):
                                                  plotstats=self._getconfig('PLOT_STAT'),
                                                  savepdf=self._getconfig('SAVE_PDF'),
                                                  mainroot=self._getconfig('MAIN_ROOT'),
-                                                 informeroot=self._getconfig('INFORME_ROOT'))
+                                                 informeroot=self._getconfig('INFORME_ROOT'),
+                                                 statsroot=self._getconfig('STATS_ROOT'))
                     else:
                         raise Exception('ERROR: ID INCORRECTO')
                     self._lastsav = self._getconfig('SAVE')
@@ -667,7 +671,7 @@ class CreateVersion(object):
             lastvup = ''
             for j in RELEASES.keys():
                 if self._release.get() == RELEASES[j]['NAME']:
-                    lastv = get_last_ver(RELEASES[j]['STATS']['FILE']).split(' ')[0]
+                    lastv = get_last_ver(self._getconfig('STATS_ROOT') + RELEASES[j]['STATS']['FILE']).split(' ')[0]
                     lastvup = lastv.split('-')[0]
                     jver = j
                     self._log('UPLOAD_V', text=[lastvup, RELEASES[j]['NAME']])
@@ -724,7 +728,7 @@ class CreateVersion(object):
         self._root.update()
         for k in RELEASES.keys():
             if self._release.get() == RELEASES[k]['NAME']:
-                v = get_last_ver(RELEASES[k]['STATS']['FILE']).split(' ')[0]
+                v = get_last_ver(self._getconfig('STATS_ROOT') + RELEASES[k]['STATS']['FILE']).split(' ')[0]
                 self._print(GITHUB_PRINT_MSG.format(v, RELEASES[k]['NAME']), end='')
                 break
         self._root.after(500, _callback)
