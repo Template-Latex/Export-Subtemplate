@@ -21,6 +21,7 @@ GITHUB_PDF_COMMIT = 'Se agrega pdf v{0} de {1}'
 GITHUB_PRINT_MSG = 'SUBIENDO v{0} DE {1} ... '
 GITHUB_REP_COMMIT = 'Version {0}'
 GITHUB_STAT_COMMIT = 'Estadisticas compilacion v{0} de {1}'
+GITHUB_UPDATE_COMMIT = 'Se actualza upload.json'
 HELP = {
     'ESC': 'Cierra la aplicación',
     'F1': 'Muestra esta ayuda',
@@ -708,6 +709,15 @@ class CreateVersion(object):
                 with open(os.devnull, 'w') as FNULL:
                     with Cd(self._getconfig('STATS_ROOT') + 'stats/'):
                         call(['git', 'add', RELEASES[jver]['STATS']['GIT_ADD']], stdout=FNULL,
+                             creationflags=CREATE_NO_WINDOW)
+                        call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+                        call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
+
+                # Se actualiza archivo updates
+                cmsg = GITHUB_UPDATE_COMMIT
+                with open(os.devnull, 'w') as FNULL:
+                    with Cd(self._getconfig('MAIN_ROOT')):
+                        call(['git', 'add', EXTLBX_UPLOAD], stdout=FNULL,
                              creationflags=CREATE_NO_WINDOW)
                         call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
                         call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
