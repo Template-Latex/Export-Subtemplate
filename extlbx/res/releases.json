@@ -63,7 +63,8 @@
     "STATS": {
       "CTIME": "stats/Auxiliares/stats-ctime.png",
       "FILE": "stats/Auxiliares/stats.txt",
-      "LCODE": "stats/Auxiliares/stats-lcode.png"
+      "LCODE": "stats/Auxiliares/stats-lcode.png",
+      "GIT_ADD": "Auxiliares/*"
     },
     "SUBRELFILES": {
       "ENVFUN": "lib/environments.tex",
@@ -173,7 +174,8 @@
     "STATS": {
       "CTIME": "stats/Controles/stats-ctime.png",
       "FILE": "stats/Controles/stats.txt",
-      "LCODE": "stats/Controles/stats-lcode.png"
+      "LCODE": "stats/Controles/stats-lcode.png",
+      "GIT_ADD": "Controles/*"
     },
     "SUBRELFILES": {
       "MAIN": "control_main.tex",
@@ -287,7 +289,8 @@
     "STATS": {
       "CTIME": "stats/Informe/stats-ctime.png",
       "FILE": "stats/Informe/stats.txt",
-      "LCODE": "stats/Informe/stats-lcode.png"
+      "LCODE": "stats/Informe/stats-lcode.png",
+      "GIT_ADD": "Informe/*"
     },
     "VERLINE": "Template-Informe v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {

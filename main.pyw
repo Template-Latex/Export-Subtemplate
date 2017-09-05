@@ -20,6 +20,7 @@ import traceback
 GITHUB_PDF_COMMIT = 'Se agrega pdf v{0} de {1}'
 GITHUB_PRINT_MSG = 'SUBIENDO v{0} DE {1} ... '
 GITHUB_REP_COMMIT = 'Version {0}'
+GITHUB_STAT_COMMIT = 'Estadisticas compilacion v{0} de {1}'
 HELP = {
     'ESC': 'Cierra la aplicación',
     'F1': 'Muestra esta ayuda',
@@ -701,6 +702,17 @@ class CreateVersion(object):
                             call(['git', 'add', pdf_file], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
                             call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
                             call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
+
+                # Se sube estadísticas
+                cmsg = GITHUB_STAT_COMMIT.format(lastv, RELEASES[jver]['NAME'])
+                with open(os.devnull, 'w') as FNULL:
+                    with Cd(self._getconfig('STATS_ROOT') + 'stats/'):
+                        call(['git', 'add', RELEASES[jver]['STATS']['GIT_ADD']], stdout=FNULL,
+                             creationflags=CREATE_NO_WINDOW)
+                        call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+                        call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
+
+                # Se muestra tiempo de subida
                 self._print(MSG_FOKTIMER.format((time.time() - t)))
 
                 # Se guarda la versión
