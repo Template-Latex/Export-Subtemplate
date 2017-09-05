@@ -713,6 +713,10 @@ class CreateVersion(object):
                         call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
                         call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
 
+                # Se guarda la versión
+                self._uploaded[jver] = lastv
+                self._saveupload()
+
                 # Se actualiza archivo updates
                 cmsg = GITHUB_UPDATE_COMMIT
                 with open(os.devnull, 'w') as FNULL:
@@ -722,12 +726,8 @@ class CreateVersion(object):
                         call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
                         call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
 
-                # Se muestra tiempo de subida
+                # Se muestra tiempo de subida y se termina el proceso
                 self._print(MSG_FOKTIMER.format((time.time() - t)))
-
-                # Se guarda la versión
-                self._uploaded[jver] = lastv
-                self._saveupload()
                 self._uploadstatebtn('off')
             except Exception as e:
                 tkMessageBox.showerror('Error fatal', 'Ocurrio un error inesperado al procesar la solicitud.')
