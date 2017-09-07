@@ -234,6 +234,10 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         files[delfile] = del_block_from_list(fl, a, b)
         a, b = find_block(files[delfile], '\\throwbadconfigondoc{Estilo de portada incorrecto}')
         files[delfile][a] = files[delfile][a][:-2]
+        delfile = 'lib/initconf.tex'
+        fl = files[delfile]
+        files[delfile] = find_delete(fl, '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{\importtikzlib}{}',
+                                     white_end_block=True)
 
         # Se crea el archivo unificado
         fl = open(mainsinglefile, 'w')
