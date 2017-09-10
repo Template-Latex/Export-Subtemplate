@@ -754,11 +754,12 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                 call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t1 = time.time() - t
+                t = time.time()
                 call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
                 tmean = (t1 + t2) / 2
-                printfun(MSG_FOKTIMER.format(tmean))
+                printfun(MSG_FOKTIMER.format(t2))
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
@@ -1106,9 +1107,10 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                 t1 = time.time() - t
                 call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
+                t = time.time()
                 t2 = time.time() - t
                 tmean = (t1 + t2) / 2
-                printfun(MSG_FOKTIMER.format(tmean))
+                printfun(MSG_FOKTIMER.format(t2))
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
