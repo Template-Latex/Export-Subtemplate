@@ -15,7 +15,7 @@
     "EVENT": true
   },
   "PLOT_STAT": {
-    "VALUE": true,
+    "VALUE": false,
     "KEY": "<F8>",
     "EVENT": true
   },
