@@ -61,10 +61,10 @@
     "ROOT": "../Template-Auxiliares/",
     "SINGLEFILE": "auxiliar.tex",
     "STATS": {
-      "CTIME": "stats/Auxiliares/stats-ctime.png",
-      "FILE": "stats/Auxiliares/stats.txt",
-      "LCODE": "stats/Auxiliares/stats-lcode.png",
-      "GIT_ADD": "Auxiliares/*"
+      "CTIME": "",
+      "FILE": "stats/data/auxiliares.txt",
+      "LCODE": "",
+      "GIT_ADD": "data/auxiliares.txt"
     },
     "SUBRELFILES": {
       "ENVFUN": "lib/environments.tex",
@@ -172,10 +172,10 @@
     "ROOT": "../Template-Controles/",
     "SINGLEFILE": "control.tex",
     "STATS": {
-      "CTIME": "stats/Controles/stats-ctime.png",
-      "FILE": "stats/Controles/stats.txt",
-      "LCODE": "stats/Controles/stats-lcode.png",
-      "GIT_ADD": "Controles/*"
+      "CTIME": "",
+      "FILE": "stats/data/controles.txt",
+      "LCODE": "",
+      "GIT_ADD": "data/controles.txt"
     },
     "SUBRELFILES": {
       "MAIN": "control_main.tex",
@@ -287,10 +287,10 @@
     "ROOT": "",
     "SINGLEFILE": "informe.tex",
     "STATS": {
-      "CTIME": "stats/Informe/stats-ctime.png",
-      "FILE": "stats/Informe/stats.txt",
-      "LCODE": "stats/Informe/stats-lcode.png",
-      "GIT_ADD": "Informe/*"
+      "CTIME": "",
+      "FILE": "stats/data/informe.txt",
+      "LCODE": "",
+      "GIT_ADD": "data/informe.txt"
     },
     "VERLINE": "Template-Informe v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {
