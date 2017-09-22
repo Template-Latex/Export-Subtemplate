@@ -1,7 +1,7 @@
 # coding=utf-8
 """
-RESOURCES
-Recursos del toolbox
+EXPORT PROFESSIONAL-CV
+Exporta el template Professional-CV
 
 Autor: Pablo Pizarro R. @ ppizarror.com
 Licencia:
@@ -27,17 +27,6 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
-# Importación de librerías
-import os
 
-# Obtiene el path actual
-__actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace('\\', '/') + '/'
-__respath = __actualpath + 'res/'
-
-# Recursos
-EXTLBX_BTN_UPLOAD = __respath + 'upload2.png'
-EXTLBX_CONFIGS = __respath + 'config.json'
-EXTLBX_ICON = __respath + 'icon.ico'
-EXTLBX_LICENSE = __respath + 'lic'
-EXTLBX_RELEASE_JSON = __respath + 'releases.json'
-EXTLBX_UPLOAD = __respath + 'upload.json'
+def exportcv():
+    pass

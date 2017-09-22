@@ -1,11 +1,30 @@
 # coding=utf-8
 """
 ZIP UTILS
-Herramientas para el uso de archivos Zip.
+Herramientas para el uso de archivos ZIP
 
-Autor: PABLO PIZARRO @ github.com/ppizarror
-Fecha: 2017
-Licencia: MIT
+Autor: Pablo Pizarro R. @ ppizarror.com
+Licencia:
+    The MIT License (MIT)
+
+    Copyright 2017 Pablo Pizarro R.
+
+    Permission is hereby granted, free of charge, to any person obtaining a
+    copy of this software and associated documentation files (the "Software"),
+    to deal in the Software without restriction, including without limitation
+    the rights to use, copy, modify, merge, publish, distribute, sublicense,
+    and/or sell copies of the Software, and to permit persons to whom the Software
+    is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
 # Importación de librerías
@@ -15,7 +34,7 @@ import zipfile
 
 class Zip(object):
     """
-    Clase para administrar archivos zip
+    Clase para administrar archivos zip.
     """
 
     def __init__(self, filename):
@@ -38,7 +57,7 @@ class Zip(object):
 
     def add_excepted_file(self, filename):
         """
-        Agrega un archivo a la lista de excepciones
+        Agrega un archivo a la lista de excepciones.
 
         :param filename: Nombre del archivo
         :type filename: str, list
@@ -52,7 +71,7 @@ class Zip(object):
 
     def _check_excepted_file(self, filename):
         """
-        Indica si el archivo está dentro de la lista de excepciones
+        Indica si el archivo está dentro de la lista de excepciones.
 
         :param filename: Nombre del archivo
         :type filename: str
@@ -75,7 +94,7 @@ class Zip(object):
 
     def add_file(self, ufile, ghostpath=None):
         """
-        Añade un archivo al zip
+        Añade un archivo al zip.
 
         :param ghostpath: Dirección a borrar
         :param ufile: Ubicación del archivo
@@ -93,7 +112,7 @@ class Zip(object):
 
     def add_folder(self, folder):
         """
-        Agrega una carpeta al archivo zip
+        Agrega una carpeta al archivo zip.
 
         :param folder: Carpeta
         :type folder: str, list
