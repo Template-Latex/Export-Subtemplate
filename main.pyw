@@ -313,6 +313,8 @@ class CreateVersion(object):
 
         self._root = Tk()
         self._root.protocol('WM_DELETE_WINDOW', _kill)
+        self._root.tk.call('tk', 'scaling', 1.35)
+
         self._sounds = Sound()
 
         # Se obtienen configuraciones
@@ -372,7 +374,7 @@ class CreateVersion(object):
         Label(f1, text='Nueva versión:').pack(side=LEFT, padx=5)
         self._versionstr = StringVar()
         self._versionstr.trace('w', lambda name, index, mode, sv=self._versionstr: _checkver(sv))
-        self._versiontxt = Entry(f1, relief=GROOVE, width=10, font=fonts[5], textvariable=self._versionstr)
+        self._versiontxt = Entry(f1, relief=GROOVE, width=9, font=fonts[5], textvariable=self._versionstr)
         self._versiontxt.configure(state='disabled')
         self._versiontxt.pack(side=LEFT, padx=5, pady=2)
         self._versiontxt.focus()
