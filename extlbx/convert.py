@@ -368,7 +368,6 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         t = time.time()
         with open(os.devnull, 'w') as FNULL:
             printfun(MSG_DCOMPILE, end='')
-
             call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t1 = time.time() - t
             call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
@@ -404,10 +403,10 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         export_single.add_folder(czip['ADD']['FOLDER'])
         export_single.save()
 
-    try:
-        pyperclip.copy('Version ' + versiondev)
-    except:
-        pass
+    # try:
+    #     pyperclip.copy('Version ' + versiondev)
+    # except:
+    #     pass
 
     if doclean:
         clear_dict(RELEASES[REL_INFORME], 'FILES')

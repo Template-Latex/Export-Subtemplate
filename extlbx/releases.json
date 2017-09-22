@@ -378,7 +378,7 @@
     "MESSAGE": "\nCREANDO PROFESSIONAL-CV v{0}",
     "NAME": "Professional-CV",
     "PDF_FOLDER": "../pdf-version/Professional-CV/Professional-CV v{0}.pdf",
-    "ROOT": "",
+    "ROOT": "../Professional-CV/",
     "SINGLEFILE": "cv_single.tex",
     "STATS": {
       "CTIME": "",

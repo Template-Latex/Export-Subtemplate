@@ -40,7 +40,7 @@ GITHUB_PDF_COMMIT = 'Se agrega pdf v{0} de {1}'
 GITHUB_PRINT_MSG = 'SUBIENDO v{0} DE {1} ... '
 GITHUB_REP_COMMIT = 'Version {0}'
 GITHUB_STAT_COMMIT = 'Estadisticas compilacion v{0} de {1}'
-GITHUB_UPDATE_COMMIT = 'Se actualza upload.json'
+GITHUB_UPDATE_COMMIT = 'Se actualiza upload.json'
 HELP = {
     'ESC': 'Cierra la aplicación',
     'F1': 'Muestra esta ayuda',
@@ -74,7 +74,7 @@ TITLE_UPLOADING = '{0} | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.3.6'
+__version__ = '2.4.0'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -202,6 +202,8 @@ class CreateVersion(object):
             for j in key:
                 if self._configs[j]['EVENT']:
                     self._print('\t{0} [{1}]'.format(j.ljust(maxlen), self._getconfig(j)))
+            for j in range(5):
+                self._print('\n')
             self._log('PRINTCONFIG')
 
         def _scroll_console(event):
@@ -626,6 +628,14 @@ class CreateVersion(object):
                                                  mainroot=self._getconfig('MAIN_ROOT'),
                                                  informeroot=self._getconfig('INFORME_ROOT'),
                                                  statsroot=self._getconfig('STATS_ROOT'))
+                    elif t == 4:
+                        exportcv(ver, versiondev, versionhash, printfun=self._print,
+                                 dosave=self._getconfig('SAVE'), docompile=self._getconfig('COMPILE'),
+                                 addstat=self._getconfig('SAVE_STAT'),
+                                 plotstats=self._getconfig('PLOT_STAT'),
+                                 savepdf=self._getconfig('SAVE_PDF'),
+                                 mainroot=self._getconfig('MAIN_ROOT'),
+                                 statsroot=self._getconfig('STATS_ROOT'), backtoroot=True)
                     else:
                         raise Exception('ERROR: ID INCORRECTO')
                     self._lastsav = self._getconfig('SAVE')
