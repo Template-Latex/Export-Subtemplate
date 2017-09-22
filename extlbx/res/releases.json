@@ -338,5 +338,89 @@
         "GHOST": ""
       }
     }
+  },
+  "PROFESSIONAL-CV": {
+    "CONFIGFILE": "lib/config.tex",
+    "FILEDELCOMENTS": {
+      "lib/config.tex": false,
+      "lib/env.tex": true,
+      "lib/function.tex": true,
+      "lib/imports.tex": true,
+      "lib/initconf.tex": true,
+      "lib/pageconf.tex": true,
+      "lib/styles.tex": true,
+      "cv.tex": false
+    },
+    "FILES": {
+      "lib/config.tex": [],
+      "lib/env.tex": [],
+      "lib/function.tex": [],
+      "lib/imports.tex": [],
+      "lib/initconf.tex": [],
+      "lib/pageconf.tex": [],
+      "lib/styles.tex": [],
+      "cv.tex": []
+    },
+    "FILESTRIP": {
+      "lib/config.tex": false,
+      "lib/env.tex": true,
+      "lib/function.tex": true,
+      "lib/imports.tex": true,
+      "lib/initconf.tex": true,
+      "lib/pageconf.tex": true,
+      "lib/styles.tex": true,
+      "cv.tex": false
+    },
+    "GIT": "../Professional-CV/",
+    "ID": 4,
+    "INITCONFFILE": "lib/initconf.tex",
+    "MAINFILE": "cv.tex",
+    "MESSAGE": "\nCREANDO PROFESSIONAL-CV v{0}",
+    "NAME": "Professional-CV",
+    "PDF_FOLDER": "../pdf-version/Professional-CV/Professional-CV v{0}.pdf",
+    "ROOT": "",
+    "SINGLEFILE": "cv_single.tex",
+    "STATS": {
+      "CTIME": "",
+      "FILE": "stats/data/professional-cv.txt",
+      "LCODE": "",
+      "GIT_ADD": "data/professional-cv.txt"
+    },
+    "VERLINE": "Professional-CV v{0} | (Pablo Pizarro R.) ppizarror.com",
+    "WEB": {
+      "MANUAL": "http://latex.ppizarror.com/Professional-CV/",
+      "SOURCE": "https://github.com/Template-Latex/Professional-CV/"
+    },
+    "ZIP": {
+      "COMPACT": {
+        "ADD": {
+          "FILES": [
+            "cv_single.tex"
+          ],
+          "FOLDER": [
+            "img"
+          ]
+        },
+        "EXCEPTED": [],
+        "FILE": "release/ProfessionalCV-Single.zip",
+        "GHOST": ""
+      },
+      "NORMAL": {
+        "ADD": {
+          "FILES": [
+            "cv.tex"
+          ],
+          "FOLDER": [
+            "img",
+            "lib"
+          ]
+        },
+        "EXCEPTED": [
+          "other.tex"
+        ],
+        "FILE": "release/ProfessionalCV.zip",
+        "GHOST": ""
+      }
+    }
   }
 }
