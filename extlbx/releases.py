@@ -28,16 +28,17 @@ Licencia:
 """
 
 # Importación de librerías
-from resources import EXTLBX_RELEASE_JSON as JSONFILE
 import json
 import os
 
 # Se carga json
-__actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace('\\', '/')
-with open(JSONFILE) as json_data:
+__actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace('\\', '/') + '/'
+jsonfile = __actualpath + 'releases.json'
+with open(jsonfile) as json_data:
     RELEASES = json.load(json_data)
 
 # Constantes
 REL_AUXILIAR = 'AUXILIAR'
 REL_CONTROLES = 'CONTROLES'
 REL_INFORME = 'INFORME'
+REL_PROFESSIONALCV = 'PROFESSIONAL-CV'
