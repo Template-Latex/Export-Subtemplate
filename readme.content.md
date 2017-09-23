@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="http://latex.ppizarror.com/Template-Informe/resources/export-subtemplate.PNG" width="50%" />
+  <img src="http://latex.ppizarror.com/resources/export-subtemplate.PNG" width="50%" />
 </p>
 
 ## Licencia
