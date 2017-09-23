@@ -398,7 +398,7 @@
             "cv_single.tex"
           ],
           "FOLDER": [
-            "img"
+            "images"
           ]
         },
         "EXCEPTED": [],
@@ -411,7 +411,7 @@
             "cv.tex"
           ],
           "FOLDER": [
-            "img",
+            "images",
             "lib"
           ]
         },
