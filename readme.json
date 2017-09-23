@@ -2,7 +2,7 @@
     "PROJECT": {
         "NAME": "Export-Subtemplate",
         "ICON": {
-            "IMAGE": "http://latex.ppizarror.com/Template-Informe/icon.png",
+            "IMAGE": "http://latex.ppizarror.com/icon.png",
             "ALT": "Export-Subtemplate",
             "WIDTH": 200,
             "HEIGHT": 200
