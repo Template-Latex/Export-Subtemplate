@@ -55,6 +55,13 @@ from vframe import VerticalScrolledFrame
 # noinspection PyUnresolvedReferences
 from pyperclip import copy as extlbcbpaste
 
+import sys
+
+# noinspection PyCompatibility
+reload(sys)
+# noinspection PyUnresolvedReferences
+sys.setdefaultencoding('utf8')
+
 
 # noinspection PyCompatibility
 def reload_extlbx():
