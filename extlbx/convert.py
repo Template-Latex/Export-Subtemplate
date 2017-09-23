@@ -37,7 +37,6 @@ from subprocess import call
 from version import *
 from ziputils import *
 import copy
-import pyperclip
 import time
 
 # Constantes
