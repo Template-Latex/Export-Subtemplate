@@ -167,6 +167,12 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
         data[l_ttype] = d_ttype
         data[l_tvdev] = d_tvdev
 
+        # Se añade salto de línea a función maintitle
+        funfile = release['FUNCTIONFILE']
+        fl = files[funfile]
+        a, b = find_block(fl, '\\noindent{\LARGE \\textbf{#1}} \quad')
+        files[funfile][a] = '\\noindent{\LARGE \\textbf{#1}} \quad \emph{#2} \hfill {\scriptsize \color{gray} #3} \\vspace{0.25em} \\\\ '
+
         # Se crea el archivo unificado
         fl = open(mainsinglefile, 'w')
         data = files[mainfile]

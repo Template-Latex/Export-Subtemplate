@@ -371,6 +371,7 @@
       "lib/styles.tex": true,
       "cv.tex": false
     },
+    "FUNCTIONFILE": "lib/function.tex",
     "GIT": "../Professional-CV/",
     "ID": 4,
     "INITCONFFILE": "lib/initconf.tex",

@@ -369,10 +369,11 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             printfun(MSG_DCOMPILE, end='')
             call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t1 = time.time() - t
+            t = time.time()
             call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t2 = time.time() - t
             tmean = (t1 + t2) / 2
-            printfun(MSG_FOKTIMER.format(tmean))
+            printfun(MSG_FOKTIMER.format(t2))
 
             # Copia a la carpeta pdf_version
             if savepdf:
@@ -598,7 +599,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     nl = find_extract(aux_pageconf, '% Se crean los header-footer', True)
     files[fl] = find_replace(files[fl], '% Se crean los header-footer', nl, white_end_block=True, jadd=-1)
     ra, _ = find_block(files[fl], '% Profundidad del índice')
-    i1, f1 = find_block(aux_pageconf, '% Tamaño fuentes', True)
+    i1, f1 = find_block(aux_pageconf, '% Numeración de objetos', True)
     nl = extract_block_from_list(aux_pageconf, i1, f1)
     for i in range(1):
         files[fl].pop()
@@ -1122,9 +1123,9 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                 call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t1 = time.time() - t
+                t = time.time()
                 call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
-                t = time.time()
                 t2 = time.time() - t
                 tmean = (t1 + t2) / 2
                 printfun(MSG_FOKTIMER.format(t2))
