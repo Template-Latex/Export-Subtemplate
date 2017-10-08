@@ -171,7 +171,7 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
         funfile = release['FUNCTIONFILE']
         fl = files[funfile]
         a, b = find_block(fl, '\\noindent {\\fontsizemaintitle \stylemaintitle #1} \quad')
-        files[funfile][a] = '\\noindent {\\fontsizemaintitle \stylemaintitle #1} \quad \emph{#2} \hfill \quad {\scriptsize \color{gray} #3} \\\\ \\vspace{-1em} \\\\'
+        files[funfile][a] = '\\noindent {\\fontsizemaintitle \stylemaintitle #1} \quad \emph{#2} \hfill \quad {\scriptsize #3} \\\\ \\vspace{-1em} \\\\'
 
         # Se crea el archivo unificado
         fl = open(mainsinglefile, 'w')
