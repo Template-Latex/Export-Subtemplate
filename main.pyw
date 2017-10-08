@@ -38,8 +38,8 @@ import traceback
 # Constantes
 GITHUB_PDF_COMMIT = 'Se agrega pdf v{0} de {1}'
 GITHUB_PRINT_MSG = 'SUBIENDO v{0} DE {1} ... '
-GITHUB_REP_COMMIT = 'Version {0}'
-GITHUB_STAT_COMMIT = 'Estadisticas compilacion v{0} de {1}'
+GITHUB_REP_COMMIT = 'Versión {0}'
+GITHUB_STAT_COMMIT = 'Estadísticas compilación v{0} de {1}'
 GITHUB_UPDATE_COMMIT = 'Se actualiza upload.json'
 HELP = {
     'ESC': 'Cierra la aplicación',
