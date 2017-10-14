@@ -28,7 +28,7 @@ Licencia:
 """
 
 # noinspection PyUnresolvedReferences
-from releases import RELEASES
+from releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, RELEASES
 # noinspection PyUnresolvedReferences
 import convert
 # noinspection PyUnresolvedReferences

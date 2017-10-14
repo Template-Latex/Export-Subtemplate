@@ -540,7 +540,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     nconf = replace_argument(files[fl][ra], 1, '2.30').replace(' %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'cfgshowbookmarkmenu', True)
-    nconf = replace_argument(files[fl][ra], 1, 'false').replace('%', '%')
+    nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'cfgbookmarksopenlevel', True)
     nconf = replace_argument(files[fl][ra], 1, '1')
@@ -582,6 +582,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl][ra] = replace_argument(files[fl][ra], 1, '\\tituloauxiliar')
     ra, _ = find_block(files[fl], 'pdftitle')
     files[fl][ra] = replace_argument(files[fl][ra], 1, '\\tituloauxiliar')
+    ra, _ = find_block(files[fl], '\setcounter{tocdepth}')
+    files[fl][ra] = replace_argument(files[fl][ra], 2, '1')
     ra, _ = find_block(files[fl], 'Template.Web.Manual')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
@@ -598,17 +600,13 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = find_replace(files[fl], '% Márgenes de páginas y tablas', nl, white_end_block=True, jadd=-1)
     nl = find_extract(aux_pageconf, '% Se crean los header-footer', True)
     files[fl] = find_replace(files[fl], '% Se crean los header-footer', nl, white_end_block=True, jadd=-1)
-    ra, _ = find_block(files[fl], '% Profundidad del índice')
     i1, f1 = find_block(aux_pageconf, '% Numeración de objetos', True)
     nl = extract_block_from_list(aux_pageconf, i1, f1)
-    for i in range(1):
-        files[fl].pop()
-    files[fl] = add_block_from_list(files[fl], nl, len(files[fl]) - 1)
+    files[fl] = add_block_from_list(files[fl], nl, len(files[fl]) + 1)
     pcfg = ['listfigurename', 'listtablename', 'contentsname', 'lstlistlistingname']
     for pcfg in pcfg:
         ra, _ = find_block(files[fl], pcfg)
     files[fl].pop(ra)
-    files[fl][len(files[fl]) - 1] = files[fl][len(files[fl]) - 1].strip()
 
     # AUXILIAR FUNCTIONS
     fl = release['FUNCTIONS']
@@ -617,6 +615,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     nl = find_extract(aux_fun, '% Crea una sección de referencias solo para bibtex', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     nl = find_extract(aux_fun, '% Crea una sección de anexos', True)
+    files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+    nl = find_extract(aux_fun, '% Inserta código fuente', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     files[fl].pop()
 

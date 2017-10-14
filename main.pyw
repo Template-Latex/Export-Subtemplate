@@ -74,7 +74,7 @@ TITLE_UPLOADING = '{0} | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.4.4'
+__version__ = '2.5.0'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
@@ -602,40 +602,64 @@ class CreateVersion(object):
                     self._print(msg.format(versiondev))
                     self._log('CREATE_V', text=[versiondev, relnm])
                     if t == 1:
-                        convert.export_informe(ver, versiondev, versionhash, printfun=self._print, doclean=True,
-                                               dosave=self._getconfig('SAVE'), docompile=self._getconfig('COMPILE'),
-                                               addstat=self._getconfig('SAVE_STAT'), backtoroot=True,
-                                               plotstats=self._getconfig('PLOT_STAT'),
-                                               mainroot=self._getconfig('MAIN_ROOT'),
-                                               informeroot=self._getconfig('INFORME_ROOT'),
-                                               statsroot=self._getconfig('STATS_ROOT'))
+                        try:
+                            convert.export_informe(ver, versiondev, versionhash,
+                                                   printfun=self._print,
+                                                   doclean=True,
+                                                   dosave=self._getconfig('SAVE'),
+                                                   docompile=self._getconfig('COMPILE'),
+                                                   addstat=self._getconfig('SAVE_STAT'),
+                                                   backtoroot=True,
+                                                   plotstats=self._getconfig('PLOT_STAT'),
+                                                   mainroot=self._getconfig('MAIN_ROOT'),
+                                                   informeroot=self._getconfig('INFORME_ROOT'),
+                                                   statsroot=self._getconfig('STATS_ROOT'))
+                        except:
+                            clear_dict(RELEASES[REL_INFORME], 'FILES')
                     elif t == 2:
-                        convert.export_auxiliares(ver, versiondev, versionhash, printfun=self._print,
-                                                  dosave=self._getconfig('SAVE'), docompile=self._getconfig('COMPILE'),
-                                                  addstat=self._getconfig('SAVE_STAT'),
-                                                  plotstats=self._getconfig('PLOT_STAT'),
-                                                  savepdf=self._getconfig('SAVE_PDF'),
-                                                  mainroot=self._getconfig('MAIN_ROOT'),
-                                                  informeroot=self._getconfig('INFORME_ROOT'),
-                                                  statsroot=self._getconfig('STATS_ROOT')
-                                                  )
+                        try:
+                            convert.export_auxiliares(ver, versiondev, versionhash,
+                                                      printfun=self._print,
+                                                      dosave=self._getconfig('SAVE'),
+                                                      docompile=self._getconfig('COMPILE'),
+                                                      addstat=self._getconfig('SAVE_STAT'),
+                                                      plotstats=self._getconfig('PLOT_STAT'),
+                                                      savepdf=self._getconfig('SAVE_PDF'),
+                                                      mainroot=self._getconfig('MAIN_ROOT'),
+                                                      informeroot=self._getconfig('INFORME_ROOT'),
+                                                      statsroot=self._getconfig('STATS_ROOT'))
+                        except:
+                            clear_dict(RELEASES[REL_INFORME], 'FILES')
+                            clear_dict(RELEASES[REL_AUXILIAR], 'FILES')
                     elif t == 3:
-                        convert.export_controles(ver, versiondev, versionhash, printfun=self._print,
-                                                 dosave=self._getconfig('SAVE'), docompile=self._getconfig('COMPILE'),
-                                                 addstat=self._getconfig('SAVE_STAT'),
-                                                 plotstats=self._getconfig('PLOT_STAT'),
-                                                 savepdf=self._getconfig('SAVE_PDF'),
-                                                 mainroot=self._getconfig('MAIN_ROOT'),
-                                                 informeroot=self._getconfig('INFORME_ROOT'),
-                                                 statsroot=self._getconfig('STATS_ROOT'))
+                        try:
+                            convert.export_controles(ver, versiondev, versionhash,
+                                                     printfun=self._print,
+                                                     dosave=self._getconfig('SAVE'),
+                                                     docompile=self._getconfig('COMPILE'),
+                                                     addstat=self._getconfig('SAVE_STAT'),
+                                                     plotstats=self._getconfig('PLOT_STAT'),
+                                                     savepdf=self._getconfig('SAVE_PDF'),
+                                                     mainroot=self._getconfig('MAIN_ROOT'),
+                                                     informeroot=self._getconfig('INFORME_ROOT'),
+                                                     statsroot=self._getconfig('STATS_ROOT'))
+                        except:
+                            clear_dict(RELEASES[REL_INFORME], 'FILES')
+                            clear_dict(RELEASES[REL_AUXILIAR], 'FILES')
+                            clear_dict(RELEASES[REL_CONTROLES], 'FILES')
                     elif t == 4:
-                        exportcv(ver, versiondev, versionhash, printfun=self._print,
-                                 dosave=self._getconfig('SAVE'), docompile=self._getconfig('COMPILE'),
-                                 addstat=self._getconfig('SAVE_STAT'),
-                                 plotstats=self._getconfig('PLOT_STAT'),
-                                 savepdf=self._getconfig('SAVE_PDF'),
-                                 mainroot=self._getconfig('MAIN_ROOT'),
-                                 statsroot=self._getconfig('STATS_ROOT'), backtoroot=True)
+                        try:
+                            exportcv(ver, versiondev, versionhash, printfun=self._print,
+                                     dosave=self._getconfig('SAVE'),
+                                     docompile=self._getconfig('COMPILE'),
+                                     addstat=self._getconfig('SAVE_STAT'),
+                                     plotstats=self._getconfig('PLOT_STAT'),
+                                     savepdf=self._getconfig('SAVE_PDF'),
+                                     mainroot=self._getconfig('MAIN_ROOT'),
+                                     statsroot=self._getconfig('STATS_ROOT'),
+                                     backtoroot=True)
+                        except:
+                            clear_dict(RELEASES[REL_PROFESSIONALCV], 'FILES')
                     else:
                         raise Exception('ERROR: ID INCORRECTO')
                     self._lastsav = self._getconfig('SAVE')
