@@ -336,6 +336,224 @@
         ],
         "FILE": "release/Template-Informe.zip",
         "GHOST": ""
+      },
+      "OTHERS": {
+        "DATA": [
+          [
+            [
+              "Área de Humanidades",
+              "Área de Humanidades"
+            ],
+            "adh",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Astronomía",
+              "Departamento de Astronomía"
+            ],
+            "das",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Ciencias de la Computación",
+              "Departamento de Ciencias de la Computación"
+            ],
+            "dcc",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Física",
+              "Departamento de Física"
+            ],
+            "dfi",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Geofísica",
+              "Departamento de Geofísica"
+            ],
+            "dgf",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Ingeniería Civil",
+              "Departamento de Ingeniería Civil"
+            ],
+            "dic",
+            [
+              "dic2",
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Ingeniería Eléctrica",
+              "Departamento de Ingeniería Eléctrica"
+            ],
+            "die",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Ingeniería Industrial",
+              "Departamento de Ingeniería Industrial"
+            ],
+            "dii",
+            [
+              "dii2",
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Ingeniería Matemática",
+              "Departamento de Ingeniería Matemática"
+            ],
+            "dim",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Ingeniería Mecánica",
+              "Departamento de Ingeniería Mecánica"
+            ],
+            "dimec",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Ingeniería Química y Biotecnología",
+              "Departamento de Ingeniería Química y Biotecnología"
+            ],
+            "diqbt",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Facultad de Ciencias Físicas y Matemáticas",
+              "Departamento de la Universidad"
+            ],
+            "fcfm",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Geología",
+              "Departamento de Geología"
+            ],
+            "geo",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Departamento de Ingeniería en Minas",
+              "Departamento de Ingeniería en Minas"
+            ],
+            "minas",
+            [
+              "uchile",
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ],
+          [
+            [
+              "Universidad de Chile",
+              "Departamento de la Universidad"
+            ],
+            "uchile",
+            [
+              "uchile2",
+              "uchile3",
+              "fcfm",
+              "fcfm2"
+            ]
+          ]
+        ],
+        "NORMAL": "release/Template-Informe-{0}.zip",
+        "SINGLE": "release/Template-Informe-{0}-Single.zip",
+        "IMGPATH": "images/departamentos/{0}.pdf",
+        "EXPATH": "images/ejemplos/"
       }
     }
   },
