@@ -403,34 +403,75 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         export_single.add_folder(czip['ADD']['FOLDER'])
         export_single.save()
 
-    # Se exportan los distintos estilos de versiones
-    fl_mainfile = open(mainfile)
-    fl_mainsinglefile = open(mainsinglefile)
+        # Se exportan los distintos estilos de versiones
+        fl_mainfile = open(mainfile)
+        fl_mainsinglefile = open(mainsinglefile)
 
-    # Se cargan los archivos en listas
-    data_mainfile = []
-    data_mainsinglefile = []
-    for i in fl_mainfile:
-        data_mainfile.append(i)
-    for i in fl_mainsinglefile:
-        data_mainsinglefile.append(i)
+        # Se cargan los archivos en listas
+        data_mainfile = []
+        data_mainsinglefile = []
+        for i in fl_mainfile:
+            data_mainfile.append(i)
+        for i in fl_mainsinglefile:
+            data_mainsinglefile.append(i)
 
-    # Se buscan las líneas del departamento y de la imagen
-    fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
-    fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
-    fl_pos_dp_mainsinglefile = find_line(data_mainsinglefile, '\def\departamentouniversidad')
-    fl_pos_im_mainsinglefile = find_line(data_mainsinglefile, '\def\imagendepartamento')
+        # Se buscan las líneas del departamento y de la imagen
+        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
+        fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
+        fl_pos_dp_mainsinglefile = find_line(data_mainsinglefile, '\def\departamentouniversidad')
+        fl_pos_im_mainsinglefile = find_line(data_mainsinglefile, '\def\imagendepartamento')
 
-    # Se cierran los archivos
-    fl_mainfile.close()
-    fl_mainsinglefile.close()
+        # Se cierran los archivos
+        fl_mainfile.close()
+        fl_mainsinglefile.close()
 
-    # Se recorre cada versión y se genera el .zip
-    for m in release['ZIP']['OTHERS']['DATA']:
-        data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
-        data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
-        data_mainsinglefile[fl_pos_dp_mainsinglefile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
-        data_mainsinglefile[fl_pos_im_mainsinglefile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
+        # Se recorre cada versión y se genera el .zip
+        for m in release['ZIP']['OTHERS']['DATA']:
+            data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
+            data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
+            data_mainsinglefile[fl_pos_dp_mainsinglefile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
+            data_mainsinglefile[fl_pos_im_mainsinglefile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
+
+            # Se reescriben los archivos
+            new_mainfile = open(mainfile, 'w')
+            for i in data_mainfile:
+                new_mainfile.write(i)
+            new_mainfile.close()
+            new_mainsinglefile = open(mainsinglefile, 'w')
+            for i in data_mainsinglefile:
+                new_mainsinglefile.write(i)
+            new_mainsinglefile.close()
+
+            # Se genera el .zip
+            czip = release['ZIP']['NORMAL']
+            export_normal = Zip(mainroot + release['ZIP']['OTHERS']['NORMAL'].format(m[1]))
+            export_normal.add_excepted_file(czip['EXCEPTED'])
+            export_normal.add_file(czip['ADD']['FILES'])
+            export_normal.add_folder('lib')
+            export_normal.add_folder('images/ejemplos')
+            export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
+            for k in m[2]:
+                export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
+            export_normal.save()
+
+            # Se genera el single
+            czip = release['ZIP']['COMPACT']
+            export_single = Zip(mainroot + release['ZIP']['OTHERS']['SINGLE'].format(m[1]))
+            export_single.add_file(czip['ADD']['FILES'], 'lib/')
+            export_single.add_folder('images/ejemplos')
+            export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
+            for k in m[2]:
+                export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
+            export_single.save()
+
+        data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
+                                                             'Departamento de la Universidad')
+        data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
+                                                             'departamentos/fcfm')
+        data_mainsinglefile[fl_pos_dp_mainsinglefile] = replace_argument(data_mainsinglefile[fl_pos_dp_mainsinglefile],
+                                                                         1, 'Departamento de la Universidad')
+        data_mainsinglefile[fl_pos_im_mainsinglefile] = replace_argument(data_mainsinglefile[fl_pos_im_mainsinglefile],
+                                                                         1, 'departamentos/fcfm')
 
         # Se reescriben los archivos
         new_mainfile = open(mainfile, 'w')
@@ -441,47 +482,6 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         for i in data_mainsinglefile:
             new_mainsinglefile.write(i)
         new_mainsinglefile.close()
-
-        # Se genera el .zip
-        czip = release['ZIP']['NORMAL']
-        export_normal = Zip(mainroot + release['ZIP']['OTHERS']['NORMAL'].format(m[1]))
-        export_normal.add_excepted_file(czip['EXCEPTED'])
-        export_normal.add_file(czip['ADD']['FILES'])
-        export_normal.add_folder('lib')
-        export_normal.add_folder('images/ejemplos')
-        export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
-        for k in m[2]:
-            export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
-        export_normal.save()
-
-        # Se genera el single
-        czip = release['ZIP']['COMPACT']
-        export_single = Zip(mainroot + release['ZIP']['OTHERS']['SINGLE'].format(m[1]))
-        export_single.add_file(czip['ADD']['FILES'], 'lib/')
-        export_single.add_folder('images/ejemplos')
-        export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
-        for k in m[2]:
-            export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
-        export_single.save()
-
-    data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
-                                                         'Departamento de la Universidad')
-    data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
-                                                         'departamentos/fcfm')
-    data_mainsinglefile[fl_pos_dp_mainsinglefile] = replace_argument(data_mainsinglefile[fl_pos_dp_mainsinglefile],
-                                                                     1, 'Departamento de la Universidad')
-    data_mainsinglefile[fl_pos_im_mainsinglefile] = replace_argument(data_mainsinglefile[fl_pos_im_mainsinglefile],
-                                                                     1, 'departamentos/fcfm')
-
-    # Se reescriben los archivos
-    new_mainfile = open(mainfile, 'w')
-    for i in data_mainfile:
-        new_mainfile.write(i)
-    new_mainfile.close()
-    new_mainsinglefile = open(mainsinglefile, 'w')
-    for i in data_mainsinglefile:
-        new_mainsinglefile.write(i)
-    new_mainsinglefile.close()
 
     # try:
     #     pyperclip.copy('Version ' + versiondev)
@@ -498,6 +498,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     return
 
 
+# noinspection PyUnboundLocalVariable
 def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
                       addwhitespace=False, deletecoments=True, plotstats=True, addstat=True, doclean=True,
                       savepdf=True, informeroot=None, mainroot=None, statsroot=None):
