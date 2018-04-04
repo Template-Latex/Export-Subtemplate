@@ -7,7 +7,7 @@ Autor: Pablo Pizarro R. @ ppizarror.com
 Licencia:
     The MIT License (MIT)
 
-    Copyright 2017 Pablo Pizarro R.
+    Copyright 2017-2018 Pablo Pizarro R.
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -38,8 +38,6 @@ POS_DER = 2
 
 
 class Cd(object):
-    """Context manager for changing the current working directory."""
-
     def __init__(self, new_path):
         self.newPath = os.path.expanduser(new_path)
 

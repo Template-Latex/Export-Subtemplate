@@ -7,7 +7,7 @@ Autor: Pablo Pizarro R. @ ppizarror.com
 Licencia:
     The MIT License (MIT)
 
-    Copyright 2017 Pablo Pizarro R.
+    Copyright 2017-2018 Pablo Pizarro R.
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -171,7 +171,8 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
         funfile = release['FUNCTIONFILE']
         fl = files[funfile]
         a, b = find_block(fl, '\\noindent {\\fontsizemaintitle \stylemaintitle #1} \quad')
-        files[funfile][a] = '\\noindent {\\fontsizemaintitle \stylemaintitle #1} \quad \emph{#2} \hfill \quad {\scriptsize #3} \\\\ \\vspace{-1em} \\\\'
+        files[funfile][a] = '\\noindent {\\fontsizemaintitle \stylemaintitle #1} \quad \emph{#2} \hfill \quad {' \
+                            '\scriptsize #3} \\\\ \\vspace{-1em} \\\\ '
 
         # Se crea el archivo unificado
         fl = open(mainsinglefile, 'w')
