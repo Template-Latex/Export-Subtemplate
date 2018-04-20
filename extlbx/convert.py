@@ -243,16 +243,16 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         data[l_tvdev] = d_tvdev
 
         # Se buscan funciones no válidas en compacto
-        delfile = 'lib/function/core.tex'
+        delfile = 'lib/cmd/core.tex'
         fl = files[delfile]
         files[delfile] = find_delete(fl, '\\newcommand{\\bgtemplatetestimg}{')
-        delfile = 'lib/portrait.tex'
+        delfile = 'lib/page/portrait.tex'
         fl = files[delfile]
         a, b = find_block(fl, '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{', altend='}{')
         files[delfile] = del_block_from_list(fl, a, b)
         a, b = find_block(files[delfile], '\\throwbadconfigondoc{Estilo de portada incorrecto}')
         files[delfile][a] = files[delfile][a][:-2]
-        delfile = 'lib/initconf.tex'
+        delfile = 'lib/cfg/init.tex'
         fl = files[delfile]
         files[delfile] = find_delete(fl, '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{\importtikzlib}{}',
                                      white_end_block=True)
@@ -267,6 +267,18 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         # data[codetablewidthpos] = data[codetablewidthpos].replace(itableoriginal, itablenew)
         line = 0
         stconfig = False  # Indica si se han escrito comentarios en configuraciones
+
+        # Se buscan los archivos /all y pega contenido
+        all_l = 0
+        for d in data:
+            if '/all}' in d:
+                allfile = d.strip().replace('\input{', '').replace('}', '').split(' ')[0] + '.tex'
+                data.pop(all_l)
+                newdata = files[allfile]
+                for k in newdata:
+                    if '%' not in k[0] and k.strip() != '':
+                        data.insert(all_l, k.strip() + '\n')
+            all_l += 1
 
         # Se recorren las líneas del archivo
         for d in data:
@@ -335,7 +347,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                             if libr != configfile:
                                 fl.write('\n')  # Se agrega espacio vacío
                         else:
-                            fl.write(d.replace('lib/', ''))
+                            fl.write(d.replace('lib/etc/', ''))
                         write = False
                 except:
                     pass
@@ -448,7 +460,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             export_normal.add_excepted_file(czip['EXCEPTED'])
             export_normal.add_file(czip['ADD']['FILES'])
             export_normal.add_folder('lib')
-            export_normal.add_folder('images/ejemplos')
+            export_normal.add_folder(release['ZIP']['OTHERS']['EXPATH'])
             export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
             for k in m[2]:
                 export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
@@ -458,7 +470,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             czip = release['ZIP']['COMPACT']
             export_single = Zip(mainroot + release['ZIP']['OTHERS']['SINGLE'].format(m[1]))
             export_single.add_file(czip['ADD']['FILES'], 'lib/')
-            export_single.add_folder('images/ejemplos')
+            export_single.add_folder(release['ZIP']['OTHERS']['EXPATH'])
             export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
             for k in m[2]:
                 export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))

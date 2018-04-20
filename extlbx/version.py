@@ -186,6 +186,8 @@ def validate_ver(newver, lastver):
                     else:
                         if nv3 == 'beta' and lv3 == 'alpha':
                             return True
+                        elif nv3 == 'beta' and lv3 == 'beta':
+                            return True
                         else:
                             if nv3 == 'alpha' and lv3 == 'alpha':
                                 return int(nv2.split('-')[1]) > int(lv2.split('-')[1])
@@ -206,7 +208,18 @@ def v_down(v):
     if len(_v) == 1:
         nv = v + '-1'
     else:
-        if int(_v[1][0]) < 9:
+        if _v[1] == 'beta' or _v[1] == 'alpha' or _v[1] == 'pre':
+            if int(_v[2]) < 9:
+                if _v[1] == 'beta':
+                    cd = 'b'
+                elif _v[1] == 'alpha':
+                    cd = 'a'
+                else:
+                    cd = 'p'
+                nv = _v[0] + '-' + cd + str(int(_v[2]) + 1)
+            else:
+                return v_up(v)
+        elif _v[1][0].isdigit() and int(_v[1][0]) < 9:
             nv = _v[0] + '-' + str(int(_v[1][0]) + 1)
         else:
             return v_up(v)

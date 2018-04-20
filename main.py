@@ -32,6 +32,7 @@ from extlbx import *
 from functools import partial
 from PIL import ImageTk
 import json
+import logging
 import signal
 import traceback
 
@@ -614,7 +615,8 @@ class CreateVersion(object):
                                                    mainroot=self._getconfig('MAIN_ROOT'),
                                                    informeroot=self._getconfig('INFORME_ROOT'),
                                                    statsroot=self._getconfig('STATS_ROOT'))
-                        except:
+                        except Exception, e:
+                            logging.exception('Error al generar informe')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                     elif t == 2:
                         try:
