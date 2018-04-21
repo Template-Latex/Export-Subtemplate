@@ -309,7 +309,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
                                 # Se borran los comentarios
                                 if deletecoments and libdelcom:
-                                    if '%' in srclin:
+                                    if '%' in srclin and not '\%' in srclin:
                                         if libr == configfile:
                                             if srclin.upper() == srclin:
                                                 if stconfig:
