@@ -165,3 +165,69 @@ def replace_argument(line, argnum, new, arginitsep='{', argendsep='}'):
     for k in a:
         z += k[0]
     return z
+
+
+def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelcom, deletecoments, configfile,
+                                 stconfig, dolibstrip=False, add_ending_line=False):
+    """
+    Pega un archivo de latex en un archivo fl.
+
+    :param fl: Archivo abierto, tipo open
+    :param libr: Nombre del .tex
+    :param files: Indica ubicación en memoria de los archivos
+    :param headersize: Tamaño de cabecera de los .tex
+    :param libstrip: Indica si se eliminan los espacios en blanco
+    :param libdelcom: Lista que indica si se eliminan
+    :param deletecoments: Borrar comentarios del archivo
+    :param configfile: Indica el archivo de configuración del template
+    :param stconfig: Se añade línea en blanco al reconocer el archivo de configuración
+    :param dolibstrip: Se forza strip al archivo
+    :param add_ending_line: Indica si se agrega una línea en blanco al final del archivo
+    :return:
+    """
+    # Se escribe desde el largo del header en adelante
+    libdata = files[libr]  # Datos del import
+
+    for libdatapos in range(headersize, len(libdata)):
+        srclin = libdata[libdatapos]
+
+        # Se borran los comentarios
+        if deletecoments and libdelcom:
+            if '%' in srclin and '\%' not in srclin:
+                if libr == configfile:
+                    if srclin.upper() == srclin:
+                        if stconfig:
+                            fl.write('\n')
+                        fl.write(srclin)
+                        stconfig = True
+                        continue
+                comments = srclin.strip().split('%')
+                if comments[0] is '':
+                    srclin = ''
+                else:
+                    srclin = srclin.replace('%' + comments[1], '')
+                    if libdatapos != len(libdata) - 1:
+                        srclin = srclin.strip() + '\n'
+                    else:
+                        srclin = srclin.strip()
+            elif srclin.strip() is '':
+                srclin = ''
+        else:
+            if libr == configfile:
+                # noinspection PyBroadException
+                try:
+                    if libdata[libdatapos + 1][0] == '%' and srclin.strip() is '':
+                        srclin = '\n'
+                except:
+                    pass
+
+        # Se ecribe la línea
+        if srclin is not '':
+            # Se aplica strip dependiendo del archivo
+            if libstrip or dolibstrip:
+                fl.write(srclin.strip())
+            else:
+                fl.write(srclin)
+
+    if libr != configfile and add_ending_line:
+        fl.write('\n')  # Se agrega espacio vacío

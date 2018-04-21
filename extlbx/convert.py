@@ -138,6 +138,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Obtiene archivos
     configfile = release['CONFIGFILE']
+    distfolder = release['DIST']
     examplefile = release['EXAMPLEFILE']
     filedelcoments = release['FILEDELCOMENTS']
     files = release['FILES']
@@ -151,11 +152,8 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     main_data = open(mainfile)
     main_data.read()
     initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
-    # codetablewidthpos = find_line(main_data, '\\begin{minipage}{0.976\\textwidth}')
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
-    # itableoriginal = '0.976\\textwidth'
-    # itablenew = '1.0126\\textwidth'
     versionheader = '% Versión:      {0} ({1})\n'
     main_data.close()
 
@@ -220,6 +218,33 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                 newfl.write(j)
             newfl.close()
 
+    # Se guardan archivos en DIST
+    if dosave:
+        for f in files.keys():
+            fl = open(distfolder + f, 'w')
+
+            # Se escribe el header
+            data = files[f]
+            kline = 0
+            for d in data:
+                if kline < headersize:
+                    fl.write(d)
+                else:
+                    break
+                kline += 1
+
+            # Strip
+            dostrip = True
+            if f == configfile or f == mainfile or f == examplefile:
+                dostrip = False
+
+            # Se escribe el documento
+            paste_external_tex_into_file(fl, f, files, headersize, dostrip, dostrip,
+                                         True, configfile, False)
+
+            # Se elimina la última linea en blanco si hay doble
+            fl.close()
+
     # Se obtiene la cantidad de líneas de código
     lc = 0
     for f in files.keys():
@@ -227,12 +252,9 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
     if dosave:
 
-        # Se crea ejemplo generado automáticamente
-        fl = open(release['EXAMPLECLONE'], 'w')
-        data = files[examplefile]
-        for k in data:
-            fl.write(k)
-        fl.close()
+        # Se clona archivo de ejemplo
+        copyfile(examplefile, release['EXAMPLECLONE'])
+        copyfile(examplefile, distfolder + release['EXAMPLECLONE'])
 
         # Se modifican propiedades para establecer tipo compacto
         data = files[initconffile]
@@ -298,54 +320,9 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                         if '.tex' not in libr:
                             libr += '.tex'
                         if libr != examplefile:
-
-                            # Se escribe desde el largo del header en adelante
-                            libdata = files[libr]  # Datos del import
-                            libstirp = filestrip[libr]  # Eliminar espacios en blanco
-                            libdelcom = filedelcoments[libr]  # Borrar comentarios
-
-                            for libdatapos in range(headersize, len(libdata)):
-                                srclin = libdata[libdatapos]
-
-                                # Se borran los comentarios
-                                if deletecoments and libdelcom:
-                                    if '%' in srclin and not '\%' in srclin:
-                                        if libr == configfile:
-                                            if srclin.upper() == srclin:
-                                                if stconfig:
-                                                    fl.write('\n')
-                                                fl.write(srclin)
-                                                stconfig = True
-                                                continue
-                                        comments = srclin.strip().split('%')
-                                        if comments[0] is '':
-                                            srclin = ''
-                                        else:
-                                            srclin = srclin.replace('%' + comments[1], '')
-                                            if libdatapos != len(libdata) - 1:
-                                                srclin = srclin.strip() + '\n'
-                                            else:
-                                                srclin = srclin.strip()
-                                    elif srclin.strip() is '':
-                                        srclin = ''
-                                else:
-                                    if libr == configfile:
-                                        try:
-                                            if libdata[libdatapos + 1][0] == '%' and srclin.strip() is '':
-                                                srclin = '\n'
-                                        except:
-                                            pass
-
-                                # Se ecribe la línea
-                                if srclin is not '':
-                                    # Se aplica strip dependiendo del archivo
-                                    if libstirp:
-                                        fl.write(srclin.strip())
-                                    else:
-                                        fl.write(srclin)
-
-                            if libr != configfile:
-                                fl.write('\n')  # Se agrega espacio vacío
+                            paste_external_tex_into_file(fl, libr, files, headersize, filestrip[libr],
+                                                         filedelcoments[libr], deletecoments, configfile,
+                                                         stconfig)
                         else:
                             fl.write(d.replace('lib/etc/', ''))
                         write = False
@@ -371,6 +348,9 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             line += 1
 
         fl.close()
+
+        # Se copia el archivo a dist
+        copyfile(mainsinglefile, distfolder + mainsinglefile)
 
     printfun(MSG_FOKTIMER.format(time.time() - t))
 
@@ -403,6 +383,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     if dosave:
         czip = release['ZIP']['NORMAL']
         export_normal = Zip(mainroot + czip['FILE'])
+        export_normal.set_ghostpath(distfolder)
         export_normal.add_excepted_file(czip['EXCEPTED'])
         export_normal.add_file(czip['ADD']['FILES'])
         export_normal.add_folder(czip['ADD']['FOLDER'])
@@ -411,7 +392,8 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         # Se exporta el proyecto único
         czip = release['ZIP']['COMPACT']
         export_single = Zip(mainroot + czip['FILE'])
-        export_single.add_file(czip['ADD']['FILES'], 'lib/')
+        export_single.set_ghostpath(distfolder)
+        export_single.add_file(czip['ADD']['FILES'], 'dist/')
         export_single.add_folder(czip['ADD']['FOLDER'])
         export_single.save()
 
@@ -457,9 +439,10 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             # Se genera el .zip
             czip = release['ZIP']['NORMAL']
             export_normal = Zip(mainroot + release['ZIP']['OTHERS']['NORMAL'].format(m[1]))
+            export_normal.set_ghostpath(distfolder)
             export_normal.add_excepted_file(czip['EXCEPTED'])
             export_normal.add_file(czip['ADD']['FILES'])
-            export_normal.add_folder('lib')
+            export_normal.add_folder('dist/lib')
             export_normal.add_folder(release['ZIP']['OTHERS']['EXPATH'])
             export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
             for k in m[2]:
@@ -469,7 +452,8 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             # Se genera el single
             czip = release['ZIP']['COMPACT']
             export_single = Zip(mainroot + release['ZIP']['OTHERS']['SINGLE'].format(m[1]))
-            export_single.add_file(czip['ADD']['FILES'], 'lib/')
+            export_single.set_ghostpath(distfolder)
+            export_single.add_file(czip['ADD']['FILES'], 'dist/lib/')
             export_single.add_folder(release['ZIP']['OTHERS']['EXPATH'])
             export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
             for k in m[2]:

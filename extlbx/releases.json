@@ -317,38 +317,39 @@
       "COMPACT": {
         "ADD": {
           "FILES": [
-            "informe.tex",
-            "example.tex"
+            "dist/informe.tex",
+            "dist/example.tex"
           ],
           "FOLDER": [
             "img"
           ]
         },
-        "EXCEPTED": [],
+        "EXCEPTED": [".gitkeep"],
         "FILE": "release/Template-Informe-Single.zip",
         "GHOST": ""
       },
       "NORMAL": {
         "ADD": {
           "FILES": [
-            "main.tex"
+            "dist/main.tex"
           ],
           "FOLDER": [
             "img",
-            "lib"
+            "dist/lib"
           ]
         },
         "EXCEPTED": [
-          "greekenum.sty",
-          "auxiliar_example.tex",
           ".aux",
-          "auxiliar_main.tex",
+          ".gitkeep",
           "auxiliar.tex",
+          "auxiliar_example.tex",
+          "auxiliar_imports.tex",
+          "auxiliar_main.tex",
           "auxiliar_pageconf.tex",
           "auxiliar_title.tex",
-          "auxiliar_imports.tex",
           "control_example.tex",
-          "control_pageconf.tex"
+          "control_pageconf.tex",
+          "greekenum.sty"
         ],
         "FILE": "release/Template-Informe.zip",
         "GHOST": ""

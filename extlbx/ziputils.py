@@ -92,6 +92,16 @@ class Zip(object):
         """
         self._zip.close()
 
+    def _writefile(self, f, fname):
+        """
+        Escribe un archivo en el zip.
+
+        :param f: Dirección del archivo
+        :param fname: Nombre del archivo
+        :return:
+        """
+        self._zip.write(f, fname)
+
     def add_file(self, ufile, ghostpath=None):
         """
         Añade un archivo al zip.
@@ -103,12 +113,15 @@ class Zip(object):
         """
         if type(ufile) is list:
             for f in ufile:
-                self.add_file(f, ghostpath)
+                if ghostpath is None:
+                    self._writefile(f, f.replace(self.ghostpath, ''))
+                else:
+                    self._writefile(f, f.replace(ghostpath, ''))
         else:
             if ghostpath is None:
-                self._zip.write(ufile, ufile.replace(self.ghostpath, ''))
+                self._writefile(ufile, ufile.replace(self.ghostpath, ''))
             else:
-                self._zip.write(ufile, ufile.replace(ghostpath, ''))
+                self._writefile(ufile, ufile.replace(ghostpath, ''))
 
     def add_folder(self, folder):
         """
