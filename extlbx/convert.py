@@ -427,11 +427,11 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             data_mainsinglefile[fl_pos_im_mainsinglefile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
 
             # Se reescriben los archivos
-            new_mainfile = open(mainfile, 'w')
+            new_mainfile = open(distfolder + mainfile, 'w')
             for i in data_mainfile:
                 new_mainfile.write(i)
             new_mainfile.close()
-            new_mainsinglefile = open(mainsinglefile, 'w')
+            new_mainsinglefile = open(distfolder + mainsinglefile, 'w')
             for i in data_mainsinglefile:
                 new_mainsinglefile.write(i)
             new_mainsinglefile.close()
@@ -453,7 +453,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             czip = release['ZIP']['COMPACT']
             export_single = Zip(mainroot + release['ZIP']['OTHERS']['SINGLE'].format(m[1]))
             export_single.set_ghostpath(distfolder)
-            export_single.add_file(czip['ADD']['FILES'], 'dist/lib/')
+            export_single.add_file(czip['ADD']['FILES'], 'dist/')
             export_single.add_folder(release['ZIP']['OTHERS']['EXPATH'])
             export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
             for k in m[2]:
@@ -470,11 +470,11 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                                                                          1, 'departamentos/fcfm')
 
         # Se reescriben los archivos
-        new_mainfile = open(mainfile, 'w')
+        new_mainfile = open(distfolder + mainfile, 'w')
         for i in data_mainfile:
             new_mainfile.write(i)
         new_mainfile.close()
-        new_mainsinglefile = open(mainsinglefile, 'w')
+        new_mainsinglefile = open(distfolder + mainsinglefile, 'w')
         for i in data_mainsinglefile:
             new_mainsinglefile.write(i)
         new_mainsinglefile.close()
