@@ -322,7 +322,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                         if libr != examplefile:
                             paste_external_tex_into_file(fl, libr, files, headersize, filestrip[libr],
                                                          filedelcoments[libr], deletecoments, configfile,
-                                                         stconfig)
+                                                         stconfig, add_ending_line=True)
                         else:
                             fl.write(d.replace('lib/etc/', ''))
                         write = False
