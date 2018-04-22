@@ -538,18 +538,23 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     mainf = RELEASES[REL_INFORME]['FILES']
     files = release['FILES']
     files['main.tex'] = copy.copy(mainf['main.tex'])
-    files['lib/function/core.tex'] = copy.copy(mainf['lib/function/core.tex'])
-    files['lib/function/elements.tex'] = copy.copy(mainf['lib/function/elements.tex'])
-    files['lib/function/equation.tex'] = copy.copy(mainf['lib/function/equation.tex'])
-    files['lib/function/image.tex'] = copy.copy(mainf['lib/function/image.tex'])
-    files['lib/function/title.tex'] = file_to_list('lib/function/auxiliar_title.tex')
-    files['lib/function/auxiliar.tex'] = file_to_list('lib/function/auxiliar.tex')
-    files['lib/example.tex'] = file_to_list('lib/auxiliar_example.tex')
-    files['lib/initconf.tex'] = copy.copy(mainf['lib/initconf.tex'])
+    files['lib/cmd/all.tex'] = file_to_list('lib/cmd/all_auxiliar.tex')
+    files['lib/cmd/core.tex'] = copy.copy(mainf['lib/cmd/core.tex'])
+    files['lib/cmd/math.tex'] = copy.copy(mainf['lib/cmd/math.tex'])
+    files['lib/cmd/equation.tex'] = copy.copy(mainf['lib/cmd/equation.tex'])
+    files['lib/cmd/image.tex'] = copy.copy(mainf['lib/cmd/image.tex'])
+    files['lib/cmd/title.tex'] = file_to_list('lib/cmd/auxiliar_title.tex')
+    files['lib/cmd/other.tex'] = copy.copy(mainf['lib/cmd/other.tex'])
+    files['lib/cmd/auxiliar.tex'] = file_to_list('lib/cmd/auxiliar.tex')
+    files['lib/etc/example.tex'] = file_to_list('lib/etc/auxiliar_example.tex')
+    files['lib/cfg/init.tex'] = copy.copy(mainf['lib/cfg/init.tex'])
     files['lib/config.tex'] = copy.copy(mainf['lib/config.tex'])
-    files['lib/pageconf.tex'] = copy.copy(mainf['lib/pageconf.tex'])
-    files['lib/styles.tex'] = copy.copy(mainf['lib/styles.tex'])
-    files['lib/imports.tex'] = copy.copy(mainf['lib/imports.tex'])
+    files['lib/cfg/page.tex'] = copy.copy(mainf['lib/cfg/page.tex'])
+    files['lib/style/all.tex'] = copy.copy(mainf['lib/style/all.tex'])
+    files['lib/style/color.tex'] = copy.copy(mainf['lib/style/color.tex'])
+    files['lib/style/code.tex'] = copy.copy(mainf['lib/style/code.tex'])
+    files['lib/style/other.tex'] = copy.copy(mainf['lib/style/other.tex'])
+    files['lib/env/imports.tex'] = copy.copy(mainf['lib/env/imports.tex'])
     filedelcoments = release['FILEDELCOMENTS']
     filestrip = release['FILESTRIP']
     mainfile = release['MAINFILE']
@@ -698,7 +703,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl].pop()
 
     # CORE FUN
-    delfile = 'lib/function/core.tex'
+    delfile = release['COREFUN']
     fl = files[delfile]
     files[delfile] = find_delete(fl, '\\newcommand{\\bgtemplatetestimg}{')
     fl = files[delfile]
@@ -707,10 +712,14 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # Cambia encabezado archivos
     for fl in files.keys():
         data = files[fl]
-        data[0] = '% Template:     Template Auxiliar LaTeX\n'
-        data[10] = '% Sitio web:    [{0}]\n'.format(release['WEB']['MANUAL'])
-        data[11] = '% Licencia MIT: [https://opensource.org/licenses/MIT]\n'
-        data[headerversionpos] = versionhead
+        # noinspection PyCompatibility,PyBroadException
+        try:
+            data[0] = '% Template:     Template Auxiliar LaTeX\n'
+            data[10] = '% Sitio web:    [{0}]\n'.format(release['WEB']['MANUAL'])
+            data[11] = '% Licencia MIT: [https://opensource.org/licenses/MIT]\n'
+            data[headerversionpos] = versionhead
+        except:
+            print('Error en archivo ' + fl)
 
     # Guarda los archivos
     os.chdir(mainroot)
@@ -731,13 +740,13 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
         # Se crea ejemplo
         fl = open(subrlfolder + 'example.tex', 'w')
-        data = files['lib/example.tex']
+        data = files[release['EXAMPLEFILE']]
         for k in data:
             fl.write(k)
         fl.close()
 
         # Actualización a compacto
-        fl = 'lib/initconf.tex'
+        fl = release['INITCONFFILE']
         ra, _ = find_block(files[fl], 'Template.Version.Dev')
         files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-AUX-C')
         ra, _ = find_block(files[fl], 'Template.Tipo')
@@ -748,6 +757,18 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         fl = open(subrlfolder + release['SINGLEFILE'], 'w')
         data = files[mainfile]
         stconfig = False  # Indica si se han escrito comentarios en configuraciones
+
+        # Se buscan los archivos /all y pega contenido
+        all_l = 0
+        for d in data:
+            if '/all}' in d:
+                allfile = d.strip().replace('\input{', '').replace('}', '').split(' ')[0] + '.tex'
+                data.pop(all_l)
+                newdata = files[allfile]
+                for k in newdata:
+                    if '%' not in k[0] and k.strip() != '':
+                        data.insert(all_l, k.strip() + '\n')
+            all_l += 1
 
         for d in data:
             write = True
@@ -767,57 +788,12 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                         if '.tex' not in libr:
                             libr += '.tex'
                         if libr != examplefile:
+                            paste_external_tex_into_file(fl, libr, files, headersize, filestrip[libr],
+                                                         filedelcoments[libr], deletecoments, configfile,
+                                                         stconfig)
 
-                            # Se escribe desde el largo del header en adelante
-                            libdata = files[libr]  # Datos del import
-                            libstirp = filestrip[libr]  # Eliminar espacios en blanco
-                            libdelcom = filedelcoments[libr]  # Borrar comentarios
-
-                            for libdatapos in range(headersize, len(libdata)):
-                                srclin = libdata[libdatapos]
-
-                                # Se borran los comentarios
-                                if deletecoments and libdelcom:
-                                    if '%' in srclin:
-                                        if libr == configfile:
-                                            if srclin.upper() == srclin:
-                                                if stconfig:
-                                                    fl.write('\n')
-                                                fl.write(srclin)
-                                                stconfig = True
-                                                continue
-                                        comments = srclin.strip().split('%')
-                                        if comments[0] is '':
-                                            srclin = ''
-                                        else:
-                                            srclin = srclin.replace('%' + comments[1], '')
-                                            if libdatapos != len(libdata) - 1:
-                                                srclin = srclin.strip() + '\n'
-                                            else:
-                                                srclin = srclin.strip()
-                                    elif srclin.strip() is '':
-                                        srclin = ''
-                                else:
-                                    if libr == configfile:
-                                        # noinspection PyBroadException
-                                        try:
-                                            if libdata[libdatapos + 1][0] == '%' and srclin.strip() is '':
-                                                srclin = '\n'
-                                        except:
-                                            pass
-
-                                # Se ecribe la línea
-                                if srclin is not '':
-                                    # Se aplica strip dependiendo del archivo
-                                    if libstirp:
-                                        fl.write(srclin.strip())
-                                    else:
-                                        fl.write(srclin)
-
-                            if libr != configfile:
-                                fl.write('\n')  # Se agrega espacio vacío
                         else:
-                            fl.write(d.replace('lib/', ''))
+                            fl.write(d.replace('lib/etc/', ''))
                         write = False
                 except:
                     pass
@@ -885,8 +861,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         with Cd(subrlfolder):
             export_single.set_ghostpath(czip['GHOST'])
             export_single.add_file(release['SINGLEFILE'])
-            export_single.add_folder('images')
-            export_single.add_file('lib/example.tex', 'lib/')
+            export_single.add_folder('img')
+            export_single.add_file('lib/etc/example.tex', 'lib/etc/')
         export_single.save()
 
     # Limpia el diccionario

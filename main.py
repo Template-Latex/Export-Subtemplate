@@ -630,7 +630,8 @@ class CreateVersion(object):
                                                       mainroot=self._getconfig('MAIN_ROOT'),
                                                       informeroot=self._getconfig('INFORME_ROOT'),
                                                       statsroot=self._getconfig('STATS_ROOT'))
-                        except:
+                        except Exception, e:
+                            logging.exception('Error al generar auxiliares')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                             clear_dict(RELEASES[REL_AUXILIAR], 'FILES')
                     elif t == 3:
