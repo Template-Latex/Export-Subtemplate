@@ -46,6 +46,7 @@ MSG_FOKTIMER = 'OK [t {0:.3g}]'
 MSG_GEN_FILE = 'GENERANDO ARCHIVOS ... '
 MSG_LAST_VER = 'ULTIMA VERSION:\t {0}'
 MSG_UPV_FILE = 'ACTUALIZANDO VERSION ...'
+STIP_ALL_GENERATED_FILES = False
 
 
 # noinspection PyUnusedLocal
@@ -239,7 +240,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                 dostrip = False
 
             # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, dostrip, dostrip,
+            paste_external_tex_into_file(fl, f, files, headersize, STIP_ALL_GENERATED_FILES, dostrip,
                                          True, configfile, False)
 
             # Se elimina la última linea en blanco si hay doble
@@ -748,7 +749,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                 dostrip = False
 
             # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, dostrip, dostrip,
+            paste_external_tex_into_file(fl, f, files, headersize, STIP_ALL_GENERATED_FILES, dostrip,
                                          True, configfile, False)
 
             # Se elimina la última linea en blanco si hay doble
@@ -1093,7 +1094,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                 dostrip = False
 
             # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, dostrip, dostrip,
+            paste_external_tex_into_file(fl, f, files, headersize, STIP_ALL_GENERATED_FILES, dostrip,
                                          True, configfile, False)
 
             # Se elimina la última linea en blanco si hay doble
