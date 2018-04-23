@@ -168,6 +168,9 @@ def validate_ver(newver, lastver):
         if _check2(nv1, lv1):
             lv2 = lastver[1]
             nv2 = newver[1]
+
+            if nv2 == '0' and ('pre' in lv2 or 'beta' in lv2 or 'alpha' in lv2):
+                return True
             if len(nv2) > 1 and len(lv2) == 1:
                 return True
             elif len(nv2) == 1 and len(lv2) > 1:

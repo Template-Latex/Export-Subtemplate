@@ -191,6 +191,10 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
     for libdatapos in range(headersize, len(libdata)):
         srclin = libdata[libdatapos]
 
+        forcenl = False
+        if '% !NL' in srclin:
+            forcenl = True
+
         # Se borran los comentarios
         if deletecoments and libdelcom:
             if '%' in srclin and '\%' not in srclin:
@@ -228,6 +232,10 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
                 fl.write(srclin.strip())
             else:
                 fl.write(srclin)
+
+        # Se forza nueva línea
+        if forcenl:
+            fl.write('\n')
 
     if libr != configfile and add_ending_line:
         fl.write('\n')  # Se agrega espacio vacío
