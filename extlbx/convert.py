@@ -596,7 +596,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[mainfile][ra] = '\def\\temaatratar {Tema de la auxiliar}\n'
     nl = find_extract(main_auxiliar, '% IMPORTACIÓN DE FUNCIONES', True)
     files[mainfile] = find_replace(files[mainfile], '% IMPORTACIÓN DE FUNCIONES', nl, white_end_block=True, jadd=-1)
-    files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
+    # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # MODIFICA CONFIGURACIIONES
     fl = release['CONFIGFILE']
@@ -721,20 +721,38 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         except:
             print('Error en archivo ' + fl)
 
-    # Guarda los archivos
-    os.chdir(mainroot)
-    if dosave:
-        for fl in files.keys():
-            data = files[fl]
-            newfl = open(subrlfolder + fl, 'w')
-            for j in data:
-                newfl.write(j)
-            newfl.close()
-
     # Se obtiene la cantidad de líneas de código
     lc = 0
     for f in files.keys():
         lc += len(files[f])
+
+    # Guarda los archivos
+    os.chdir(mainroot)
+    if dosave:
+        for f in files.keys():
+            fl = open(subrlfolder + f, 'w')
+
+            # Se escribe el header
+            data = files[f]
+            kline = 0
+            for d in data:
+                if kline < headersize:
+                    fl.write(d)
+                else:
+                    break
+                kline += 1
+
+            # Strip
+            dostrip = True
+            if f == configfile or f == mainfile or f == examplefile:
+                dostrip = False
+
+            # Se escribe el documento
+            paste_external_tex_into_file(fl, f, files, headersize, dostrip, dostrip,
+                                         True, configfile, False)
+
+            # Se elimina la última linea en blanco si hay doble
+            fl.close()
 
     if dosave:
 
@@ -972,7 +990,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files[mainfile][ra] = '\def\indicacionevaluacion {\\textbf{INDICACIÓN DEL CONTROL}} % Opcional\n'
     nl = find_extract(main_auxiliar, '% IMPORTACIÓN DE FUNCIONES', True)
     files[mainfile] = find_replace(files[mainfile], '% IMPORTACIÓN DE FUNCIONES', nl, white_end_block=True, jadd=-1)
-    files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
+    # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # CONTROL
     fl = release['FUNCTIONS']
@@ -1048,20 +1066,38 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
         except:
             print('Fallo carga de archivo ' + fl)
 
-    # Guarda los archivos
-    os.chdir(mainroot)
-    if dosave:
-        for fl in files.keys():
-            data = files[fl]
-            newfl = open(subrlfolder + fl, 'w')
-            for j in data:
-                newfl.write(j)
-            newfl.close()
-
     # Se obtiene la cantidad de líneas de código
     lc = 0
     for f in files.keys():
         lc += len(files[f])
+
+    # Guarda los archivos
+    os.chdir(mainroot)
+    if dosave:
+        for f in files.keys():
+            fl = open(subrlfolder + f, 'w')
+
+            # Se escribe el header
+            data = files[f]
+            kline = 0
+            for d in data:
+                if kline < headersize:
+                    fl.write(d)
+                else:
+                    break
+                kline += 1
+
+            # Strip
+            dostrip = True
+            if f == configfile or f == mainfile or f == examplefile:
+                dostrip = False
+
+            # Se escribe el documento
+            paste_external_tex_into_file(fl, f, files, headersize, dostrip, dostrip,
+                                         True, configfile, False)
+
+            # Se elimina la última linea en blanco si hay doble
+            fl.close()
 
     if dosave:
 
