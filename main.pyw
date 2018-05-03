@@ -75,7 +75,7 @@ TITLE_UPLOADING = '{0} | Cargando a GitHub ...'
 
 # Otros
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.7.5 (20/11/2017)'
+__version__ = '2.8.0 (02/05/2018)'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal

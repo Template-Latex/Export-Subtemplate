@@ -699,7 +699,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     nl = find_extract(aux_fun, '% Crea una sección de anexos', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
-    nl = find_extract(aux_fun, '% Inserta código fuente', True)
+    nl = find_extract(aux_fun, '% Inserta código fuente con parámetros', True)
+    files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+    nl = find_extract(aux_fun, '% Inserta código fuente sin parámetros', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     files[fl].pop()
 
