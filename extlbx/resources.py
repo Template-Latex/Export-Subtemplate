@@ -35,7 +35,7 @@ __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace('\\', '/'
 __respath = __actualpath + 'res/'
 
 # Recursos
-EXTLBX_BTN_UPLOAD = __respath + 'upload.png'
+EXTLBX_BTN_UPLOAD = __respath + 'upload2.png'
 EXTLBX_CONFIGS = __respath + 'config.json'
 EXTLBX_ICON = __respath + 'icon.ico'
 EXTLBX_LICENSE = __respath + 'license'
