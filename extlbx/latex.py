@@ -187,6 +187,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
     :param force_nl: Forzar nueva línea
     :return:
     """
+
     # Se escribe desde el largo del header en adelante
     if files is not None:
         libdata = files[libr]  # Datos del import
@@ -202,8 +203,20 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
 
         # Forzar nueva línea
         forcenl = False or force_nl
-        if '% !NL' in srclin:
+        if ' !NL' in srclin:
             forcenl = True
+        if ' !DISTNL' in srclin:
+            forcenl = True and dist
+
+        # Forzar borrado de comentarios
+        forcedelcom = False
+        if ' !DELCOM' in srclin:
+            forcedelcom = True
+
+        # Forzar strip
+        forcestrip = False
+        if ' !STRIP' in srclin:
+            forcestrip = True
 
         # Si es un archivo
         if '% !FILE' in srclin:
@@ -233,7 +246,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
                                              configfile, stconfig, file_strip, file_nl)
 
         # Se borran los comentarios
-        if deletecoments and libdelcom:
+        if deletecoments and libdelcom or forcedelcom:
             if '%' in srclin and '\%' not in srclin:
                 if libr == configfile:
                     if srclin.upper() == srclin:
@@ -265,7 +278,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
         # Se ecribe la línea
         if srclin is not '':
             # Se aplica strip dependiendo del archivo
-            if libstrip or dolibstrip:
+            if libstrip or dolibstrip or forcestrip:
                 fl.write(srclin.strip())
             else:
                 fl.write(srclin)
