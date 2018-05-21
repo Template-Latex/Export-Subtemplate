@@ -205,18 +205,34 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
         forcenl = False or force_nl
         if ' !NL' in srclin:
             forcenl = True
+            srclin = srclin.replace(' !NL', '')
         if ' !DISTNL' in srclin:
             forcenl = True and dist
+            srclin = srclin.replace(' !DISTNL', '')
 
         # Forzar borrado de comentarios
         forcedelcom = False
         if ' !DELCOM' in srclin:
             forcedelcom = True
+            srclin = srclin.replace(' !DELCOM', '')
 
         # Forzar strip
         forcestrip = False
         if ' !STRIP' in srclin:
             forcestrip = True
+            srclin = srclin.replace(' !STRIP', '')
+
+        # Insertar una línea nueva modo normal
+        if ' !PREVNL' in srclin:
+            if not dist:
+                fl.write('\n')
+            srclin = srclin.replace(' !PREVNL', '')
+
+        # Insertar una línea nueva modo normal
+        if ' !PREVDISTNL' in srclin:
+            if dist:
+                fl.write('\n')
+            srclin = srclin.replace(' !PREVDISTNL', '')
 
         # Si es un archivo
         if '% !FILE' in srclin:
