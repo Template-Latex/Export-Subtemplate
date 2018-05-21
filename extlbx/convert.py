@@ -281,9 +281,6 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         files[delfile] = find_delete(fl, '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{\importtikzlib}{}',
                                      white_end_block=True)
 
-        # Borra archivos externos
-        files['lib/page/portrait-config.tex'] = None
-
         # Se crea el archivo unificado
         fl = open(mainsinglefile, 'w')
         data = files[mainfile]
