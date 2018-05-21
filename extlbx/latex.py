@@ -244,6 +244,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
             if file_ignoredist and not dist:
                 paste_external_tex_into_file(fl, file_libr, None, headersize, file_strip, file_delcom, file_delcom,
                                              configfile, stconfig, file_strip, file_nl)
+                continue
 
         # Se borran los comentarios
         if deletecoments and libdelcom or forcedelcom:

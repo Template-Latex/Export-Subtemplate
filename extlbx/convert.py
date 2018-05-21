@@ -46,7 +46,7 @@ MSG_FOKTIMER = 'OK [t {0:.3g}]'
 MSG_GEN_FILE = 'GENERANDO ARCHIVOS ... '
 MSG_LAST_VER = 'ULTIMA VERSION:\t {0}'
 MSG_UPV_FILE = 'ACTUALIZANDO VERSION ...'
-STRIP_ALL_GENERATED_FILES = False  # Aplica strip a todos los archivos en dist/
+STRIP_ALL_GENERATED_FILES = True  # Aplica strip a todos los archivos en dist/
 
 
 # noinspection PyUnusedLocal
@@ -280,6 +280,9 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         fl = files[delfile]
         files[delfile] = find_delete(fl, '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{\importtikzlib}{}',
                                      white_end_block=True)
+
+        # Borra archivos externos
+        files['lib/page/portrait-config.tex'] = None
 
         # Se crea el archivo unificado
         fl = open(mainsinglefile, 'w')
