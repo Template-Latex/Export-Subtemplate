@@ -168,7 +168,7 @@ def replace_argument(line, argnum, new, arginitsep='{', argendsep='}'):
 
 
 def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelcom, deletecoments, configfile,
-                                 stconfig, dolibstrip=False, add_ending_line=False):
+                                 stconfig, dolibstrip=False, add_ending_line=False, dist=False, force_nl=False):
     """
     Pega un archivo de latex en un archivo fl.
 
@@ -183,17 +183,54 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
     :param stconfig: Se añade línea en blanco al reconocer el archivo de configuración
     :param dolibstrip: Se forza strip al archivo
     :param add_ending_line: Indica si se agrega una línea en blanco al final del archivo
+    :param dist: Indica que la función se llama en modo dist
+    :param force_nl: Forzar nueva línea
     :return:
     """
     # Se escribe desde el largo del header en adelante
-    libdata = files[libr]  # Datos del import
+    if files is not None:
+        libdata = files[libr]  # Datos del import
+    else:
+        libdata = []
+        fld = open(libr, 'r')
+        for k in fld:
+            libdata.append(k)
+        fld.close()
 
     for libdatapos in range(headersize, len(libdata)):
         srclin = libdata[libdatapos]
 
-        forcenl = False
+        # Forzar nueva línea
+        forcenl = False or force_nl
         if '% !NL' in srclin:
             forcenl = True
+
+        # Si es un archivo
+        if '% !FILE' in srclin:
+
+            # Obtiene el archivo
+            file_libr = srclin.replace('\input{', '').replace('}', '').strip()
+            file_libr = file_libr.split(' ')[0]
+            if '.tex' not in file_libr:
+                file_libr += '.tex'
+
+            # Obtiene parámetros
+            file_params = srclin.strip().split(' ')
+            for k in file_params:
+                if '<' in k and '>' in k:
+                    file_params = k
+                    break
+            file_params = file_params.replace('<', '').replace('>', '')
+            file_params = file_params.split(',')
+
+            file_strip = 'STRIP' in file_params
+            file_delcom = 'DELCOM' in file_params
+            file_nl = 'NL' in file_params
+            file_ignoredist = 'NODIST' in file_params
+
+            if file_ignoredist and not dist:
+                paste_external_tex_into_file(fl, file_libr, None, headersize, file_strip, file_delcom, file_delcom,
+                                             configfile, stconfig, file_strip, file_nl)
 
         # Se borran los comentarios
         if deletecoments and libdelcom:

@@ -29,6 +29,7 @@ Licencia:
 
 # Importación de librerías
 from extlbx import *
+from extlbx import __author__, __version__
 from functools import partial
 from PIL import ImageTk
 import json
@@ -72,10 +73,6 @@ LOG_MSG = {
 TITLE = 'Export-Subtemplate'
 TITLE_LOADING = '{0} | Espere ...'
 TITLE_UPLOADING = '{0} | Cargando a GitHub ...'
-
-# Otros
-__author__ = 'Pablo Pizarro R.'
-__version__ = '2.8.0 (02/05/2018)'
 
 
 # noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal

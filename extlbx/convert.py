@@ -46,7 +46,7 @@ MSG_FOKTIMER = 'OK [t {0:.3g}]'
 MSG_GEN_FILE = 'GENERANDO ARCHIVOS ... '
 MSG_LAST_VER = 'ULTIMA VERSION:\t {0}'
 MSG_UPV_FILE = 'ACTUALIZANDO VERSION ...'
-STIP_ALL_GENERATED_FILES = False
+STRIP_ALL_GENERATED_FILES = False  # Aplica strip a todos los archivos en dist/
 
 
 # noinspection PyUnusedLocal
@@ -236,12 +236,13 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
             # Strip
             dostrip = True
-            if f == configfile or f == mainfile or f == examplefile:
+            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
                 dostrip = False
 
             # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STIP_ALL_GENERATED_FILES, dostrip,
-                                         True, configfile, False)
+            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES, dostrip,
+                                         True, configfile, False, dist=True,
+                                         force_nl=(not dostrip and STRIP_ALL_GENERATED_FILES))
 
             # Se elimina la última linea en blanco si hay doble
             fl.close()
@@ -751,12 +752,13 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
             # Strip
             dostrip = True
-            if f == configfile or f == mainfile or f == examplefile:
+            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
                 dostrip = False
 
             # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STIP_ALL_GENERATED_FILES, dostrip,
-                                         True, configfile, False)
+            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES, dostrip,
+                                         True, configfile, False, dist=True,
+                                         force_nl=(not dostrip and STRIP_ALL_GENERATED_FILES))
 
             # Se elimina la última linea en blanco si hay doble
             fl.close()
@@ -1096,12 +1098,13 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
 
             # Strip
             dostrip = True
-            if f == configfile or f == mainfile or f == examplefile:
+            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
                 dostrip = False
 
             # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STIP_ALL_GENERATED_FILES, dostrip,
-                                         True, configfile, False)
+            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES, dostrip,
+                                         True, configfile, False, dist=True,
+                                         force_nl=(not dostrip and STRIP_ALL_GENERATED_FILES))
 
             # Se elimina la última linea en blanco si hay doble
             fl.close()

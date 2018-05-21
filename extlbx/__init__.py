@@ -27,6 +27,9 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__author__ = 'Pablo Pizarro R.'
+__version__ = '2.9.0 (21/05/2018)'
+
 # noinspection PyUnresolvedReferences
 from releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, RELEASES
 # noinspection PyUnresolvedReferences
@@ -41,20 +44,16 @@ from sound import Sound
 from resources import *
 # noinspection PyUnresolvedReferences
 from export_professionalcv import exportcv
-
 # noinspection PyCompatibility,PyUnresolvedReferences
 from Tkinter import *
 # noinspection PyCompatibility,PyUnresolvedReferences
 import tkFont
 # noinspection PyUnresolvedReferences,PyCompatibility
 import tkMessageBox
-
 # noinspection PyUnresolvedReferences
 from vframe import VerticalScrolledFrame
-
 # noinspection PyUnresolvedReferences
 from pyperclip import copy as extlbcbpaste
-
 import sys
 
 # noinspection PyCompatibility
