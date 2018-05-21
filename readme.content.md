@@ -32,3 +32,5 @@ Formato de línea:
 | !DISTNL | Forza una nueva línea solo en la distribución |
 | !NL | Forza una nueva línea en cualquier caso |
 | !STRIP | Forza el *strip* en la línea |
+| !PREVNL | Añade una nueva línea en modo compacto |
+| !PREVDISTNL | Añade una nueva línea solo en el modo distribución |
