@@ -207,6 +207,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
             forcenl = True
             srclin = srclin.replace(' !NL', '')
         if ' !DISTNL' in srclin:
+            print(srclin)
             forcenl = True and dist
             srclin = srclin.replace(' !DISTNL', '')
 
@@ -302,6 +303,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
 
         # Se forza nueva línea
         if forcenl:
+            # print(srclin)
             fl.write('\n')
 
     if libr != configfile and add_ending_line:

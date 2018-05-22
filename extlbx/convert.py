@@ -240,9 +240,8 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                 dostrip = False
 
             # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES, dostrip,
-                                         True, configfile, False, dist=True,
-                                         force_nl=(not dostrip and STRIP_ALL_GENERATED_FILES))
+            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
+                                         True, configfile, False, dist=True, add_ending_line=True and dostrip)
 
             # Se elimina la última linea en blanco si hay doble
             fl.close()
@@ -756,9 +755,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                 dostrip = False
 
             # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES, dostrip,
-                                         True, configfile, False, dist=True,
-                                         force_nl=(not dostrip and STRIP_ALL_GENERATED_FILES))
+            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
+                                         True, configfile, False, dist=True, add_ending_line=True and dostrip)
 
             # Se elimina la última linea en blanco si hay doble
             fl.close()
@@ -1102,9 +1100,8 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                 dostrip = False
 
             # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES, dostrip,
-                                         True, configfile, False, dist=True,
-                                         force_nl=(not dostrip and STRIP_ALL_GENERATED_FILES))
+            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
+                                         True, configfile, False, dist=True, add_ending_line=True and dostrip)
 
             # Se elimina la última linea en blanco si hay doble
             fl.close()
