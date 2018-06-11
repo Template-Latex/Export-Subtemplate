@@ -540,6 +540,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files = release['FILES']
     files['main.tex'] = copy.copy(mainf['main.tex'])
     files['lib/cmd/all.tex'] = file_to_list('lib/cmd/all_auxiliar.tex')
+    files['lib/cmd/column.tex'] = copy.copy(mainf['lib/cmd/column.tex'])
     files['lib/cmd/core.tex'] = copy.copy(mainf['lib/cmd/core.tex'])
     files['lib/cmd/math.tex'] = copy.copy(mainf['lib/cmd/math.tex'])
     files['lib/cmd/equation.tex'] = copy.copy(mainf['lib/cmd/equation.tex'])
@@ -947,6 +948,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files['main.tex'] = copy.copy(mainf['main.tex'])
     files['lib/cmd/all.tex'] = file_to_list('lib/cmd/all_control.tex')
     files['lib/cmd/core.tex'] = copy.copy(mainf['lib/cmd/core.tex'])
+    files['lib/cmd/column.tex'] = copy.copy(mainf['lib/cmd/column.tex'])
     files['lib/cmd/control.tex'] = copy.copy(mainf['lib/cmd/auxiliar.tex'])
     files['lib/cmd/math.tex'] = copy.copy(mainf['lib/cmd/math.tex'])
     files['lib/cmd/equation.tex'] = copy.copy(mainf['lib/cmd/equation.tex'])
