@@ -602,11 +602,13 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
     # MODIFICA CONFIGURACIIONES
     fl = release['CONFIGFILE']
+
+    # Configuraciones que se borran
     cdel = ['addemptypagetwosides', 'nomlttable', 'nomltsrc', 'nomltfigure',
             'nomltcont', 'nameportraitpage', 'nameabstract', 'indextitlecolor',
             'portraittitlecolor', 'fontsizetitlei', 'styletitlei',
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
-            'nomchapter']
+            'nomchapter', 'nomnpageof']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -623,9 +625,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra, rb = find_block(files[fl], 'pagemargintop', True)
     nconf = replace_argument(files[fl][ra], 1, '2.30').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'cfgshowbookmarkmenu', True)
-    nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
-    files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'cfgbookmarksopenlevel', True)
     nconf = replace_argument(files[fl][ra], 1, '1')
     files[fl][ra] = nconf
@@ -641,6 +640,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     aux_imports = file_to_list(subrelfile['IMPORTS'])
     nl = find_extract(aux_imports, '% Anexos/Apéndices', True)
     files[fl] = find_replace(files[fl], '\ifthenelse{\equal{\showappendixsecindex}', nl, jadd=-1, white_end_block=True)
+    files[fl] = find_delete(files[fl], '% Estilo portada', white_end_block=True)
 
     # CAMBIO INITCONF
     fl = release['INITCONFFILE']

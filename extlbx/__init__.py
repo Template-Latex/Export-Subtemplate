@@ -28,7 +28,7 @@ Licencia:
 """
 
 __author__ = 'Pablo Pizarro R.'
-__version__ = '2.9.5 (27/05/2018)'
+__version__ = '2.9.6 (23/08/2018)'
 
 # noinspection PyUnresolvedReferences
 from releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, RELEASES
