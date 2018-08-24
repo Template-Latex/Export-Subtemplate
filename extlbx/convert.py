@@ -236,7 +236,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
             # Strip
             dostrip = True
-            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
+            if f == configfile or f == mainfile or f == examplefile or 'index' in f or '-config' in f:
                 dostrip = False
 
             # Se escribe el documento
