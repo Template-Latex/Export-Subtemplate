@@ -328,7 +328,7 @@
       "lib/env/environments.tex": true,
       "lib/env/imports.tex": true,
       "lib/etc/example.tex": false,
-      "lib/page/index.tex": false,
+      "lib/page/index.tex": true,
       "lib/page/portrait.tex": true,
       "lib/page/portrait-config.tex": false,
       "lib/style/all.tex": true,
