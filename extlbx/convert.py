@@ -236,7 +236,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
             # Strip
             dostrip = True
-            if f == configfile or f == mainfile or f == examplefile or 'index' in f or '-config' in f:
+            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
                 dostrip = False
 
             # Se escribe el documento
@@ -608,7 +608,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             'nomltcont', 'nameportraitpage', 'nameabstract', 'indextitlecolor',
             'portraittitlecolor', 'fontsizetitlei', 'styletitlei',
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
-            'nomchapter', 'nomnpageof']
+            'nomchapter', 'nomnpageof', 'indexforcenewpage']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
