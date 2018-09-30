@@ -108,7 +108,7 @@
           ]
         },
         "EXCEPTED": [".gitkeep"],
-        "FILE": "release/Template-Auxiliares-Single.zip",
+        "FILE": "dist/Template-Auxiliares.min.zip",
         "GHOST": "Template-Auxiliares/"
       },
       "NORMAL": {
@@ -124,7 +124,7 @@
         "EXCEPTED": [
           ".aux"
         ],
-        "FILE": "release/Template-Auxiliares.zip",
+        "FILE": "dist/Template-Auxiliares.zip",
         "GHOST": "Template-Auxiliares/"
       }
     }
@@ -236,7 +236,7 @@
           ]
         },
         "EXCEPTED": [],
-        "FILE": "release/Template-Controles-Single.zip",
+        "FILE": "dist/Template-Controles.min.zip",
         "GHOST": "../Template-Controles/"
       },
       "NORMAL": {
@@ -252,7 +252,7 @@
         "EXCEPTED": [
           ".aux"
         ],
-        "FILE": "release/Template-Controles.zip",
+        "FILE": "dist/Template-Controles.zip",
         "GHOST": "../Template-Controles/"
       }
     }
@@ -369,7 +369,7 @@
           ]
         },
         "EXCEPTED": [".gitkeep"],
-        "FILE": "release/Template-Informe-Single.zip",
+        "FILE": "dist/Template-Informe.min.zip",
         "GHOST": ""
       },
       "NORMAL": {
@@ -395,7 +395,7 @@
           "control_pageconf.tex",
           "greekenum.sty"
         ],
-        "FILE": "release/Template-Informe.zip",
+        "FILE": "dist/Template-Informe.zip",
         "GHOST": ""
       },
       "OTHERS": {
@@ -611,8 +611,8 @@
             ]
           ]
         ],
-        "NORMAL": "release/Template-Informe-{0}.zip",
-        "SINGLE": "release/Template-Informe-{0}-Single.zip",
+        "NORMAL": "dist/Template-Informe-{0}.zip",
+        "SINGLE": "dist/Template-Informe-{0}.min.zip",
         "IMGPATH": "img/departamentos/{0}.pdf",
         "EXPATH": "img/ejemplos/"
       }
@@ -682,7 +682,7 @@
           ]
         },
         "EXCEPTED": [],
-        "FILE": "release/ProfessionalCV-Single.zip",
+        "FILE": "dist/ProfessionalCV.min.zip",
         "GHOST": ""
       },
       "NORMAL": {
@@ -698,7 +698,7 @@
         "EXCEPTED": [
           "other.tex"
         ],
-        "FILE": "release/ProfessionalCV.zip",
+        "FILE": "dist/ProfessionalCV.zip",
         "GHOST": ""
       }
     }

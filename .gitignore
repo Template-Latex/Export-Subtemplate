@@ -10,7 +10,7 @@
 # Subreleases
 subreleases/
 .releases/
-release/*.zip
+dist/*.zip
 
 # Logs
 *.log
