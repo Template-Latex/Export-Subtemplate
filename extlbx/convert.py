@@ -46,7 +46,7 @@ MSG_FOKTIMER = 'OK [t {0:.3g}]'
 MSG_GEN_FILE = 'GENERANDO ARCHIVOS ... '
 MSG_LAST_VER = 'ULTIMA VERSION:\t {0}'
 MSG_UPV_FILE = 'ACTUALIZANDO VERSION ...'
-STRIP_ALL_GENERATED_FILES = True  # Aplica strip a todos los archivos en dist/
+STRIP_ALL_GENERATED_FILES = False  # Aplica strip a todos los archivos en dist/
 
 
 # noinspection PyUnusedLocal
