@@ -241,7 +241,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
             # Se escribe el documento
             paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
-                                         True, configfile, False, dist=True, add_ending_line=True and dostrip)
+                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
 
             # Se elimina la última linea en blanco si hay doble
             fl.close()

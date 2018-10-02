@@ -194,9 +194,16 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
     else:
         libdata = []
         fld = open(libr, 'r')
-        for k in fld:
-            libdata.append(k)
         fld.close()
+
+    # Si tiene END retorna, se borran luego todas las líneas vacías
+    if libdata[len(libdata) - 1] == '% END':
+        libdata.pop()
+        while True:
+            if libdata[len(libdata) - 1].strip() == '':
+                libdata.pop()
+            else:
+                break
 
     for libdatapos in range(headersize, len(libdata)):
         srclin = libdata[libdatapos]
@@ -306,5 +313,5 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
             # print(srclin)
             fl.write('\n')
 
-    if libr != configfile and add_ending_line:
+    if libr != configfile and add_ending_line or 'imports' in libr:
         fl.write('\n')  # Se agrega espacio vacío
