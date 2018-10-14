@@ -745,9 +745,17 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     nl = find_extract(aux_fun, '% Crea una sección de anexos', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+    nl = find_extract(aux_fun, '% Inicia código fuente con parámetros', True)
+    files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     nl = find_extract(aux_fun, '% Inserta código fuente con parámetros', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+    nl = find_extract(aux_fun, '% Importa código fuente desde un archivo con parámetros', True)
+    files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+    nl = find_extract(aux_fun, '% Inicia código fuente sin parámetros', True)
+    files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     nl = find_extract(aux_fun, '% Inserta código fuente sin parámetros', True)
+    files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+    nl = find_extract(aux_fun, '% Importa código fuente desde un archivo sin parámetros', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     nl = find_extract(aux_fun, '% Itemize en negrita', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
@@ -802,7 +810,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
             # Se escribe el documento
             paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
-                                         True, configfile, False, dist=True, add_ending_line=True and dostrip)
+                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
 
             # Se elimina la última linea en blanco si hay doble
             fl.close()
@@ -1149,7 +1157,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
 
             # Se escribe el documento
             paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
-                                         True, configfile, False, dist=True, add_ending_line=True and dostrip)
+                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
 
             # Se elimina la última linea en blanco si hay doble
             fl.close()
