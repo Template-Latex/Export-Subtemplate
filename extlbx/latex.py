@@ -194,6 +194,8 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
     else:
         libdata = []
         fld = open(libr, 'r')
+        for i in fld:
+            libdata.append(i)
         fld.close()
 
     # Si tiene END retorna, se borran luego todas las líneas vacías

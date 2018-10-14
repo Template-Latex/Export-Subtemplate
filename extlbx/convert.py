@@ -70,7 +70,7 @@ def find_extract(data, element, white_end_block=False):
     return extract_block_from_list(data, ia, ja)
 
 
-def find_replace(data, block, newblock, white_end_block=False, iadd=0, jadd=0, verbose=False):
+def find_replace_block(data, block, newblock, white_end_block=False, iadd=0, jadd=0, verbose=False):
     """
     Busca el bloque en una lista de datos y reemplaza por un bloque <newblock>.
 
@@ -89,7 +89,46 @@ def find_replace(data, block, newblock, white_end_block=False, iadd=0, jadd=0, v
     return replace_block_from_list(data, newblock, i + iadd, j + jadd)
 
 
-def find_delete(data, block, white_end_block=False, iadd=0, jadd=0, altending=None):
+def find_delete_block_recursive(data, block, white_end_block=False, iadd=0, jadd=0, altending=None):
+    """
+    Busca el bloque en una lista de datos y lo elimina.
+
+    :param data: Datos
+    :param block: Bloque a buscar
+    :param iadd: Agrega líneas al inicio del bloque
+    :param jadd: Agrega líneas al término del bloque
+    :param white_end_block: Indica si el bloque termina en espacio en blanco o con llave
+    :param altending: Final alternativo bloque
+    :return:
+    """
+    rdata = data
+    while True:
+        ra, rb = find_block(rdata, block, blankend=white_end_block, altend=altending)
+        if ra == -1 or rb == -1:
+            return rdata
+        rdata = del_block_from_list(rdata, ra + iadd, rb + jadd)
+
+
+def find_delete_line_recursive(data, line, replace=''):
+    """
+    Busca el bloque en una lista de datos y lo elimina.
+
+    :param data: Datos
+    :param line: Linea a buscar
+    :param replace: Linea a reemplazar
+    :return:
+    """
+    rdata = data
+    while True:
+        r = find_line(rdata, line)
+        if r == -1:
+            return rdata
+        rdata = del_block_from_list(rdata, r, r)
+        if replace != '':
+            rdata = add_block_from_list(rdata, [replace], r)
+
+
+def find_delete_block(data, block, white_end_block=False, iadd=0, jadd=0, altending=None):
     """
     Busca el bloque en una lista de datos y lo elimina.
 
@@ -268,17 +307,21 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         # Se buscan funciones no válidas en compacto
         delfile = 'lib/cmd/core.tex'
         fl = files[delfile]
-        files[delfile] = find_delete(fl, '\\newcommand{\\bgtemplatetestimg}{')
+        files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
+
         delfile = 'lib/page/portrait.tex'
         fl = files[delfile]
         a, b = find_block(fl, '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{', altend='}{')
         files[delfile] = del_block_from_list(fl, a, b)
         a, b = find_block(files[delfile], '\\throwbadconfigondoc{Estilo de portada incorrecto}')
         files[delfile][a] = files[delfile][a][:-2]
+        files[delfile] = find_delete_line_recursive(fl, '\hspace{-0.255cm}', replace='}')
+
         delfile = 'lib/cfg/init.tex'
         fl = files[delfile]
-        files[delfile] = find_delete(fl, '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{\importtikzlib}{}',
-                                     white_end_block=True)
+        files[delfile] = find_delete_block(fl,
+                                           '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{\importtikzlib}{}',
+                                           white_end_block=True)
 
         # Se crea el archivo unificado
         fl = open(mainsinglefile, 'w')
@@ -585,19 +628,20 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     main_auxiliar = file_to_list(subrelfile['MAIN'])
     nb = find_extract(main_auxiliar, '% EQUIPO DOCENTE')
     nb.append('\n')
-    files[mainfile] = find_replace(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', nb)
+    files[mainfile] = find_replace_block(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', nb)
     files[mainfile][1] = '% Documento:    Archivo principal\n'
-    files[mainfile] = find_delete(files[mainfile], '% PORTADA', white_end_block=True)
-    files[mainfile] = find_delete(files[mainfile], '% RESUMEN O ABSTRACT', white_end_block=True)
-    files[mainfile] = find_delete(files[mainfile], '% TABLA DE CONTENIDOS - ÍNDICE', white_end_block=True)
-    files[mainfile] = find_delete(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
-    files[mainfile] = find_delete(files[mainfile], '% CONFIGURACIONES FINALES', white_end_block=True)
+    files[mainfile] = find_delete_block(files[mainfile], '% PORTADA', white_end_block=True)
+    files[mainfile] = find_delete_block(files[mainfile], '% RESUMEN O ABSTRACT', white_end_block=True)
+    files[mainfile] = find_delete_block(files[mainfile], '% TABLA DE CONTENIDOS - ÍNDICE', white_end_block=True)
+    files[mainfile] = find_delete_block(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
+    files[mainfile] = find_delete_block(files[mainfile], '% CONFIGURACIONES FINALES', white_end_block=True)
     ra = find_line(files[mainfile], 'titulodelinforme')
     files[mainfile][ra] = '\def\\tituloauxiliar {Título de la auxiliar}\n'
     ra = find_line(files[mainfile], 'temaatratar')
     files[mainfile][ra] = '\def\\temaatratar {Tema de la auxiliar}\n'
     nl = find_extract(main_auxiliar, '% IMPORTACIÓN DE FUNCIONES', True)
-    files[mainfile] = find_replace(files[mainfile], '% IMPORTACIÓN DE FUNCIONES', nl, white_end_block=True, jadd=-1)
+    files[mainfile] = find_replace_block(files[mainfile], '% IMPORTACIÓN DE FUNCIONES', nl, white_end_block=True,
+                                         jadd=-1)
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # MODIFICA CONFIGURACIIONES
@@ -612,7 +656,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
-    files[fl] = find_delete(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     ra, rb = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
     files[fl] = del_block_from_list(files[fl], ra, rb)
     for cdel in ['namereferences', 'nomltwsrc', 'nomltwfigure', 'nomltwtable', 'nameappendixsection',
@@ -639,8 +683,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         files[fl].pop(ra)
     aux_imports = file_to_list(subrelfile['IMPORTS'])
     nl = find_extract(aux_imports, '% Anexos/Apéndices', True)
-    files[fl] = find_replace(files[fl], '\ifthenelse{\equal{\showappendixsecindex}', nl, jadd=-1, white_end_block=True)
-    files[fl] = find_delete(files[fl], '% Estilo portada', white_end_block=True)
+    files[fl] = find_replace_block(files[fl], '\ifthenelse{\equal{\showappendixsecindex}', nl, jadd=-1,
+                                   white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
 
     # CAMBIO INITCONF
     fl = release['INITCONFFILE']
@@ -672,18 +717,18 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
-    files[fl] = find_delete(files[fl], '% Se añade listings a tocloft', white_end_block=True)
-    files[fl] = find_delete(files[fl], '% Se revisa si se importa tikz', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Se añade listings a tocloft', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Se revisa si se importa tikz', white_end_block=True)
 
     # PAGECONF
     fl = release['PAGECONFFILE']
     aux_pageconf = file_to_list(subrelfile['PAGECONF'])
     nl = find_extract(aux_pageconf, '% Numeración de páginas', True)
-    files[fl] = find_replace(files[fl], '% Numeración de páginas', nl, white_end_block=True, jadd=-1)
+    files[fl] = find_replace_block(files[fl], '% Numeración de páginas', nl, white_end_block=True, jadd=-1)
     nl = find_extract(aux_pageconf, '% Márgenes de páginas y tablas', True)
-    files[fl] = find_replace(files[fl], '% Márgenes de páginas y tablas', nl, white_end_block=True, jadd=-1)
+    files[fl] = find_replace_block(files[fl], '% Márgenes de páginas y tablas', nl, white_end_block=True, jadd=-1)
     nl = find_extract(aux_pageconf, '% Se crean los header-footer', True)
-    files[fl] = find_replace(files[fl], '% Se crean los header-footer', nl, white_end_block=True, jadd=-1)
+    files[fl] = find_replace_block(files[fl], '% Se crean los header-footer', nl, white_end_block=True, jadd=-1)
     i1, f1 = find_block(aux_pageconf, '% Numeración de objetos', True)
     nl = extract_block_from_list(aux_pageconf, i1, f1)
     files[fl] = add_block_from_list(files[fl], nl, len(files[fl]) + 1)
@@ -694,7 +739,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
     # AUXILIAR FUNCTIONS
     fl = release['FUNCTIONS']
-    files[fl] = find_delete(files[fl], '% COMPILACION', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% COMPILACION', white_end_block=True)
     aux_fun = file_to_list(subrelfile['ENVFUN'])
     nl = find_extract(aux_fun, '% Crea una sección de referencias solo para bibtex', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
@@ -713,9 +758,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # CORE FUN
     delfile = release['COREFUN']
     fl = files[delfile]
-    files[delfile] = find_delete(fl, '\\newcommand{\\bgtemplatetestimg}{')
+    files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
     fl = files[delfile]
-    files[delfile] = find_delete(fl, '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
+    files[delfile] = find_delete_block(fl, '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
 
     # Cambia encabezado archivos
     for fl in files.keys():
@@ -992,13 +1037,14 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     main_auxiliar = file_to_list(subrelfile['MAIN'])
     nb = find_extract(main_auxiliar, '% EQUIPO DOCENTE')
     nb.append('\n')
-    files[mainfile] = find_replace(files[mainfile], '% EQUIPO DOCENTE', nb)
+    files[mainfile] = find_replace_block(files[mainfile], '% EQUIPO DOCENTE', nb)
     ra = find_line(files[mainfile], 'tituloauxiliar')
     files[mainfile][ra] = '\def\\tituloevaluacion {Título del Control}\n'
     ra = find_line(files[mainfile], 'temaatratar')
     files[mainfile][ra] = '\def\indicacionevaluacion {\\textbf{INDICACIÓN DEL CONTROL}} % Opcional\n'
     nl = find_extract(main_auxiliar, '% IMPORTACIÓN DE FUNCIONES', True)
-    files[mainfile] = find_replace(files[mainfile], '% IMPORTACIÓN DE FUNCIONES', nl, white_end_block=True, jadd=-1)
+    files[mainfile] = find_replace_block(files[mainfile], '% IMPORTACIÓN DE FUNCIONES', nl, white_end_block=True,
+                                         jadd=-1)
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # CONTROL
@@ -1019,7 +1065,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     fl = release['PAGECONFFILE']
     control_pageconf = file_to_list(subrelfile['PAGECONF'])
     nl = find_extract(control_pageconf, '% Se crean los header-footer', True)
-    files[fl] = find_replace(files[fl], '% Se crean los header-footer', nl, white_end_block=True, jadd=-1)
+    files[fl] = find_replace_block(files[fl], '% Se crean los header-footer', nl, white_end_block=True, jadd=-1)
 
     # CONFIGS
     fl = release['CONFIGFILE']
