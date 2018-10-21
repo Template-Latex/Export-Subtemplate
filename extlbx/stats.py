@@ -29,9 +29,7 @@ Licencia:
 
 # Importación de librerías
 from __future__ import print_function
-from matplotlib.ticker import MaxNLocator
 from scipy import stats
-import matplotlib.pyplot as plt
 from utils import split_str
 
 
@@ -128,6 +126,9 @@ def plot_stats(statfile, statplotctime, statplotlcode):
     :param statfile: Archivo de estadísticas
     :return:
     """
+    import matplotlib.pyplot as plt
+    from matplotlib.ticker import MaxNLocator
+
     data = open(statfile)
     numcomp = []
     timecomp = []

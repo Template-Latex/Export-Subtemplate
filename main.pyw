@@ -612,7 +612,7 @@ class CreateVersion(object):
                                                    mainroot=self._getconfig('MAIN_ROOT'),
                                                    informeroot=self._getconfig('INFORME_ROOT'),
                                                    statsroot=self._getconfig('STATS_ROOT'))
-                        except Exception, e:
+                        except:
                             logging.exception('Error al generar informe')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                     elif t == 2:
@@ -627,7 +627,7 @@ class CreateVersion(object):
                                                       mainroot=self._getconfig('MAIN_ROOT'),
                                                       informeroot=self._getconfig('INFORME_ROOT'),
                                                       statsroot=self._getconfig('STATS_ROOT'))
-                        except Exception, e:
+                        except:
                             logging.exception('Error al generar auxiliares')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                             clear_dict(RELEASES[REL_AUXILIAR], 'FILES')
@@ -643,7 +643,7 @@ class CreateVersion(object):
                                                      mainroot=self._getconfig('MAIN_ROOT'),
                                                      informeroot=self._getconfig('INFORME_ROOT'),
                                                      statsroot=self._getconfig('STATS_ROOT'))
-                        except Exception, e:
+                        except:
                             logging.exception('Error al generar controles')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                             clear_dict(RELEASES[REL_AUXILIAR], 'FILES')
@@ -659,7 +659,7 @@ class CreateVersion(object):
                                      mainroot=self._getconfig('MAIN_ROOT'),
                                      statsroot=self._getconfig('STATS_ROOT'),
                                      backtoroot=True)
-                        except Exception, e:
+                        except:
                             logging.exception('Error al generar cv')
                             clear_dict(RELEASES[REL_PROFESSIONALCV], 'FILES')
                     else:
