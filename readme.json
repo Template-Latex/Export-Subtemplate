@@ -2,7 +2,7 @@
     "PROJECT": {
         "NAME": "Export-Subtemplate",
         "ICON": {
-            "IMAGE": "http://latex.ppizarror.com/res/favicon-informe/icon.png",
+            "IMAGE": "https://latex.ppizarror.com/res/favicon-informe/icon.png",
             "ALT": "Export-Subtemplate",
             "WIDTH": 200,
             "HEIGHT": 200
@@ -12,7 +12,7 @@
     },
     "AUTHOR": {
         "NAME": "Pablo Pizarro R.",
-        "URL": "http://ppizarror.com",
+        "URL": "https://ppizarror.com",
         "ALT": "ppizarror",
         "DATE": "2017 - 2018",
         "SECTION": {
@@ -23,17 +23,17 @@
     "DESCRIPTION": "Aplicación que permite generar subtemplates a partir de Template-Informe",
     "BADGES": {
         "0": {
-            "IMAGE": "http://latex.ppizarror.com/res/badges/autor.svg",
-            "HREF": "http://ppizarror.com",
+            "IMAGE": "https://latex.ppizarror.com/res/badges/autor.svg",
+            "HREF": "https://ppizarror.com",
             "ALT": "@ppizarror"
         },
         "1": {
-            "IMAGE": "http://latex.ppizarror.com/res/badges/licenciamit.svg",
+            "IMAGE": "https://latex.ppizarror.com/res/badges/licenciamit.svg",
             "HREF": "https://opensource.org/licenses/MIT/",
             "ALT": "Licencia MIT"
         },
 		"2": {
-		  "IMAGE": "http://latex.ppizarror.com/res/badges/python27.svg",
+		  "IMAGE": "https://latex.ppizarror.com/res/badges/python27.svg",
 		  "HREF": "https://www.python.org/downloads/",
 		  "ALT": "Python 2.7"
 		}
