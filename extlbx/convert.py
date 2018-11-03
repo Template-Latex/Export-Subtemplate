@@ -308,6 +308,9 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         delfile = 'lib/cmd/core.tex'
         fl = files[delfile]
         files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
+        ra, rb = find_block(fl, 'GLOBALenvimagenewlinemarg', True)
+        nconf = replace_argument(fl[ra], 1, '0.0')
+        files[delfile][ra] = nconf
 
         delfile = 'lib/page/portrait.tex'
         fl = files[delfile]
