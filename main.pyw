@@ -1,4 +1,5 @@
-﻿# coding=utf-8
+﻿#!python2
+# coding=utf-8
 """
 EXPORT-SUBTEMPLATE
 Genera distintos sub-releases y exporta los templates

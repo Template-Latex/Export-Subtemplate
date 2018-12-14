@@ -252,7 +252,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             data[l_vcmtd] = d_vcmtd
 
         # Se reescribe el archivo
-        if dosave:
+        if dosave and (f == mainfile or f == examplefile):  # Se desactiva la escritura de archivos
             newfl = open(f, 'w')
             for j in data:
                 newfl.write(j)
