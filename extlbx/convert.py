@@ -666,7 +666,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                  'nomltappendixsection']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
-    ra, rb = find_block(files[fl], 'showdotontitles', True)
+    ra, rb = find_block(files[fl], 'showdotaftersnum', True)
     nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemargintop', True)
@@ -677,6 +677,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'tablepadding', True)
     files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1,style2\n')
+    files[fl].pop()
 
     # CAMBIA IMPORTS
     fl = release['IMPORTSFILE']
