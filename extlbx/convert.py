@@ -702,7 +702,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra, _ = find_block(files[fl], '\errmessage{LaTeX Warning: Se borro la variable \\noexpand\\tablain')
     files[fl][ra] = '\t\errmessage{LaTeX Warning: Se borro la variable \\noexpand\\equipodocente, creando una vacia}\n'
     ra, _ = find_block(files[fl], '\def\\tablaintegrantes {}')
-    files[fl][ra] = '\t\def\\equipodocente {}\n'
+    files[fl][ra] = '\t\def\\equipodocente {}}{\n'
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Template-Auxiliares')
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
