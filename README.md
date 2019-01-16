@@ -46,4 +46,4 @@ Formato de línea:
 | !PREVDISTNL | Añade una nueva línea solo en el modo distribución |
 
 ## Autor
-<a href="https://ppizarror.com" title="ppizarror">Pablo Pizarro R.</a> | 2017 - 2018
+<a href="https://ppizarror.com" title="ppizarror">Pablo Pizarro R.</a> | 2017 - 2019
