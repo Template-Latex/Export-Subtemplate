@@ -303,7 +303,8 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
                     pass
 
         # Se ecribe la línea
-        if srclin is not '':
+        if srclin is not '' and srclin.strip() is not '%' and \
+                not (not add_ending_line and srclin.strip() == '' and libdatapos == len(libdata) - 1):
             # Se aplica strip dependiendo del archivo
             if libstrip or dolibstrip or forcestrip:
                 fl.write(srclin.strip())
