@@ -3,6 +3,7 @@
 
 # Pycharm
 .idea/
+.vscode/
 
 # Gráficos
 *.png
