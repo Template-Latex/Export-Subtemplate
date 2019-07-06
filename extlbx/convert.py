@@ -655,7 +655,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             'nomltcont', 'nameportraitpage', 'nameabstract', 'indextitlecolor',
             'portraittitlecolor', 'fontsizetitlei', 'styletitlei',
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
-            'nomchapter', 'nomnpageof', 'indexforcenewpage']
+            'nomchapter', 'nomnpageof', 'indexforcenewpage', 'predocpageromannumber',
+            'predocresetpagenumber']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -668,6 +669,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     ra, rb = find_block(files[fl], 'showdotaftersnum', True)
     nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'equationrestart', True)
+    nconf = replace_argument(files[fl][ra], 1, 'none').replace(' %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemargintop', True)
     nconf = replace_argument(files[fl][ra], 1, '2.30').replace(' %', '%')
