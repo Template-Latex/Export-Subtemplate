@@ -7,7 +7,7 @@ Autor: Pablo Pizarro R. @ ppizarror.com
 Licencia:
     The MIT License (MIT)
 
-    Copyright 2017-2018 Pablo Pizarro R.
+    Copyright 2017-2019 Pablo Pizarro R.
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -28,7 +28,7 @@ Licencia:
 """
 
 __author__ = 'Pablo Pizarro R.'
-__version__ = '3.0.0'  # (30/09/2018)
+__version__ = '3.0.1'  # (19/08/2019)
 
 # noinspection PyUnresolvedReferences
 from releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, RELEASES

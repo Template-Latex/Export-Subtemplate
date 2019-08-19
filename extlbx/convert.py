@@ -7,7 +7,7 @@ Autor: Pablo Pizarro R. @ ppizarror.com
 Licencia:
     The MIT License (MIT)
 
-    Copyright 2017-2018 Pablo Pizarro R.
+    Copyright 2017-2019 Pablo Pizarro R.
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -681,7 +681,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'tablepadding', True)
     files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1,style2\n')
-    files[fl].pop()
+    # files[fl].pop()
 
     # CAMBIA IMPORTS
     fl = release['IMPORTSFILE']
