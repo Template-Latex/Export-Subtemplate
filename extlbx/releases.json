@@ -1,845 +1,846 @@
 {
-  "AUXILIAR": {
-    "CONFIGFILE": "lib/config.tex",
-    "EXAMPLECLONE": "example.tex",
-    "EXAMPLEFILE": "lib/etc/example.tex",
-    "COREFUN": "lib/cmd/core.tex",
-    "FILEDELCOMENTS": {
-      "lib/config.tex": false,
-      "lib/etc/example.tex": false,
-      "lib/cmd/all.tex": true,
-      "lib/cmd/auxiliar.tex": true,
-      "lib/cmd/core.tex": true,
-      "lib/cmd/equation.tex": true,
-      "lib/cmd/image.tex": true,
-      "lib/cmd/math.tex": true,
-      "lib/cmd/other.tex": true,
-      "lib/cmd/title.tex": true,
-      "lib/env/imports.tex": true,
-      "lib/env/environments.tex": true,
-      "lib/cfg/init.tex": true,
-      "lib/cfg/page.tex": true,
-      "lib/style/all.tex": true,
-      "lib/style/code.tex": true,
-      "lib/style/color.tex": true,
-      "lib/style/other.tex": true,
-      "main.tex": false
-    },
-    "FILES": {
-      "lib/config.tex": [],
-      "lib/etc/example.tex": [],
-      "lib/cmd/all.tex": [],
-      "lib/cmd/core.tex": [],
-      "lib/cmd/auxiliar.tex": [],
-      "lib/cmd/equation.tex": [],
-      "lib/cmd/image.tex": [],
-      "lib/cmd/math.tex": [],
-      "lib/cmd/other.tex": [],
-      "lib/cmd/title.tex": [],
-      "lib/env/imports.tex": [],
-      "lib/cfg/init.tex": [],
-      "lib/cfg/page.tex": [],
-      "lib/style/all.tex": [],
-      "lib/style/code.tex": [],
-      "lib/style/color.tex": [],
-      "lib/style/other.tex": []
-    },
-    "FILESTRIP": {
-      "lib/config.tex": false,
-      "lib/etc/example.tex": false,
-      "lib/cmd/all.tex": true,
-      "lib/cmd/auxiliar.tex": true,
-      "lib/cmd/core.tex": true,
-      "lib/cmd/equation.tex": true,
-      "lib/cmd/image.tex": true,
-      "lib/cmd/math.tex": true,
-      "lib/cmd/other.tex": true,
-      "lib/cmd/title.tex": true,
-      "lib/env/imports.tex": true,
-      "lib/cfg/init.tex": true,
-      "lib/cfg/page.tex": true,
-      "lib/style/all.tex": true,
-      "lib/style/code.tex": true,
-      "lib/style/color.tex": true,
-      "lib/style/other.tex": true,
-      "main.tex": false
-    },
-    "FUNCTIONS": "lib/cmd/auxiliar.tex",
-    "GIT": "../Template-Auxiliares/",
-    "ID": 2,
-    "IMPORTSFILE": "lib/env/imports.tex",
-    "INITCONFFILE": "lib/cfg/init.tex",
-    "MAINFILE": "main.tex",
-    "MESSAGE": "\nCREANDO TEMPLATE-AUXILIARES v{0}",
-    "NAME": "Template-Auxiliares",
-    "PAGECONFFILE": "lib/cfg/page.tex",
-    "PDF_FOLDER": "../pdf-version/Auxiliares/Template-Auxiliares v{0}.pdf",
-    "ROOT": "../Template-Auxiliares/",
-    "SINGLEFILE": "auxiliar.tex",
-    "STATS": {
-      "CTIME": "",
-      "FILE": "stats/data/auxiliares.txt",
-      "LCODE": "",
-      "GIT_ADD": "data/auxiliares.txt"
-    },
-    "SUBRELFILES": {
-      "ENVFUN": "lib/env/environments.tex",
-      "IMPORTS": "lib/env/auxiliar_imports.tex",
-      "MAIN": "auxiliar_main.tex",
-      "PAGECONF": "lib/cfg/auxiliar_page.tex"
-    },
-    "VERLINE": "Template-Auxiliares v{0} | (Pablo Pizarro R.) ppizarror.com",
-    "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/Template-Auxiliares/",
-      "SOURCE": "https://github.com/Template-Latex/Template-Auxiliares/"
-    },
-    "ZIP": {
-      "COMPACT": {
-        "ADD": {
-          "FILES": [
-            "main.tex"
-          ],
-          "FOLDER": [
-            "img",
-            "dist/lib"
-          ]
+    "AUXILIAR": {
+        "CONFIGFILE": "lib/config.tex",
+        "COREFUN": "lib/cmd/core.tex",
+        "EXAMPLECLONE": "example.tex",
+        "EXAMPLEFILE": "lib/etc/example.tex",
+        "FILEDELCOMENTS": {
+            "lib/cfg/init.tex": true,
+            "lib/cfg/page.tex": true,
+            "lib/cmd/all.tex": true,
+            "lib/cmd/auxiliar.tex": true,
+            "lib/cmd/core.tex": true,
+            "lib/cmd/equation.tex": true,
+            "lib/cmd/image.tex": true,
+            "lib/cmd/math.tex": true,
+            "lib/cmd/other.tex": true,
+            "lib/cmd/title.tex": true,
+            "lib/config.tex": false,
+            "lib/env/environments.tex": true,
+            "lib/env/imports.tex": true,
+            "lib/etc/example.tex": false,
+            "lib/style/all.tex": true,
+            "lib/style/code.tex": true,
+            "lib/style/color.tex": true,
+            "lib/style/other.tex": true,
+            "main.tex": false
         },
-        "EXCEPTED": [
-          ".gitkeep"
-        ],
-        "FILE": "dist/Template-Auxiliares.min.zip",
-        "GHOST": "Template-Auxiliares/"
-      },
-      "NORMAL": {
-        "ADD": {
-          "FILES": [
-            "main.tex"
-          ],
-          "FOLDER": [
-            "img",
-            "lib"
-          ]
+        "FILES": {
+            "lib/cfg/init.tex": [],
+            "lib/cfg/page.tex": [],
+            "lib/cmd/all.tex": [],
+            "lib/cmd/auxiliar.tex": [],
+            "lib/cmd/core.tex": [],
+            "lib/cmd/equation.tex": [],
+            "lib/cmd/image.tex": [],
+            "lib/cmd/math.tex": [],
+            "lib/cmd/other.tex": [],
+            "lib/cmd/title.tex": [],
+            "lib/config.tex": [],
+            "lib/env/imports.tex": [],
+            "lib/etc/example.tex": [],
+            "lib/style/all.tex": [],
+            "lib/style/code.tex": [],
+            "lib/style/color.tex": [],
+            "lib/style/other.tex": []
         },
-        "EXCEPTED": [
-          ".aux"
-        ],
-        "FILE": "dist/Template-Auxiliares.zip",
-        "GHOST": "Template-Auxiliares/"
-      }
+        "FILESTRIP": {
+            "lib/cfg/init.tex": true,
+            "lib/cfg/page.tex": true,
+            "lib/cmd/all.tex": true,
+            "lib/cmd/auxiliar.tex": true,
+            "lib/cmd/core.tex": true,
+            "lib/cmd/equation.tex": true,
+            "lib/cmd/image.tex": true,
+            "lib/cmd/math.tex": true,
+            "lib/cmd/other.tex": true,
+            "lib/cmd/title.tex": true,
+            "lib/config.tex": false,
+            "lib/env/imports.tex": true,
+            "lib/etc/example.tex": false,
+            "lib/style/all.tex": true,
+            "lib/style/code.tex": true,
+            "lib/style/color.tex": true,
+            "lib/style/other.tex": true,
+            "main.tex": false
+        },
+        "FUNCTIONS": "lib/cmd/auxiliar.tex",
+        "GIT": "../Template-Auxiliares/",
+        "ID": 2,
+        "IMPORTSFILE": "lib/env/imports.tex",
+        "INITCONFFILE": "lib/cfg/init.tex",
+        "MAINFILE": "main.tex",
+        "MESSAGE": "\nCREANDO TEMPLATE-AUXILIARES v{0}",
+        "NAME": "Template-Auxiliares",
+        "PAGECONFFILE": "lib/cfg/page.tex",
+        "PDF_FOLDER": "../pdf-version/Auxiliares/Template-Auxiliares v{0}.pdf",
+        "ROOT": "../Template-Auxiliares/",
+        "SINGLEFILE": "auxiliar.tex",
+        "STATS": {
+            "CTIME": "",
+            "FILE": "stats/data/auxiliares.txt",
+            "GIT_ADD": "data/auxiliares.txt",
+            "LCODE": ""
+        },
+        "SUBRELFILES": {
+            "ENVFUN": "lib/env/environments.tex",
+            "IMPORTS": "lib/env/auxiliar_imports.tex",
+            "MAIN": "auxiliar_main.tex",
+            "PAGECONF": "lib/cfg/auxiliar_page.tex"
+        },
+        "VERLINE": "Template-Auxiliares v{0} | (Pablo Pizarro R.) ppizarror.com",
+        "WEB": {
+            "MANUAL": "https://latex.ppizarror.com/Template-Auxiliares/",
+            "SOURCE": "https://github.com/Template-Latex/Template-Auxiliares/"
+        },
+        "ZIP": {
+            "COMPACT": {
+                "ADD": {
+                    "FILES": [
+                        "main.tex"
+                    ],
+                    "FOLDER": [
+                        "img",
+                        "dist/lib"
+                    ]
+                },
+                "EXCEPTED": [
+                    ".gitkeep"
+                ],
+                "FILE": "dist/Template-Auxiliares.min.zip",
+                "GHOST": "Template-Auxiliares/"
+            },
+            "NORMAL": {
+                "ADD": {
+                    "FILES": [
+                        "main.tex"
+                    ],
+                    "FOLDER": [
+                        "img",
+                        "lib"
+                    ]
+                },
+                "EXCEPTED": [
+                    ".aux"
+                ],
+                "FILE": "dist/Template-Auxiliares.zip",
+                "GHOST": "Template-Auxiliares/"
+            }
+        }
+    },
+    "CONTROLES": {
+        "CONFIGFILE": "lib/config.tex",
+        "EXAMPLECLONE": "example.tex",
+        "EXAMPLEFILE": "lib/etc/example.tex",
+        "FILEDELCOMENTS": {
+            "lib/cfg/init.tex": true,
+            "lib/cfg/page.tex": true,
+            "lib/cmd/all.tex": true,
+            "lib/cmd/control.tex": true,
+            "lib/cmd/core.tex": true,
+            "lib/cmd/equation.tex": true,
+            "lib/cmd/image.tex": true,
+            "lib/cmd/math.tex": true,
+            "lib/cmd/other.tex": true,
+            "lib/cmd/title.tex": true,
+            "lib/config.tex": false,
+            "lib/env/environments.tex": true,
+            "lib/env/imports.tex": true,
+            "lib/etc/example.tex": false,
+            "lib/style/all.tex": true,
+            "lib/style/code.tex": true,
+            "lib/style/color.tex": true,
+            "lib/style/other.tex": true,
+            "main.tex": false
+        },
+        "FILES": {
+            "lib/cfg/init.tex": [],
+            "lib/cfg/page.tex": [],
+            "lib/cmd/all.tex": [],
+            "lib/cmd/control.tex": [],
+            "lib/cmd/core.tex": [],
+            "lib/cmd/equation.tex": [],
+            "lib/cmd/image.tex": [],
+            "lib/cmd/math.tex": [],
+            "lib/cmd/other.tex": [],
+            "lib/cmd/title.tex": [],
+            "lib/config.tex": [],
+            "lib/env/imports.tex": [],
+            "lib/etc/example.tex": [],
+            "lib/style/all.tex": [],
+            "lib/style/code.tex": [],
+            "lib/style/color.tex": [],
+            "lib/style/other.tex": []
+        },
+        "FILESTRIP": {
+            "lib/cfg/init.tex": true,
+            "lib/cfg/page.tex": true,
+            "lib/cmd/all.tex": true,
+            "lib/cmd/control.tex": true,
+            "lib/cmd/core.tex": true,
+            "lib/cmd/equation.tex": true,
+            "lib/cmd/image.tex": true,
+            "lib/cmd/math.tex": true,
+            "lib/cmd/other.tex": true,
+            "lib/cmd/title.tex": true,
+            "lib/config.tex": false,
+            "lib/env/environments.tex": true,
+            "lib/env/imports.tex": true,
+            "lib/etc/example.tex": false,
+            "lib/style/all.tex": true,
+            "lib/style/code.tex": true,
+            "lib/style/color.tex": true,
+            "lib/style/other.tex": true,
+            "main.tex": false
+        },
+        "FUNCTIONS": "lib/cmd/control.tex",
+        "GIT": "../Template-Controles/",
+        "ID": 3,
+        "IMPORTSFILE": "lib/env/imports.tex",
+        "INITCONFFILE": "lib/cfg/init.tex",
+        "MAINFILE": "main.tex",
+        "MESSAGE": "\nCREANDO TEMPLATE-CONTROLES v{0}",
+        "NAME": "Template-Controles",
+        "PAGECONFFILE": "lib/cfg/page.tex",
+        "PDF_FOLDER": "../pdf-version/Controles/Template-Controles v{0}.pdf",
+        "ROOT": "../Template-Controles/",
+        "SINGLEFILE": "control.tex",
+        "STATS": {
+            "CTIME": "",
+            "FILE": "stats/data/controles.txt",
+            "GIT_ADD": "data/controles.txt",
+            "LCODE": ""
+        },
+        "SUBRELFILES": {
+            "MAIN": "control_main.tex",
+            "PAGECONF": "lib/cfg/control_page.tex"
+        },
+        "VERLINE": "Template-Controles v{0} | (Pablo Pizarro R.) ppizarror.com",
+        "WEB": {
+            "MANUAL": "https://latex.ppizarror.com/Template-Controles/",
+            "SOURCE": "https://github.com/Template-Latex/Template-Controles/"
+        },
+        "ZIP": {
+            "COMPACT": {
+                "ADD": {
+                    "FILES": [
+                        "main.tex"
+                    ],
+                    "FOLDER": [
+                        "img",
+                        "lib"
+                    ]
+                },
+                "EXCEPTED": [],
+                "FILE": "dist/Template-Controles.min.zip",
+                "GHOST": "../Template-Controles/"
+            },
+            "NORMAL": {
+                "ADD": {
+                    "FILES": [
+                        "main.tex"
+                    ],
+                    "FOLDER": [
+                        "img",
+                        "lib"
+                    ]
+                },
+                "EXCEPTED": [
+                    ".aux"
+                ],
+                "FILE": "dist/Template-Controles.zip",
+                "GHOST": "../Template-Controles/"
+            }
+        }
+    },
+    "INFORME": {
+        "CONFIGFILE": "lib/config.tex",
+        "DIST": "dist/",
+        "EXAMPLECLONE": "example.tex",
+        "EXAMPLEFILE": "lib/etc/example.tex",
+        "FILEDELCOMENTS": {
+            "lib/cfg/final.tex": true,
+            "lib/cfg/init.tex": true,
+            "lib/cfg/page.tex": true,
+            "lib/cmd/all.tex": true,
+            "lib/cmd/core.tex": true,
+            "lib/cmd/equation.tex": true,
+            "lib/cmd/image.tex": true,
+            "lib/cmd/math.tex": true,
+            "lib/cmd/other.tex": true,
+            "lib/cmd/title.tex": true,
+            "lib/config.tex": false,
+            "lib/env/environments.tex": true,
+            "lib/env/imports.tex": true,
+            "lib/etc/example.tex": false,
+            "lib/page/index.tex": true,
+            "lib/page/portrait-config.tex": false,
+            "lib/page/portrait.tex": true,
+            "lib/style/all.tex": true,
+            "lib/style/code.tex": true,
+            "lib/style/color.tex": true,
+            "lib/style/other.tex": true,
+            "main.tex": false
+        },
+        "FILES": {
+            "lib/cfg/final.tex": [],
+            "lib/cfg/init.tex": [],
+            "lib/cfg/page.tex": [],
+            "lib/cmd/all.tex": [],
+            "lib/cmd/core.tex": [],
+            "lib/cmd/equation.tex": [],
+            "lib/cmd/image.tex": [],
+            "lib/cmd/math.tex": [],
+            "lib/cmd/other.tex": [],
+            "lib/cmd/title.tex": [],
+            "lib/config.tex": [],
+            "lib/env/environments.tex": [],
+            "lib/env/imports.tex": [],
+            "lib/etc/example.tex": [],
+            "lib/page/index.tex": [],
+            "lib/page/portrait-config.tex": [],
+            "lib/page/portrait.tex": [],
+            "lib/style/all.tex": [],
+            "lib/style/code.tex": [],
+            "lib/style/color.tex": [],
+            "lib/style/other.tex": [],
+            "main.tex": []
+        },
+        "FILESTRIP": {
+            "lib/cfg/final.tex": true,
+            "lib/cfg/init.tex": true,
+            "lib/cfg/page.tex": true,
+            "lib/cmd/all.tex": true,
+            "lib/cmd/core.tex": true,
+            "lib/cmd/equation.tex": true,
+            "lib/cmd/image.tex": true,
+            "lib/cmd/math.tex": true,
+            "lib/cmd/other.tex": true,
+            "lib/cmd/title.tex": true,
+            "lib/config.tex": false,
+            "lib/env/environments.tex": true,
+            "lib/env/imports.tex": true,
+            "lib/etc/example.tex": false,
+            "lib/page/index.tex": true,
+            "lib/page/portrait-config.tex": false,
+            "lib/page/portrait.tex": true,
+            "lib/style/all.tex": true,
+            "lib/style/code.tex": true,
+            "lib/style/color.tex": true,
+            "lib/style/other.tex": true,
+            "main.tex": false
+        },
+        "GIT": "../Template-Informe/",
+        "ID": 1,
+        "INITCONFFILE": "lib/cfg/init.tex",
+        "MAINFILE": "main.tex",
+        "MESSAGE": "\nCREANDO TEMPLATE-INFORME v{0}",
+        "NAME": "Template-Informe",
+        "PDF_FOLDER": "../pdf-version/Informe/Template-Informe v{0}.pdf",
+        "ROOT": "",
+        "SINGLEFILE": "informe.tex",
+        "STATS": {
+            "CTIME": "",
+            "FILE": "stats/data/informe.txt",
+            "GIT_ADD": "data/informe.txt",
+            "LCODE": ""
+        },
+        "VERLINE": "Template-Informe v{0} | (Pablo Pizarro R.) ppizarror.com",
+        "WEB": {
+            "MANUAL": "https://latex.ppizarror.com/Template-Informe/",
+            "SOURCE": "https://github.com/Template-Latex/Template-Informe/"
+        },
+        "ZIP": {
+            "COMPACT": {
+                "ADD": {
+                    "FILES": [
+                        "dist/informe.tex",
+                        "dist/example.tex"
+                    ],
+                    "FOLDER": [
+                        "img"
+                    ]
+                },
+                "EXCEPTED": [
+                    ".gitkeep"
+                ],
+                "FILE": "dist/Template-Informe.min.zip",
+                "GHOST": ""
+            },
+            "NORMAL": {
+                "ADD": {
+                    "FILES": [
+                        "dist/main.tex"
+                    ],
+                    "FOLDER": [
+                        "img",
+                        "dist/lib"
+                    ]
+                },
+                "EXCEPTED": [
+                    ".aux",
+                    ".gitkeep",
+                    "auxiliar.tex",
+                    "auxiliar_example.tex",
+                    "auxiliar_imports.tex",
+                    "auxiliar_main.tex",
+                    "auxiliar_pageconf.tex",
+                    "auxiliar_title.tex",
+                    "column.tex",
+                    "control_example.tex",
+                    "control_pageconf.tex",
+                    "greekenum.sty"
+                ],
+                "FILE": "dist/Template-Informe.zip",
+                "GHOST": ""
+            },
+            "OTHERS": {
+                "DATA": [
+                    [
+                        [
+                            "Área de Humanidades",
+                            "Área de Humanidades"
+                        ],
+                        "adh",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Astronomía",
+                            "Departamento de Astronomía"
+                        ],
+                        "das",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Ciencias de la Computación",
+                            "Departamento de Ciencias de la Computación"
+                        ],
+                        "dcc",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Física",
+                            "Departamento de Física"
+                        ],
+                        "dfi",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Geofísica",
+                            "Departamento de Geofísica"
+                        ],
+                        "dgf",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Ingeniería Civil",
+                            "Departamento de Ingeniería Civil"
+                        ],
+                        "dic",
+                        [
+                            "dic2",
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Ingeniería Eléctrica",
+                            "Departamento de Ingeniería Eléctrica"
+                        ],
+                        "die",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Ingeniería Industrial",
+                            "Departamento de Ingeniería Industrial"
+                        ],
+                        "dii",
+                        [
+                            "dii2",
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Ingeniería Matemática",
+                            "Departamento de Ingeniería Matemática"
+                        ],
+                        "dim",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Ingeniería Mecánica",
+                            "Departamento de Ingeniería Mecánica"
+                        ],
+                        "dimec",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Ingeniería Química, Biotecnología y Materiales",
+                            "Departamento de Ingeniería Química, Biotecnología y Materiales"
+                        ],
+                        "diqbtm",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Facultad de Ciencias Físicas y Matemáticas",
+                            "Departamento de la Universidad"
+                        ],
+                        "fcfm",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Geología",
+                            "Departamento de Geología"
+                        ],
+                        "geo",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Departamento de Ingeniería en Minas",
+                            "Departamento de Ingeniería en Minas"
+                        ],
+                        "minas",
+                        [
+                            "uchile",
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ],
+                    [
+                        [
+                            "Universidad de Chile",
+                            "Departamento de la Universidad"
+                        ],
+                        "uchile",
+                        [
+                            "uchile2",
+                            "uchile3",
+                            "fcfm",
+                            "fcfm2"
+                        ]
+                    ]
+                ],
+                "EXPATH": "img/ejemplos/",
+                "IMGPATH": "img/departamentos/{0}.pdf",
+                "NORMAL": "dist/Template-Informe-{0}.zip",
+                "SINGLE": "dist/Template-Informe-{0}.min.zip"
+            }
+        }
+    },
+    "PROFESSIONAL-CV": {
+        "CONFIGFILE": "lib/config.tex",
+        "FILEDELCOMENTS": {
+            "cv.tex": false,
+            "lib/config.tex": false,
+            "lib/env.tex": true,
+            "lib/function.tex": true,
+            "lib/imports.tex": true,
+            "lib/initconf.tex": true,
+            "lib/pageconf.tex": true,
+            "lib/styles.tex": true
+        },
+        "FILES": {
+            "cv.tex": [],
+            "lib/config.tex": [],
+            "lib/env.tex": [],
+            "lib/function.tex": [],
+            "lib/imports.tex": [],
+            "lib/initconf.tex": [],
+            "lib/pageconf.tex": [],
+            "lib/styles.tex": []
+        },
+        "FILESTRIP": {
+            "cv.tex": false,
+            "lib/config.tex": false,
+            "lib/env.tex": true,
+            "lib/function.tex": true,
+            "lib/imports.tex": true,
+            "lib/initconf.tex": true,
+            "lib/pageconf.tex": true,
+            "lib/styles.tex": true
+        },
+        "FUNCTIONFILE": "lib/function.tex",
+        "GIT": "../Professional-CV/",
+        "ID": 4,
+        "INITCONFFILE": "lib/initconf.tex",
+        "MAINFILE": "cv.tex",
+        "MESSAGE": "\nCREANDO PROFESSIONAL-CV v{0}",
+        "NAME": "Professional-CV",
+        "PDF_FOLDER": "../pdf-version/Professional-CV/Professional-CV v{0}.pdf",
+        "ROOT": "../Professional-CV/",
+        "SINGLEFILE": "cv_single.tex",
+        "STATS": {
+            "CTIME": "",
+            "FILE": "stats/data/professional-cv.txt",
+            "GIT_ADD": "data/professional-cv.txt",
+            "LCODE": ""
+        },
+        "VERLINE": "Professional-CV v{0} | (Pablo Pizarro R.) ppizarror.com",
+        "WEB": {
+            "MANUAL": "https://latex.ppizarror.com/Professional-CV/",
+            "SOURCE": "https://github.com/Template-Latex/Professional-CV/"
+        },
+        "ZIP": {
+            "COMPACT": {
+                "ADD": {
+                    "FILES": [
+                        "cv_single.tex"
+                    ],
+                    "FOLDER": [
+                        "images"
+                    ]
+                },
+                "EXCEPTED": [],
+                "FILE": "dist/ProfessionalCV.min.zip",
+                "GHOST": ""
+            },
+            "NORMAL": {
+                "ADD": {
+                    "FILES": [
+                        "cv.tex"
+                    ],
+                    "FOLDER": [
+                        "images",
+                        "lib"
+                    ]
+                },
+                "EXCEPTED": [
+                    "other.tex"
+                ],
+                "FILE": "dist/ProfessionalCV.zip",
+                "GHOST": ""
+            }
+        }
+    },
+    "REPORTE": {
+        "CONFIGFILE": "lib/config.tex",
+        "COREFUN": "lib/cmd/core.tex",
+        "DIST": "dist/",
+        "EXAMPLECLONE": "example.tex",
+        "EXAMPLEFILE": "lib/etc/example.tex",
+        "FILEDELCOMENTS": {
+            "lib/cfg/final.tex": true,
+            "lib/cfg/init.tex": true,
+            "lib/cfg/page.tex": true,
+            "lib/cmd/all.tex": true,
+            "lib/cmd/core.tex": true,
+            "lib/cmd/equation.tex": true,
+            "lib/cmd/image.tex": true,
+            "lib/cmd/math.tex": true,
+            "lib/cmd/other.tex": true,
+            "lib/cmd/title.tex": true,
+            "lib/config.tex": false,
+            "lib/env/environments.tex": true,
+            "lib/env/imports.tex": true,
+            "lib/etc/example.tex": false,
+            "lib/page/index.tex": true,
+            "lib/page/portrait-config.tex": false,
+            "lib/page/portrait.tex": true,
+            "lib/style/all.tex": true,
+            "lib/style/code.tex": true,
+            "lib/style/color.tex": true,
+            "lib/style/other.tex": true,
+            "main.tex": false
+        },
+        "FILES": {
+            "lib/cfg/final.tex": [],
+            "lib/cfg/init.tex": [],
+            "lib/cfg/page.tex": [],
+            "lib/cmd/all.tex": [],
+            "lib/cmd/core.tex": [],
+            "lib/cmd/equation.tex": [],
+            "lib/cmd/image.tex": [],
+            "lib/cmd/math.tex": [],
+            "lib/cmd/other.tex": [],
+            "lib/cmd/title.tex": [],
+            "lib/config.tex": [],
+            "lib/env/environments.tex": [],
+            "lib/env/imports.tex": [],
+            "lib/etc/example.tex": [],
+            "lib/style/all.tex": [],
+            "lib/style/code.tex": [],
+            "lib/style/color.tex": [],
+            "lib/style/other.tex": [],
+            "main.tex": []
+        },
+        "FILESTRIP": {
+            "lib/cfg/final.tex": true,
+            "lib/cfg/init.tex": true,
+            "lib/cfg/page.tex": true,
+            "lib/cmd/all.tex": true,
+            "lib/cmd/core.tex": true,
+            "lib/cmd/equation.tex": true,
+            "lib/cmd/image.tex": true,
+            "lib/cmd/math.tex": true,
+            "lib/cmd/other.tex": true,
+            "lib/cmd/title.tex": true,
+            "lib/config.tex": false,
+            "lib/env/environments.tex": true,
+            "lib/env/imports.tex": true,
+            "lib/etc/example.tex": false,
+            "lib/style/all.tex": true,
+            "lib/style/code.tex": true,
+            "lib/style/color.tex": true,
+            "lib/style/other.tex": true,
+            "main.tex": false
+        },
+        "GIT": "../Template-Reporte/",
+        "ID": 5,
+        "IMPORTSFILE": "lib/env/imports.tex",
+        "INITCONFFILE": "lib/cfg/init.tex",
+        "MAINFILE": "main.tex",
+        "MESSAGE": "\nCREANDO TEMPLATE-REPORTE v{0}",
+        "NAME": "Template-Reporte",
+        "PAGECONFFILE": "lib/cfg/page.tex",
+        "PDF_FOLDER": "../pdf-version/Reporte/Template-Reporte v{0}.pdf",
+        "ROOT": "../Template-Reporte/",
+        "SINGLEFILE": "reporte.tex",
+        "STATS": {
+            "CTIME": "",
+            "FILE": "stats/data/reporte.txt",
+            "GIT_ADD": "data/reporte.txt",
+            "LCODE": ""
+        },
+        "SUBRELFILES": {
+            "INIT": "lib/cfg/reporte_init.tex",
+            "MAIN": "reporte_main.tex"
+        },
+        "VERLINE": "Template-Reporte v{0} | (Pablo Pizarro R.) ppizarror.com",
+        "WEB": {
+            "MANUAL": "https://latex.ppizarror.com/Template-Reporte/",
+            "SOURCE": "https://github.com/Template-Latex/Template-Reporte/"
+        },
+        "ZIP": {
+            "COMPACT": {
+                "ADD": {
+                    "FILES": [
+                        "reporte.tex",
+                        "example.tex"
+                    ],
+                    "FOLDER": [
+                        "img"
+                    ]
+                },
+                "EXCEPTED": [
+                    ".gitkeep"
+                ],
+                "FILE": "dist/Template-Reporte.min.zip",
+                "GHOST": "Template-Reporte/"
+            },
+            "NORMAL": {
+                "ADD": {
+                    "FILES": [
+                        "main.tex"
+                    ],
+                    "FOLDER": [
+                        "img",
+                        "lib"
+                    ]
+                },
+                "EXCEPTED": [
+                    ".aux",
+                    ".gitkeep",
+                    "auxiliar.tex",
+                    "auxiliar_example.tex",
+                    "auxiliar_imports.tex",
+                    "auxiliar_main.tex",
+                    "auxiliar_pageconf.tex",
+                    "auxiliar_title.tex",
+                    "control_example.tex",
+                    "control_pageconf.tex",
+                    "reporte_main.tex",
+                    "greekenum.sty"
+                ],
+                "FILE": "dist/Template-Reporte.zip",
+                "GHOST": "Template-Reporte/"
+            }
+        }
     }
-  },
-  "CONTROLES": {
-    "CONFIGFILE": "lib/config.tex",
-    "EXAMPLECLONE": "example.tex",
-    "EXAMPLEFILE": "lib/etc/example.tex",
-    "FILEDELCOMENTS": {
-      "lib/config.tex": false,
-      "lib/etc/example.tex": false,
-      "lib/cmd/all.tex": true,
-      "lib/cmd/control.tex": true,
-      "lib/cmd/core.tex": true,
-      "lib/cmd/equation.tex": true,
-      "lib/cmd/image.tex": true,
-      "lib/cmd/math.tex": true,
-      "lib/cmd/other.tex": true,
-      "lib/cmd/title.tex": true,
-      "lib/env/imports.tex": true,
-      "lib/env/environments.tex": true,
-      "lib/cfg/init.tex": true,
-      "lib/cfg/page.tex": true,
-      "lib/style/all.tex": true,
-      "lib/style/code.tex": true,
-      "lib/style/color.tex": true,
-      "lib/style/other.tex": true,
-      "main.tex": false
-    },
-    "FILES": {
-      "lib/config.tex": [],
-      "lib/etc/example.tex": [],
-      "lib/cmd/all.tex": [],
-      "lib/cmd/core.tex": [],
-      "lib/cmd/control.tex": [],
-      "lib/cmd/equation.tex": [],
-      "lib/cmd/image.tex": [],
-      "lib/cmd/math.tex": [],
-      "lib/cmd/other.tex": [],
-      "lib/cmd/title.tex": [],
-      "lib/env/imports.tex": [],
-      "lib/cfg/init.tex": [],
-      "lib/cfg/page.tex": [],
-      "lib/style/all.tex": [],
-      "lib/style/code.tex": [],
-      "lib/style/color.tex": [],
-      "lib/style/other.tex": []
-    },
-    "FILESTRIP": {
-      "lib/config.tex": false,
-      "lib/etc/example.tex": false,
-      "lib/cmd/all.tex": true,
-      "lib/cmd/control.tex": true,
-      "lib/cmd/core.tex": true,
-      "lib/cmd/equation.tex": true,
-      "lib/cmd/image.tex": true,
-      "lib/cmd/math.tex": true,
-      "lib/cmd/other.tex": true,
-      "lib/cmd/title.tex": true,
-      "lib/env/imports.tex": true,
-      "lib/env/environments.tex": true,
-      "lib/cfg/init.tex": true,
-      "lib/cfg/page.tex": true,
-      "lib/style/all.tex": true,
-      "lib/style/code.tex": true,
-      "lib/style/color.tex": true,
-      "lib/style/other.tex": true,
-      "main.tex": false
-    },
-    "FUNCTIONS": "lib/cmd/control.tex",
-    "GIT": "../Template-Controles/",
-    "ID": 3,
-    "IMPORTSFILE": "lib/env/imports.tex",
-    "INITCONFFILE": "lib/cfg/init.tex",
-    "MAINFILE": "main.tex",
-    "MESSAGE": "\nCREANDO TEMPLATE-CONTROLES v{0}",
-    "NAME": "Template-Controles",
-    "PAGECONFFILE": "lib/cfg/page.tex",
-    "PDF_FOLDER": "../pdf-version/Controles/Template-Controles v{0}.pdf",
-    "ROOT": "../Template-Controles/",
-    "SINGLEFILE": "control.tex",
-    "STATS": {
-      "CTIME": "",
-      "FILE": "stats/data/controles.txt",
-      "LCODE": "",
-      "GIT_ADD": "data/controles.txt"
-    },
-    "SUBRELFILES": {
-      "MAIN": "control_main.tex",
-      "PAGECONF": "lib/cfg/control_page.tex"
-    },
-    "VERLINE": "Template-Controles v{0} | (Pablo Pizarro R.) ppizarror.com",
-    "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/Template-Controles/",
-      "SOURCE": "https://github.com/Template-Latex/Template-Controles/"
-    },
-    "ZIP": {
-      "COMPACT": {
-        "ADD": {
-          "FILES": [
-            "main.tex"
-          ],
-          "FOLDER": [
-            "img",
-            "lib"
-          ]
-        },
-        "EXCEPTED": [],
-        "FILE": "dist/Template-Controles.min.zip",
-        "GHOST": "../Template-Controles/"
-      },
-      "NORMAL": {
-        "ADD": {
-          "FILES": [
-            "main.tex"
-          ],
-          "FOLDER": [
-            "img",
-            "lib"
-          ]
-        },
-        "EXCEPTED": [
-          ".aux"
-        ],
-        "FILE": "dist/Template-Controles.zip",
-        "GHOST": "../Template-Controles/"
-      }
-    }
-  },
-  "INFORME": {
-    "CONFIGFILE": "lib/config.tex",
-    "DIST": "dist/",
-    "EXAMPLECLONE": "example.tex",
-    "EXAMPLEFILE": "lib/etc/example.tex",
-    "FILEDELCOMENTS": {
-      "lib/cfg/final.tex": true,
-      "lib/cfg/init.tex": true,
-      "lib/cfg/page.tex": true,
-      "lib/cmd/all.tex": true,
-      "lib/cmd/core.tex": true,
-      "lib/cmd/equation.tex": true,
-      "lib/cmd/image.tex": true,
-      "lib/cmd/math.tex": true,
-      "lib/cmd/other.tex": true,
-      "lib/cmd/title.tex": true,
-      "lib/config.tex": false,
-      "lib/env/environments.tex": true,
-      "lib/env/imports.tex": true,
-      "lib/etc/example.tex": false,
-      "lib/page/index.tex": true,
-      "lib/page/portrait.tex": true,
-      "lib/page/portrait-config.tex": false,
-      "lib/style/all.tex": true,
-      "lib/style/code.tex": true,
-      "lib/style/color.tex": true,
-      "lib/style/other.tex": true,
-      "main.tex": false
-    },
-    "FILES": {
-      "lib/cfg/final.tex": [],
-      "lib/cfg/init.tex": [],
-      "lib/cfg/page.tex": [],
-      "lib/cmd/all.tex": [],
-      "lib/cmd/core.tex": [],
-      "lib/cmd/equation.tex": [],
-      "lib/cmd/image.tex": [],
-      "lib/cmd/math.tex": [],
-      "lib/cmd/other.tex": [],
-      "lib/cmd/title.tex": [],
-      "lib/config.tex": [],
-      "lib/env/environments.tex": [],
-      "lib/env/imports.tex": [],
-      "lib/etc/example.tex": [],
-      "lib/page/index.tex": [],
-      "lib/page/portrait.tex": [],
-      "lib/page/portrait-config.tex": [],
-      "lib/style/all.tex": [],
-      "lib/style/code.tex": [],
-      "lib/style/color.tex": [],
-      "lib/style/other.tex": [],
-      "main.tex": []
-    },
-    "FILESTRIP": {
-      "lib/cfg/final.tex": true,
-      "lib/cfg/init.tex": true,
-      "lib/cfg/page.tex": true,
-      "lib/cmd/all.tex": true,
-      "lib/cmd/core.tex": true,
-      "lib/cmd/equation.tex": true,
-      "lib/cmd/image.tex": true,
-      "lib/cmd/math.tex": true,
-      "lib/cmd/other.tex": true,
-      "lib/cmd/title.tex": true,
-      "lib/config.tex": false,
-      "lib/env/environments.tex": true,
-      "lib/env/imports.tex": true,
-      "lib/etc/example.tex": false,
-      "lib/page/index.tex": true,
-      "lib/page/portrait.tex": true,
-      "lib/page/portrait-config.tex": false,
-      "lib/style/all.tex": true,
-      "lib/style/code.tex": true,
-      "lib/style/color.tex": true,
-      "lib/style/other.tex": true,
-      "main.tex": false
-    },
-    "GIT": "../Template-Informe/",
-    "ID": 1,
-    "INITCONFFILE": "lib/cfg/init.tex",
-    "MAINFILE": "main.tex",
-    "MESSAGE": "\nCREANDO TEMPLATE-INFORME v{0}",
-    "NAME": "Template-Informe",
-    "PDF_FOLDER": "../pdf-version/Informe/Template-Informe v{0}.pdf",
-    "ROOT": "",
-    "SINGLEFILE": "informe.tex",
-    "STATS": {
-      "CTIME": "",
-      "FILE": "stats/data/informe.txt",
-      "LCODE": "",
-      "GIT_ADD": "data/informe.txt"
-    },
-    "VERLINE": "Template-Informe v{0} | (Pablo Pizarro R.) ppizarror.com",
-    "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/Template-Informe/",
-      "SOURCE": "https://github.com/Template-Latex/Template-Informe/"
-    },
-    "ZIP": {
-      "COMPACT": {
-        "ADD": {
-          "FILES": [
-            "dist/informe.tex",
-            "dist/example.tex"
-          ],
-          "FOLDER": [
-            "img"
-          ]
-        },
-        "EXCEPTED": [
-          ".gitkeep"
-        ],
-        "FILE": "dist/Template-Informe.min.zip",
-        "GHOST": ""
-      },
-      "NORMAL": {
-        "ADD": {
-          "FILES": [
-            "dist/main.tex"
-          ],
-          "FOLDER": [
-            "img",
-            "dist/lib"
-          ]
-        },
-        "EXCEPTED": [
-          ".aux",
-          ".gitkeep",
-          "auxiliar.tex",
-          "auxiliar_example.tex",
-          "auxiliar_imports.tex",
-          "auxiliar_main.tex",
-          "auxiliar_pageconf.tex",
-          "auxiliar_title.tex",
-          "control_example.tex",
-          "control_pageconf.tex",
-          "greekenum.sty"
-        ],
-        "FILE": "dist/Template-Informe.zip",
-        "GHOST": ""
-      },
-      "OTHERS": {
-        "DATA": [
-          [
-            [
-              "Área de Humanidades",
-              "Área de Humanidades"
-            ],
-            "adh",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Astronomía",
-              "Departamento de Astronomía"
-            ],
-            "das",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Ciencias de la Computación",
-              "Departamento de Ciencias de la Computación"
-            ],
-            "dcc",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Física",
-              "Departamento de Física"
-            ],
-            "dfi",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Geofísica",
-              "Departamento de Geofísica"
-            ],
-            "dgf",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Ingeniería Civil",
-              "Departamento de Ingeniería Civil"
-            ],
-            "dic",
-            [
-              "dic2",
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Ingeniería Eléctrica",
-              "Departamento de Ingeniería Eléctrica"
-            ],
-            "die",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Ingeniería Industrial",
-              "Departamento de Ingeniería Industrial"
-            ],
-            "dii",
-            [
-              "dii2",
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Ingeniería Matemática",
-              "Departamento de Ingeniería Matemática"
-            ],
-            "dim",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Ingeniería Mecánica",
-              "Departamento de Ingeniería Mecánica"
-            ],
-            "dimec",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Ingeniería Química, Biotecnología y Materiales",
-              "Departamento de Ingeniería Química, Biotecnología y Materiales"
-            ],
-            "diqbtm",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Facultad de Ciencias Físicas y Matemáticas",
-              "Departamento de la Universidad"
-            ],
-            "fcfm",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Geología",
-              "Departamento de Geología"
-            ],
-            "geo",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Departamento de Ingeniería en Minas",
-              "Departamento de Ingeniería en Minas"
-            ],
-            "minas",
-            [
-              "uchile",
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ],
-          [
-            [
-              "Universidad de Chile",
-              "Departamento de la Universidad"
-            ],
-            "uchile",
-            [
-              "uchile2",
-              "uchile3",
-              "fcfm",
-              "fcfm2"
-            ]
-          ]
-        ],
-        "NORMAL": "dist/Template-Informe-{0}.zip",
-        "SINGLE": "dist/Template-Informe-{0}.min.zip",
-        "IMGPATH": "img/departamentos/{0}.pdf",
-        "EXPATH": "img/ejemplos/"
-      }
-    }
-  },
-  "REPORTE": {
-    "CONFIGFILE": "lib/config.tex",
-    "DIST": "dist/",
-    "EXAMPLECLONE": "example.tex",
-    "COREFUN": "lib/cmd/core.tex",
-    "EXAMPLEFILE": "lib/etc/example.tex",
-    "FILEDELCOMENTS": {
-      "lib/cfg/final.tex": true,
-      "lib/cfg/init.tex": true,
-      "lib/cfg/page.tex": true,
-      "lib/cmd/all.tex": true,
-      "lib/cmd/core.tex": true,
-      "lib/cmd/equation.tex": true,
-      "lib/cmd/image.tex": true,
-      "lib/cmd/math.tex": true,
-      "lib/cmd/other.tex": true,
-      "lib/cmd/title.tex": true,
-      "lib/config.tex": false,
-      "lib/env/environments.tex": true,
-      "lib/env/imports.tex": true,
-      "lib/etc/example.tex": false,
-      "lib/page/index.tex": true,
-      "lib/page/portrait.tex": true,
-      "lib/page/portrait-config.tex": false,
-      "lib/style/all.tex": true,
-      "lib/style/code.tex": true,
-      "lib/style/color.tex": true,
-      "lib/style/other.tex": true,
-      "main.tex": false
-    },
-    "FILES": {
-      "lib/cfg/final.tex": [],
-      "lib/cfg/init.tex": [],
-      "lib/cfg/page.tex": [],
-      "lib/cmd/all.tex": [],
-      "lib/cmd/core.tex": [],
-      "lib/cmd/equation.tex": [],
-      "lib/cmd/image.tex": [],
-      "lib/cmd/math.tex": [],
-      "lib/cmd/other.tex": [],
-      "lib/cmd/title.tex": [],
-      "lib/config.tex": [],
-      "lib/env/environments.tex": [],
-      "lib/env/imports.tex": [],
-      "lib/etc/example.tex": [],
-      "lib/style/all.tex": [],
-      "lib/style/code.tex": [],
-      "lib/style/color.tex": [],
-      "lib/style/other.tex": [],
-      "main.tex": []
-    },
-    "FILESTRIP": {
-      "lib/cfg/final.tex": true,
-      "lib/cfg/init.tex": true,
-      "lib/cfg/page.tex": true,
-      "lib/cmd/all.tex": true,
-      "lib/cmd/core.tex": true,
-      "lib/cmd/equation.tex": true,
-      "lib/cmd/image.tex": true,
-      "lib/cmd/math.tex": true,
-      "lib/cmd/other.tex": true,
-      "lib/cmd/title.tex": true,
-      "lib/config.tex": false,
-      "lib/env/environments.tex": true,
-      "lib/env/imports.tex": true,
-      "lib/etc/example.tex": false,
-      "lib/style/all.tex": true,
-      "lib/style/code.tex": true,
-      "lib/style/color.tex": true,
-      "lib/style/other.tex": true,
-      "main.tex": false
-    },
-    "SUBRELFILES": {
-      "MAIN": "reporte_main.tex",
-      "INIT": "lib/cfg/reporte_init.tex"
-    },
-    "GIT": "../Template-Reporte/",
-    "PAGECONFFILE": "lib/cfg/page.tex",
-    "ID": 5,
-    "INITCONFFILE": "lib/cfg/init.tex",
-    "MAINFILE": "main.tex",
-    "IMPORTSFILE": "lib/env/imports.tex",
-    "MESSAGE": "\nCREANDO TEMPLATE-REPORTE v{0}",
-    "NAME": "Template-Reporte",
-    "PDF_FOLDER": "../pdf-version/Reporte/Template-Reporte v{0}.pdf",
-    "ROOT": "../Template-Reporte/",
-    "SINGLEFILE": "reporte.tex",
-    "STATS": {
-      "CTIME": "",
-      "FILE": "stats/data/reporte.txt",
-      "LCODE": "",
-      "GIT_ADD": "data/reporte.txt"
-    },
-    "VERLINE": "Template-Reporte v{0} | (Pablo Pizarro R.) ppizarror.com",
-    "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/Template-Reporte/",
-      "SOURCE": "https://github.com/Template-Latex/Template-Reporte/"
-    },
-    "ZIP": {
-      "COMPACT": {
-        "ADD": {
-          "FILES": [
-            "reporte.tex",
-            "example.tex"
-          ],
-          "FOLDER": [
-            "img"
-          ]
-        },
-        "EXCEPTED": [
-          ".gitkeep"
-        ],
-        "FILE": "dist/Template-Reporte.min.zip",
-        "GHOST": "Template-Reporte/"
-      },
-      "NORMAL": {
-        "ADD": {
-          "FILES": [
-            "main.tex"
-          ],
-          "FOLDER": [
-            "img",
-            "lib"
-          ]
-        },
-        "EXCEPTED": [
-          ".aux",
-          ".gitkeep",
-          "auxiliar.tex",
-          "auxiliar_example.tex",
-          "auxiliar_imports.tex",
-          "auxiliar_main.tex",
-          "auxiliar_pageconf.tex",
-          "auxiliar_title.tex",
-          "control_example.tex",
-          "control_pageconf.tex",
-          "reporte_main.tex",
-          "greekenum.sty"
-        ],
-        "FILE": "dist/Template-Reporte.zip",
-        "GHOST": "Template-Reporte/"
-      }
-    }
-  },
-  "PROFESSIONAL-CV": {
-    "CONFIGFILE": "lib/config.tex",
-    "FILEDELCOMENTS": {
-      "lib/config.tex": false,
-      "lib/env.tex": true,
-      "lib/function.tex": true,
-      "lib/imports.tex": true,
-      "lib/initconf.tex": true,
-      "lib/pageconf.tex": true,
-      "lib/styles.tex": true,
-      "cv.tex": false
-    },
-    "FILES": {
-      "lib/config.tex": [],
-      "lib/env.tex": [],
-      "lib/function.tex": [],
-      "lib/imports.tex": [],
-      "lib/initconf.tex": [],
-      "lib/pageconf.tex": [],
-      "lib/styles.tex": [],
-      "cv.tex": []
-    },
-    "FILESTRIP": {
-      "lib/config.tex": false,
-      "lib/env.tex": true,
-      "lib/function.tex": true,
-      "lib/imports.tex": true,
-      "lib/initconf.tex": true,
-      "lib/pageconf.tex": true,
-      "lib/styles.tex": true,
-      "cv.tex": false
-    },
-    "FUNCTIONFILE": "lib/function.tex",
-    "GIT": "../Professional-CV/",
-    "ID": 4,
-    "INITCONFFILE": "lib/initconf.tex",
-    "MAINFILE": "cv.tex",
-    "MESSAGE": "\nCREANDO PROFESSIONAL-CV v{0}",
-    "NAME": "Professional-CV",
-    "PDF_FOLDER": "../pdf-version/Professional-CV/Professional-CV v{0}.pdf",
-    "ROOT": "../Professional-CV/",
-    "SINGLEFILE": "cv_single.tex",
-    "STATS": {
-      "CTIME": "",
-      "FILE": "stats/data/professional-cv.txt",
-      "LCODE": "",
-      "GIT_ADD": "data/professional-cv.txt"
-    },
-    "VERLINE": "Professional-CV v{0} | (Pablo Pizarro R.) ppizarror.com",
-    "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/Professional-CV/",
-      "SOURCE": "https://github.com/Template-Latex/Professional-CV/"
-    },
-    "ZIP": {
-      "COMPACT": {
-        "ADD": {
-          "FILES": [
-            "cv_single.tex"
-          ],
-          "FOLDER": [
-            "images"
-          ]
-        },
-        "EXCEPTED": [],
-        "FILE": "dist/ProfessionalCV.min.zip",
-        "GHOST": ""
-      },
-      "NORMAL": {
-        "ADD": {
-          "FILES": [
-            "cv.tex"
-          ],
-          "FOLDER": [
-            "images",
-            "lib"
-          ]
-        },
-        "EXCEPTED": [
-          "other.tex"
-        ],
-        "FILE": "dist/ProfessionalCV.zip",
-        "GHOST": ""
-      }
-    }
-  }
 }
