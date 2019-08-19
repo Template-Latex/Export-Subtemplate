@@ -31,7 +31,7 @@ __author__ = 'Pablo Pizarro R.'
 __version__ = '3.0.1'  # (19/08/2019)
 
 # noinspection PyUnresolvedReferences
-from releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, RELEASES
+from releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, RELEASES, REL_REPORTE
 # noinspection PyUnresolvedReferences
 import convert
 # noinspection PyUnresolvedReferences

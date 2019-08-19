@@ -663,6 +663,20 @@ class CreateVersion(object):
                         except:
                             logging.exception('Error al generar cv')
                             clear_dict(RELEASES[REL_PROFESSIONALCV], 'FILES')
+                    elif t == 5:
+                        try:
+                            convert.export_reporte(ver, versiondev, versionhash, printfun=self._print,
+                                                   dosave=self._getconfig('SAVE'),
+                                                   docompile=self._getconfig('COMPILE'),
+                                                   addstat=self._getconfig('SAVE_STAT'),
+                                                   plotstats=self._getconfig('PLOT_STAT'),
+                                                   savepdf=self._getconfig('SAVE_PDF'),
+                                                   mainroot=self._getconfig('MAIN_ROOT'),
+                                                   statsroot=self._getconfig('STATS_ROOT'),
+                                                   informeroot=self._getconfig('INFORME_ROOT'))
+                        except:
+                            logging.exception('Error al generar reporte')
+                            clear_dict(RELEASES[REL_REPORTE], 'FILES')
                     else:
                         raise Exception('ERROR: ID INCORRECTO')
                     self._lastsav = self._getconfig('SAVE')

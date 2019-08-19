@@ -199,7 +199,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
         fld.close()
 
     # Si tiene END retorna, se borran luego todas las líneas vacías
-    if libdata[len(libdata) - 1] == '% END':
+    if len(libdata) > 0 and libdata[len(libdata) - 1] == '% END':
         libdata.pop()
         while True:
             if libdata[len(libdata) - 1].strip() == '':
