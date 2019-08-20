@@ -28,41 +28,25 @@ Licencia:
 """
 
 __author__ = 'Pablo Pizarro R.'
-__version__ = '3.0.1'  # (19/08/2019)
+__version__ = '3.1.0'  # (19/08/2019)
 
-# noinspection PyUnresolvedReferences
 from releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, RELEASES, REL_REPORTE
-# noinspection PyUnresolvedReferences
 import convert
-# noinspection PyUnresolvedReferences
 from convert import call, CREATE_NO_WINDOW, MSG_FOKTIMER
-# noinspection PyUnresolvedReferences
 from version import *
-# noinspection PyUnresolvedReferences
 from sound import Sound
-# noinspection PyUnresolvedReferences
 from resources import *
-# noinspection PyUnresolvedReferences
-from export_professionalcv import exportcv
-# noinspection PyCompatibility,PyUnresolvedReferences
 from Tkinter import *
-# noinspection PyCompatibility,PyUnresolvedReferences
 import tkFont
-# noinspection PyUnresolvedReferences,PyCompatibility
 import tkMessageBox
-# noinspection PyUnresolvedReferences
 from vframe import VerticalScrolledFrame
-# noinspection PyUnresolvedReferences
 from pyperclip import copy as extlbcbpaste
 import sys
 
-# noinspection PyCompatibility
 reload(sys)
-# noinspection PyUnresolvedReferences
 sys.setdefaultencoding('utf8')
 
 
-# noinspection PyCompatibility
 def reload_extlbx():
     """
     Vuelve a cargar funciones.

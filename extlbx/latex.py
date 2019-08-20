@@ -187,7 +187,6 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
     :param force_nl: Forzar nueva línea
     :return:
     """
-
     # Se escribe desde el largo del header en adelante
     if files is not None:
         libdata = files[libr]  # Datos del import

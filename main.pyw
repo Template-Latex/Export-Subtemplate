@@ -171,8 +171,6 @@ class CreateVersion(object):
 
             :return:
             """
-
-            # noinspection PyUnresolvedReferences
             def _oskill():
                 if os.name is 'nt':
                     os.system('taskkill /PID {0} /F'.format(str(os.getpid())))
@@ -651,7 +649,7 @@ class CreateVersion(object):
                             clear_dict(RELEASES[REL_CONTROLES], 'FILES')
                     elif t == 4:
                         try:
-                            exportcv(ver, versiondev, versionhash, printfun=self._print,
+                            convert.exportcv(ver, versiondev, versionhash, printfun=self._print,
                                      dosave=self._getconfig('SAVE'),
                                      docompile=self._getconfig('COMPILE'),
                                      addstat=self._getconfig('SAVE_STAT'),

@@ -42,7 +42,6 @@ class Zip(object):
         Constructor, crea un archivo zipfile con un nombre
         :param filename: Nombre del archivo
         """
-
         if '.zip' not in filename:
             filename += '.zip'
 
