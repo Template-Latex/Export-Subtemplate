@@ -1408,13 +1408,15 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[mainfile] = find_delete_block(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
     ra, _ = find_block(files[mainfile], '\input{lib/etc/example}', True)
     files[mainfile] = add_block_from_list(files[mainfile], main_reporte, ra, addnewline=True)
+    ra, _ = find_block(files[mainfile], 'imagendepartamentoescala', True)
+    files[mainfile].pop(ra)
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # Cambia las variables del documento principales
     nl = ['% INFORMACIÓN DEL DOCUMENTO\n',
           '\def\\titulodelreporte {Título del reporte}\n',
           '\def\\temaatratar {Tema a tratar}\n',
-          '\def\\fechadeldeporte {\\today}\n\n']
+          '\def\\fechadelreporte {\\today}\n\n']
     files[mainfile] = find_replace_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', nl, white_end_block=True,
                                          jadd=-1)
 
@@ -1489,8 +1491,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
     # PAGECONF
-    fl = release['PAGECONFFILE']
-    files[fl].pop(ra)
+    # fl = release['PAGECONFFILE']
 
     # CORE FUN
     delfile = release['COREFUN']
