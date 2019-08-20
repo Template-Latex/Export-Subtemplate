@@ -1728,11 +1728,11 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
                 export_normal.save()
 
                 # Se genera el single
-                # czip = release['ZIP']['COMPACT']
+                czip = release['ZIP']['COMPACT']
                 export_single = Zip(release['ZIP']['OTHERS']['SINGLE'].format(m[1]))
                 with Cd(subrlfolder):
                     export_single.set_ghostpath(distfolder)
-                    # export_single.add_file(czip['ADD']['FILES'], 'dist/')
+                    export_single.add_file(czip['ADD']['FILES'], '')
                     export_single.add_folder(release['ZIP']['OTHERS']['EXPATH'])
                     export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
                     for k in m[2]:
