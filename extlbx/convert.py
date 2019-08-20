@@ -178,13 +178,13 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Obtiene archivos
     configfile = release['CONFIGFILE']
-    distfolder = release['DIST']
     examplefile = release['EXAMPLEFILE']
     filedelcoments = release['FILEDELCOMENTS']
     files = release['FILES']
     filestrip = release['FILESTRIP']
     initconffile = release['INITCONFFILE']
     mainfile = release['MAINFILE']
+    distfolder = release['DIST']
     mainsinglefile = release['SINGLEFILE']
     stat = release['STATS']
 
@@ -1360,7 +1360,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files['lib/cmd/image.tex'] = copy.copy(mainf['lib/cmd/image.tex'])
     files['lib/cmd/title.tex'] = copy.copy(mainf['lib/cmd/title.tex'])
     files['lib/cmd/other.tex'] = copy.copy(mainf['lib/cmd/other.tex'])
-    files['lib/etc/example.tex'] = copy.copy(mainf['lib/etc/example.tex'])
+    files['lib/etc/example.tex'] = file_to_list('lib/etc/reporte_example.tex')
     files['lib/cfg/init.tex'] = copy.copy(mainf['lib/cfg/init.tex'])
     files['lib/cfg/final.tex'] = copy.copy(mainf['lib/cfg/final.tex'])
     files['lib/config.tex'] = copy.copy(mainf['lib/config.tex'])
@@ -1378,6 +1378,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     subrlfolder = release['ROOT']
     stat = release['STATS']
     configfile = release['CONFIGFILE']
+    distfolder = release['DIST']
+    mainsinglefile = release['SINGLEFILE']
 
     # Constantes
     main_data = open(mainfile)
@@ -1395,8 +1397,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     versionhead = versionhead.format(version, dia)
 
     # MODIFICA EL MAIN
-    main_auxiliar = file_to_list(subrelfile['MAIN'])
-    nb = find_extract(main_auxiliar, '% EQUIPO DOCENTE')
+    main_reporte = file_to_list(subrelfile['MAIN'])
+    nb = find_extract(main_reporte, '% EQUIPO DOCENTE')
     nb.append('\n')
     files[mainfile] = find_delete_block(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', nb)
     files[mainfile][1] = '% Documento:    Archivo principal\n'
@@ -1405,21 +1407,31 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[mainfile] = find_delete_block(files[mainfile], '% TABLA DE CONTENIDOS - ÍNDICE', white_end_block=True)
     files[mainfile] = find_delete_block(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
     ra, _ = find_block(files[mainfile], '\input{lib/etc/example}', True)
-    files[mainfile] = add_block_from_list(files[mainfile], main_auxiliar, ra, addnewline=True)
+    files[mainfile] = add_block_from_list(files[mainfile], main_reporte, ra, addnewline=True)
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
+
+    # Cambia las variables del documento principales
+    nl = ['% INFORMACIÓN DEL DOCUMENTO\n',
+          '\def\\titulodelreporte {Título del reporte}\n',
+          '\def\\temaatratar {Tema a tratar}\n',
+          '\def\\fechadeldeporte {\\today}\n\n']
+    files[mainfile] = find_replace_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', nl, white_end_block=True,
+                                         jadd=-1)
 
     # MODIFICA CONFIGURACIIONES
     fl = release['CONFIGFILE']
+    config_reporte = file_to_list(subrelfile['CONFIG'])
 
     # Configuraciones que se borran
     cdel = ['firstpagemargintop', 'portraitstyle', 'predocpageromannumber', 'predocpageromanupper',
             'predocresetpagenumber', 'fontsizetitlei', 'styletitlei', 'nomltcont', 'nomltfigure', 'nomltsrc',
-            'nomlttable', 'nameportraitpage', 'indextitlecolor', 'addindextobookmarks']
+            'nomlttable', 'nameportraitpage', 'indextitlecolor', 'addindextobookmarks', 'portraittitlecolor']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
-    for cdel in []:
+    for cdel in ['nameabstract', 'nameappendixsection', 'namereferences', 'nomchapter', 'nomltappendixsection',
+                 'nomltwfigure', 'nomltwsrc', 'nomltwtable', 'nomnpageof']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
@@ -1450,6 +1462,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     ra, rb = find_block(files[fl], 'fontsizesubsubtitle', True)
     nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace(' %', '%')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'hfwidthwrap', True)
+    files[fl] = replace_block_from_list(files[fl], config_reporte, ra, ra)
     # files[fl].pop()
 
     # CAMBIA IMPORTS
@@ -1467,6 +1481,12 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True)
     files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True)
+    ra, _ = find_block(files[fl], '\checkvardefined{\\autordeldocumento}', True)
+
+    # Agrega definición de titulodelreporte
+    nl = ['\def\\titulodelinforme{\\titulodelreporte}\n',
+          files[fl][ra]]
+    files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
     # PAGECONF
     fl = release['PAGECONFFILE']
@@ -1526,7 +1546,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
             fl.close()
 
     if dosave:
-
         # Se crea ejemplo
         fl = open(subrlfolder + 'example.tex', 'w')
         data = files[release['EXAMPLEFILE']]
@@ -1634,6 +1653,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
             plot_stats(statsroot + stat['FILE'], statsroot + stat['CTIME'], statsroot + stat['LCODE'])
 
         # Se exporta el proyecto normal
+
         if dosave:
             czip = release['ZIP']['NORMAL']
             export_normal = Zip(czip['FILE'])
@@ -1648,11 +1668,97 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
             czip = release['ZIP']['COMPACT']
             export_single = Zip(czip['FILE'])
             with Cd(subrlfolder):
-                export_single.set_ghostpath(czip['GHOST'])
-                export_single.add_file(release['SINGLEFILE'])
-                export_single.add_folder('img')
-                export_single.add_file('lib/etc/example.tex', 'lib/etc/')
+                export_single.set_ghostpath(distfolder)
+                # export_single.add_file(czip['ADD']['FILES'], 'dist/')
+                export_single.add_folder(czip['ADD']['FOLDER'])
             export_single.save()
+
+            # Se exportan los distintos estilos de versiones
+            fl_mainfile = open(subrlfolder + mainfile)
+            fl_mainsinglefile = open(subrlfolder + mainsinglefile)
+
+            # Se cargan los archivos en listas
+            data_mainfile = []
+            data_mainsinglefile = []
+            for i in fl_mainfile:
+                data_mainfile.append(i)
+            for i in fl_mainsinglefile:
+                data_mainsinglefile.append(i)
+
+            # Se buscan las líneas del departamento y de la imagen
+            fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
+            fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
+            fl_pos_dp_mainsinglefile = find_line(data_mainsinglefile, '\def\departamentouniversidad')
+            fl_pos_im_mainsinglefile = find_line(data_mainsinglefile, '\def\imagendepartamento')
+
+            # Se cierran los archivos
+            fl_mainfile.close()
+            fl_mainsinglefile.close()
+
+            # Se recorre cada versión y se genera el .zip
+            for m in release['ZIP']['OTHERS']['DATA']:
+                data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
+                data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
+                data_mainsinglefile[fl_pos_dp_mainsinglefile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
+                data_mainsinglefile[fl_pos_im_mainsinglefile] = '\\def\\imagendepartamento {departamentos/' + m[
+                    1] + '}\n'
+
+                # Se reescriben los archivos
+                new_mainfile = open(subrlfolder + mainfile, 'w')
+                for i in data_mainfile:
+                    new_mainfile.write(i)
+                new_mainfile.close()
+                new_mainsinglefile = open(subrlfolder + mainsinglefile, 'w')
+                for i in data_mainsinglefile:
+                    new_mainsinglefile.write(i)
+                new_mainsinglefile.close()
+
+                # Se genera el .zip
+                czip = release['ZIP']['NORMAL']
+                export_normal = Zip(release['ZIP']['OTHERS']['NORMAL'].format(m[1]))
+                with Cd(subrlfolder):
+                    export_normal.set_ghostpath(distfolder)
+                    export_normal.add_excepted_file(czip['EXCEPTED'])
+                    export_normal.add_file(czip['ADD']['FILES'])
+                    export_normal.add_folder('lib')
+                    export_normal.add_folder(release['ZIP']['OTHERS']['EXPATH'])
+                    export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
+                    for k in m[2]:
+                        export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
+                export_normal.save()
+
+                # Se genera el single
+                # czip = release['ZIP']['COMPACT']
+                export_single = Zip(release['ZIP']['OTHERS']['SINGLE'].format(m[1]))
+                with Cd(subrlfolder):
+                    export_single.set_ghostpath(distfolder)
+                    # export_single.add_file(czip['ADD']['FILES'], 'dist/')
+                    export_single.add_folder(release['ZIP']['OTHERS']['EXPATH'])
+                    export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
+                    for k in m[2]:
+                        export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
+                export_single.save()
+
+            data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
+                                                                 'Departamento de la Universidad')
+            data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
+                                                                 'departamentos/fcfm')
+            data_mainsinglefile[fl_pos_dp_mainsinglefile] = replace_argument(
+                data_mainsinglefile[fl_pos_dp_mainsinglefile],
+                1, 'Departamento de la Universidad')
+            data_mainsinglefile[fl_pos_im_mainsinglefile] = replace_argument(
+                data_mainsinglefile[fl_pos_im_mainsinglefile],
+                1, 'departamentos/fcfm')
+
+            # Se reescriben los archivos
+            new_mainfile = open(subrlfolder + mainfile, 'w')
+            for i in data_mainfile:
+                new_mainfile.write(i)
+            new_mainfile.close()
+            new_mainsinglefile = open(subrlfolder + mainsinglefile, 'w')
+            for i in data_mainsinglefile:
+                new_mainsinglefile.write(i)
+            new_mainsinglefile.close()
 
     # Limpia el diccionario
     if doclean:
