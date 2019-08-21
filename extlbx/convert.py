@@ -179,6 +179,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     # Obtiene archivos
     configfile = release['CONFIGFILE']
     examplefile = release['EXAMPLEFILE']
+    # exampleclone = release['EXAMPLECLONE']
     filedelcoments = release['FILEDELCOMENTS']
     files = release['FILES']
     filestrip = release['FILESTRIP']
@@ -608,6 +609,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     filestrip = release['FILESTRIP']
     mainfile = release['MAINFILE']
     subrelfile = release['SUBRELFILES']
+    exampleclone = release['EXAMPLECLONE']
     examplefile = release['EXAMPLEFILE']
     subrlfolder = release['ROOT']
     stat = release['STATS']
@@ -827,7 +829,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     if dosave:
 
         # Se crea ejemplo
-        fl = open(subrlfolder + 'example.tex', 'w')
+        fl = open(subrlfolder + exampleclone, 'w')
         data = files[release['EXAMPLEFILE']]
         for k in data:
             fl.write(k)
@@ -1031,6 +1033,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     filestrip = release['FILESTRIP']
     mainfile = release['MAINFILE']
     subrelfile = release['SUBRELFILES']
+    exampleclone = release['EXAMPLECLONE']
     examplefile = release['EXAMPLEFILE']
     subrlfolder = release['ROOT']
     stat = release['STATS']
@@ -1175,7 +1178,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     if dosave:
 
         # Se crea ejemplo
-        fl = open(subrlfolder + 'example.tex', 'w')
+        fl = open(subrlfolder + exampleclone, 'w')
         data = files[release['EXAMPLEFILE']]
         for k in data:
             fl.write(k)
@@ -1380,6 +1383,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     examplefile = release['EXAMPLEFILE']
     subrlfolder = release['ROOT']
     stat = release['STATS']
+    exampleclone = release['EXAMPLECLONE']
     configfile = release['CONFIGFILE']
     distfolder = release['DIST']
     mainsinglefile = release['SINGLEFILE']
@@ -1551,7 +1555,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     if dosave:
         # Se crea ejemplo
-        fl = open(subrlfolder + 'example.tex', 'w')
+        fl = open(subrlfolder + exampleclone, 'w')
         data = files[release['EXAMPLEFILE']]
         for k in data:
             fl.write(k)
@@ -1812,6 +1816,7 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
     filedelcoments = release['FILEDELCOMENTS']
     files = release['FILES']
     filestrip = release['FILESTRIP']
+    # exampleclone = release['EXAMPLECLONE']
     initconffile = release['INITCONFFILE']
     mainfile = release['MAINFILE']
     mainsinglefile = release['SINGLEFILE']
@@ -2057,4 +2062,482 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
     if backtoroot:
         os.chdir(mainroot)
 
+    return
+
+
+# noinspection PyUnboundLocalVariable
+def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
+                 addwhitespace=False, deletecoments=True, plotstats=True, addstat=True, doclean=True,
+                 savepdf=True, informeroot=None, mainroot=None, statsroot=None):
+    """
+    Exporta las tesis.
+
+    :param addstat: Agrega las estadísticas
+    :param addwhitespace: Añade espacios en blanco al comprimir archivos
+    :param deletecoments: Borra comentarios
+    :param doclean: Borra los archivos generados en lista
+    :param docompile: Compila automáticamente
+    :param dosave: Guarda o no los archivos
+    :param informeroot: Raíz de informe-template
+    :param mainroot: Carpeta raíz del export
+    :param plotstats: Plotea las estadísticas
+    :param printfun: Función que imprime en consola
+    :param savepdf: Guarda el pdf generado
+    :param statsroot: Raíz de la carpeta de estadísticas
+    :param version: Versión
+    :param versiondev: Versión developer
+    :param versionhash: Hash de la versión
+    :return: None
+    """
+
+    # Tipo release
+    release = RELEASES[REL_TESIS]
+
+    # Obtiene archivos
+    t = time.time()
+
+    # Genera informe
+    # noinspection PyTypeChecker
+    export_informe(version, versiondev, versionhash, dosave=False, docompile=False,
+                   plotstats=False, addwhitespace=addwhitespace, deletecoments=deletecoments,
+                   printfun=nonprint, addstat=False, savepdf=False, informeroot=informeroot)
+
+    if dosave:
+        printfun(MSG_GEN_FILE, end='')
+    else:
+        printfun(MSG_UPV_FILE, end='')
+    mainf = RELEASES[REL_INFORME]['FILES']
+    files = release['FILES']
+    files['main.tex'] = copy.copy(mainf['main.tex'])
+    files['lib/cmd/all.tex'] = copy.copy(mainf['lib/cmd/all.tex'])
+    # files['lib/cmd/column.tex'] = copy.copy(mainf['lib/cmd/column.tex'])
+    files['lib/cmd/core.tex'] = copy.copy(mainf['lib/cmd/core.tex'])
+    files['lib/cmd/math.tex'] = copy.copy(mainf['lib/cmd/math.tex'])
+    files['lib/cmd/equation.tex'] = copy.copy(mainf['lib/cmd/equation.tex'])
+    files['lib/env/environments.tex'] = copy.copy(mainf['lib/env/environments.tex'])
+    files['lib/cmd/image.tex'] = copy.copy(mainf['lib/cmd/image.tex'])
+    files['lib/page/portrait.tex'] = file_to_list('lib/page/tesis_portrait.tex')
+    files['lib/page/index.tex'] = copy.copy(mainf['lib/page/index.tex'])
+    files['lib/cmd/title.tex'] = copy.copy(mainf['lib/cmd/title.tex'])
+    files['lib/cmd/other.tex'] = copy.copy(mainf['lib/cmd/other.tex'])
+    files['lib/etc/example.tex'] = file_to_list('lib/etc/tesis_example.tex')
+    files['lib/cfg/init.tex'] = copy.copy(mainf['lib/cfg/init.tex'])
+    files['lib/cfg/final.tex'] = copy.copy(mainf['lib/cfg/final.tex'])
+    files['lib/config.tex'] = copy.copy(mainf['lib/config.tex'])
+    files['lib/cfg/page.tex'] = copy.copy(mainf['lib/cfg/page.tex'])
+    files['lib/style/all.tex'] = copy.copy(mainf['lib/style/all.tex'])
+    files['lib/style/color.tex'] = copy.copy(mainf['lib/style/color.tex'])
+    files['lib/style/code.tex'] = copy.copy(mainf['lib/style/code.tex'])
+    files['lib/style/other.tex'] = copy.copy(mainf['lib/style/other.tex'])
+    files['lib/env/imports.tex'] = copy.copy(mainf['lib/env/imports.tex'])
+    filedelcoments = release['FILEDELCOMENTS']
+    filestrip = release['FILESTRIP']
+    mainfile = release['MAINFILE']
+    subrelfile = release['SUBRELFILES']
+    examplefile = release['EXAMPLEFILE']
+    exampleclone = release['EXAMPLECLONE']
+    subrlfolder = release['ROOT']
+    stat = release['STATS']
+    configfile = release['CONFIGFILE']
+    distfolder = release['DIST']
+    mainsinglefile = release['SINGLEFILE']
+
+    # Constantes
+    main_data = open(mainfile)
+    main_data.read()
+    initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    headersize = find_line(main_data, '% Licencia MIT:') + 2
+    headerversionpos = find_line(main_data, '% Versión:      ')
+    versionhead = '% Versión:      {0} ({1})\n'
+    main_data.close()
+
+    # Se obtiene el día
+    dia = time.strftime('%d/%m/%Y')
+
+    # Se crea el header
+    versionhead = versionhead.format(version, dia)
+
+    # MODIFICA EL MAIN
+    main_prev_tesis = file_to_list(subrelfile['MAIN_PREV'])
+
+    # Borra el bloque de información del template
+    ra, _ = find_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', True)
+    _, rb = find_block(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', True)
+    files[mainfile] = replace_block_from_list(files[mainfile], main_prev_tesis, ra, rb - 1)
+    # nb = find_extract(main_reporte, '% EQUIPO DOCENTE')
+    # nb.append('\n')
+    # files[mainfile] = find_delete_block(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', nb)
+    # files[mainfile][1] = '% Documento:    Archivo principal\n'
+    # files[mainfile] = find_delete_block(files[mainfile], '% PORTADA', white_end_block=True)
+    # files[mainfile] = find_delete_block(files[mainfile], '% RESUMEN O ABSTRACT', white_end_block=True)
+    # files[mainfile] = find_delete_block(files[mainfile], '% TABLA DE CONTENIDOS - ÍNDICE', white_end_block=True)
+    # files[mainfile] = find_delete_block(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
+    # ra, _ = find_block(files[mainfile], '\input{lib/etc/example}', True)
+    # files[mainfile] = add_block_from_list(files[mainfile], main_reporte, ra, addnewline=True)
+    # ra, _ = find_block(files[mainfile], 'imagendepartamentoescala', True)
+    # files[mainfile].pop(ra)
+    # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
+
+    # Cambia las variables del documento principales
+    # nl = ['% INFORMACIÓN DEL DOCUMENTO\n',
+    #       '\def\\titulodelreporte {Título del reporte}\n',
+    #       '\def\\temaatratar {Tema a tratar}\n',
+    #       '\def\\fechadelreporte {\\today}\n\n']
+    # files[mainfile] = find_replace_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', nl, white_end_block=True,
+    #                                      jadd=-1)
+
+    # MODIFICA CONFIGURACIIONES
+    fl = release['CONFIGFILE']
+    # config_reporte = file_to_list(subrelfile['CONFIG'])
+
+    # Configuraciones que se borran
+    cdel = ['portraitstyle', 'firstpagemargintop']
+    for cdel in cdel:
+        ra, rb = find_block(files[fl], cdel, True)
+        files[fl].pop(ra)
+    # files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
+    for cdel in []:
+        ra, rb = find_block(files[fl], cdel, True)
+        files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
+    # ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
+    # files[fl] = add_block_from_list(files[fl], [files[fl][ra],
+    #                                             '\def\indexdepth{4}                 % Profundidad de los marcadores\n'],
+    #                                 ra, addnewline=True)
+    ra, _ = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
+    files[fl][ra] = '% ESTILO HEADER-FOOTER\n'
+    ra, rb = find_block(files[fl], 'pagemarginbottom', True)
+    nconf = replace_argument(files[fl][ra], 1, '2.54').replace(' %', '%')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'pagemarginleft', True)
+    nconf = replace_argument(files[fl][ra], 1, '2.54')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'pagemarginright', True)
+    nconf = replace_argument(files[fl][ra], 1, '2.54')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'pagemargintop', True)
+    nconf = replace_argument(files[fl][ra], 1, '2.54').replace(' %', '%')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'hfstyle', True)
+    nconf = replace_argument(files[fl][ra], 1, 'style7')
+    files[fl][ra] = nconf
+    # ra, rb = find_block(files[fl], 'fontsizetitle', True)
+    # nconf = replace_argument(files[fl][ra], 1, '\\Large')
+    # files[fl][ra] = nconf
+    # ra, rb = find_block(files[fl], 'fontsizesubtitle', True)
+    # nconf = replace_argument(files[fl][ra], 1, '\\large')
+    # files[fl][ra] = nconf
+    # ra, rb = find_block(files[fl], 'fontsizesubsubtitle', True)
+    # nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace(' %', '%')
+    # files[fl][ra] = nconf
+    # ra, rb = find_block(files[fl], 'hfwidthwrap', True)
+    # files[fl] = replace_block_from_list(files[fl], config_reporte, ra, ra)
+    # files[fl].pop()
+
+    # CAMBIA IMPORTS
+    fl = release['IMPORTSFILE']
+    idel = []
+    for idel in idel:
+        ra, rb = find_block(files[fl], idel, True)
+        files[fl].pop(ra)
+    files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
+
+    # CAMBIO INITCONF
+    fl = release['INITCONFFILE']
+    init_tesis = file_to_list(subrelfile['INIT'])
+
+    # nl = find_extract(init_auxiliar, 'Operaciones especiales Template-Reporte', True)
+    # files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
+    files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True)
+    files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True)
+    ra, _ = find_block(files[fl], '\checkvardefined{\\autordeldocumento}', True)
+
+    # Añade bloque de variables definidas
+    nl = find_extract(init_tesis, '% Inicialización de variables', white_end_block=True)
+    nl.append(files[fl][ra])
+    files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
+
+    # Agrega definición de titulodelreporte
+    # nl = ['\def\\titulodelinforme{\\titulodelreporte}\n',
+    #       files[fl][ra]]
+    # files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
+
+    # PAGECONF
+    # fl = release['PAGECONFFILE']
+
+    # CORE FUN
+    delfile = release['COREFUN']
+    fl = files[delfile]
+    files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
+    fl = files[delfile]
+    files[delfile] = find_delete_block(fl, '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
+
+    # Cambia encabezado archivos
+    for fl in files.keys():
+        data = files[fl]
+        # noinspection PyCompatibility,PyBroadException
+        try:
+            data[0] = '% Template:     Template Tesis LaTeX\n'
+            data[10] = '% Sitio web:    [{0}]\n'.format(release['WEB']['MANUAL'])
+            data[11] = '% Licencia MIT: [https://opensource.org/licenses/MIT]\n'
+            data[headerversionpos] = versionhead
+        except:
+            print('Error en archivo ' + fl)
+
+    # Se obtiene la cantidad de líneas de código
+    lc = 0
+    for f in files.keys():
+        lc += len(files[f])
+
+    # Guarda los archivos
+    os.chdir(mainroot)
+
+    if dosave:
+        for f in files.keys():
+            fl = open(subrlfolder + f, 'w')
+
+            # Se escribe el header
+            data = files[f]
+            kline = 0
+            for d in data:
+                if kline < headersize:
+                    fl.write(d)
+                else:
+                    break
+                kline += 1
+
+            # Strip
+            dostrip = True
+            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
+                dostrip = False
+
+            # Se escribe el documento
+            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
+                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
+
+            # Se elimina la última linea en blanco si hay doble
+            fl.close()
+
+    if dosave:
+        # Se crea ejemplo
+        fl = open(subrlfolder + exampleclone, 'w')
+        data = files[release['EXAMPLEFILE']]
+        for k in data:
+            fl.write(k)
+        fl.close()
+
+        # Actualización a compacto
+        fl = release['INITCONFFILE']
+        ra, _ = find_block(files[fl], 'Template.Version.Dev')
+        files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-AUX-C')
+        ra, _ = find_block(files[fl], 'Template.Tipo')
+        files[fl][ra] = replace_argument(files[fl][ra], 1, 'Compacto')
+
+        # Se crea compacto
+        line = 0
+        fl = open(subrlfolder + release['SINGLEFILE'], 'w')
+        data = files[mainfile]
+        stconfig = False  # Indica si se han escrito comentarios en configuraciones
+
+        # Se buscan los archivos /all y pega contenido
+        all_l = 0
+        for d in data:
+            if '/all}' in d:
+                allfile = d.strip().replace('\input{', '').replace('}', '').split(' ')[0] + '.tex'
+                data.pop(all_l)
+                newdata = files[allfile]
+                for k in newdata:
+                    if '%' not in k[0] and k.strip() != '':
+                        data.insert(all_l, k.strip() + '\n')
+            all_l += 1
+
+        for d in data:
+            write = True
+            if line < initdocumentline:
+                fl.write(d)
+                write = False
+            # Si es una línea en blanco se agrega
+            if d == '\n' and write:
+                fl.write(d)
+            else:
+                # Si es un import pega el contenido
+                # noinspection PyBroadException
+                try:
+                    if d[0:6] == '\input':
+                        libr = d.replace('\input{', '').replace('}', '').strip()
+                        libr = libr.split(' ')[0]
+                        if '.tex' not in libr:
+                            libr += '.tex'
+                        if libr != examplefile:
+                            paste_external_tex_into_file(fl, libr, files, headersize, filestrip[libr],
+                                                         filedelcoments[libr], deletecoments, configfile,
+                                                         stconfig, add_ending_line=True)
+
+                        else:
+                            fl.write(d.replace('lib/etc/', ''))
+                        write = False
+                except:
+                    pass
+
+                # Se agrega un espacio en blanco a la página después del comentario
+                if line >= initdocumentline and write:
+                    if d[0:2] == '% ' and d[3] != ' ' and d != '% CONFIGURACIONES\n':
+                        if d != '% FIN DEL DOCUMENTO\n' and addwhitespace:
+                            fl.write('\n')
+                        d = d.replace('IMPORTACIÓN', 'DECLARACIÓN')
+                        fl.write(d)
+                    elif d == '% CONFIGURACIONES\n':
+                        pass
+                    else:
+                        fl.write(d)
+
+            # Aumenta la línea
+            line += 1
+        fl.close()
+
+    printfun(MSG_FOKTIMER.format((time.time() - t)))
+
+    # Compila el archivo
+    if docompile and dosave:
+        t = time.time()
+        with open(os.devnull, 'w') as FNULL:
+            printfun(MSG_DCOMPILE, end='')
+            with Cd(subrlfolder):
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
+                t1 = time.time() - t
+                t = time.time()
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
+                t2 = time.time() - t
+                # tmean = (t1 + t2) / 2
+                tmean = min(t1, t2)
+                printfun(MSG_FOKTIMER.format(t2))
+
+                # Copia a la carpeta pdf_version
+                if savepdf:
+                    copyfile(release['SINGLEFILE'].replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
+
+        # Se agregan las estadísticas
+        if addstat:
+            add_stat(statsroot + stat['FILE'], versiondev, tmean, dia, lc, versionhash)
+
+        # Se plotean las estadísticas
+        if plotstats:
+            plot_stats(statsroot + stat['FILE'], statsroot + stat['CTIME'], statsroot + stat['LCODE'])
+
+        # Se exporta el proyecto normal
+
+        if dosave:
+            czip = release['ZIP']['NORMAL']
+            export_normal = Zip(czip['FILE'])
+            with Cd(subrlfolder):
+                export_normal.set_ghostpath(czip['GHOST'])
+                export_normal.add_excepted_file(czip['EXCEPTED'])
+                export_normal.add_file(czip['ADD']['FILES'])
+                export_normal.add_folder(czip['ADD']['FOLDER'])
+            export_normal.save()
+
+            # Se exporta el proyecto único
+            czip = release['ZIP']['COMPACT']
+            export_single = Zip(czip['FILE'])
+            with Cd(subrlfolder):
+                export_single.set_ghostpath(distfolder)
+                # export_single.add_file(czip['ADD']['FILES'], 'dist/')
+                export_single.add_folder(czip['ADD']['FOLDER'])
+            export_single.save()
+
+            # Se exportan los distintos estilos de versiones
+            fl_mainfile = open(subrlfolder + mainfile)
+            fl_mainsinglefile = open(subrlfolder + mainsinglefile)
+
+            # Se cargan los archivos en listas
+            data_mainfile = []
+            data_mainsinglefile = []
+            for i in fl_mainfile:
+                data_mainfile.append(i)
+            for i in fl_mainsinglefile:
+                data_mainsinglefile.append(i)
+
+            # Se buscan las líneas del departamento y de la imagen
+            fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
+            fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
+            fl_pos_dp_mainsinglefile = find_line(data_mainsinglefile, '\def\departamentouniversidad')
+            fl_pos_im_mainsinglefile = find_line(data_mainsinglefile, '\def\imagendepartamento')
+
+            # Se cierran los archivos
+            fl_mainfile.close()
+            fl_mainsinglefile.close()
+
+            # Se recorre cada versión y se genera el .zip
+            for m in release['ZIP']['OTHERS']['DATA']:
+                data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
+                data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
+                data_mainsinglefile[fl_pos_dp_mainsinglefile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
+                data_mainsinglefile[fl_pos_im_mainsinglefile] = '\\def\\imagendepartamento {departamentos/' + m[
+                    1] + '}\n'
+
+                # Se reescriben los archivos
+                new_mainfile = open(subrlfolder + mainfile, 'w')
+                for i in data_mainfile:
+                    new_mainfile.write(i)
+                new_mainfile.close()
+                new_mainsinglefile = open(subrlfolder + mainsinglefile, 'w')
+                for i in data_mainsinglefile:
+                    new_mainsinglefile.write(i)
+                new_mainsinglefile.close()
+
+                # Se genera el .zip
+                czip = release['ZIP']['NORMAL']
+                export_normal = Zip(release['ZIP']['OTHERS']['NORMAL'].format(m[1]))
+                with Cd(subrlfolder):
+                    export_normal.set_ghostpath(distfolder)
+                    export_normal.add_excepted_file(czip['EXCEPTED'])
+                    export_normal.add_file(czip['ADD']['FILES'])
+                    export_normal.add_folder('lib')
+                    export_normal.add_folder(release['ZIP']['OTHERS']['EXPATH'])
+                    export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
+                    for k in m[2]:
+                        export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
+                export_normal.save()
+
+                # Se genera el single
+                czip = release['ZIP']['COMPACT']
+                export_single = Zip(release['ZIP']['OTHERS']['SINGLE'].format(m[1]))
+                with Cd(subrlfolder):
+                    export_single.set_ghostpath(distfolder)
+                    export_single.add_file(czip['ADD']['FILES'], '')
+                    export_single.add_folder(release['ZIP']['OTHERS']['EXPATH'])
+                    export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
+                    for k in m[2]:
+                        export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
+                export_single.save()
+
+            data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
+                                                                 'Departamento de la Universidad')
+            data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
+                                                                 'departamentos/uchile2')
+            data_mainsinglefile[fl_pos_dp_mainsinglefile] = replace_argument(
+                data_mainsinglefile[fl_pos_dp_mainsinglefile],
+                1, 'Departamento de la Universidad')
+            data_mainsinglefile[fl_pos_im_mainsinglefile] = replace_argument(
+                data_mainsinglefile[fl_pos_im_mainsinglefile],
+                1, 'departamentos/uchile2')
+
+            # Se reescriben los archivos
+            new_mainfile = open(subrlfolder + mainfile, 'w')
+            for i in data_mainfile:
+                new_mainfile.write(i)
+            new_mainfile.close()
+            new_mainsinglefile = open(subrlfolder + mainsinglefile, 'w')
+            for i in data_mainsinglefile:
+                new_mainsinglefile.write(i)
+            new_mainsinglefile.close()
+
+    # Limpia el diccionario
+    if doclean:
+        clear_dict(RELEASES[REL_INFORME], 'FILES')
+        clear_dict(RELEASES[REL_AUXILIAR], 'FILES')
+
+    # Retorna a root
+    os.chdir(mainroot)
     return
