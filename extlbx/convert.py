@@ -2160,6 +2160,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # MODIFICA EL MAIN
     main_prev_tesis = file_to_list(subrelfile['MAIN_PREV'])
 
+    # Cambia el tipo de documento
+    ra, _ = find_block(files[mainfile], 'documentclass', True)
+    files[mainfile][ra] = '\\documentclass[letterpaper,12pt,oneside]{book} % Libro, tamaño carta\n'
+
     # Borra el bloque de información del template
     ra, _ = find_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', True)
     _, rb = find_block(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', True)
@@ -2195,43 +2199,62 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
-    # files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     for cdel in []:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
-    # ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
-    # files[fl] = add_block_from_list(files[fl], [files[fl][ra],
-    #                                             '\def\indexdepth{4}                 % Profundidad de los marcadores\n'],
-    #                                 ra, addnewline=True)
     ra, _ = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
     files[fl][ra] = '% ESTILO HEADER-FOOTER\n'
+
+    # Añade configuraciones
+    cfg = '\\def\\objectchaptermargin {false}   % Activa margen de objetos entre capítulos\n'
+    ra, _ = find_block(files[fl], 'objectindexindent', True)
+    nl = [cfg, files[fl][ra]]
+    files[fl] = add_block_from_list(files[fl], nl, ra, False)
+
+    # Modifica configuraciones
+    ra, rb = find_block(files[fl], 'showsectioncaptioncode', True)
+    nconf = replace_argument(files[fl][ra], 1, 'chap')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'showsectioncaptioneqn', True)
+    nconf = replace_argument(files[fl][ra], 1, 'chap')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'showsectioncaptionfig', True)
+    nconf = replace_argument(files[fl][ra], 1, 'chap')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'showsectioncaptiontab', True)
+    nconf = replace_argument(files[fl][ra], 1, 'chap')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'defaultinterline', True)
+    nconf = replace_argument(files[fl][ra], 1, '1.25').replace(' %', '%')
+    files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemarginbottom', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.54').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '2.5').replace(' %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemarginleft', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.54')
+    nconf = replace_argument(files[fl][ra], 1, '4.0')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemarginright', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.54')
+    nconf = replace_argument(files[fl][ra], 1, '2.5')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemargintop', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.54').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '4.0').replace(' %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style7')
     files[fl][ra] = nconf
-    # ra, rb = find_block(files[fl], 'fontsizetitle', True)
-    # nconf = replace_argument(files[fl][ra], 1, '\\Large')
-    # files[fl][ra] = nconf
-    # ra, rb = find_block(files[fl], 'fontsizesubtitle', True)
-    # nconf = replace_argument(files[fl][ra], 1, '\\large')
-    # files[fl][ra] = nconf
-    # ra, rb = find_block(files[fl], 'fontsizesubsubtitle', True)
-    # nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace(' %', '%')
-    # files[fl][ra] = nconf
-    # ra, rb = find_block(files[fl], 'hfwidthwrap', True)
-    # files[fl] = replace_block_from_list(files[fl], config_reporte, ra, ra)
-    # files[fl].pop()
+    ra, rb = find_block(files[fl], 'showappendixsecindex', True)
+    nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
+    files[fl][ra] = nconf
+
+    # CAMBIA TÍTULOS
+    fl = release['TITLE']
+
+    # Añade número capítulo
+    for i in range(len(files[fl])):
+        if '\\arabic{section}' in files[fl][i]:
+            files[fl][i] = files[fl][i].replace('\\arabic{section}', '\\thechapter.\\arabic{section}')
+        if '\\Alph{section}' in files[fl][i]:
+            files[fl][i] = files[fl][i].replace('\\Alph{section}', '\\thechapter.\\Alph{section}')
 
     # CAMBIA IMPORTS
     fl = release['IMPORTSFILE']
@@ -2245,8 +2268,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     fl = release['INITCONFFILE']
     init_tesis = file_to_list(subrelfile['INIT'])
 
-    # nl = find_extract(init_auxiliar, 'Operaciones especiales Template-Reporte', True)
-    # files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True)
     files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True)
     ra, _ = find_block(files[fl], '\checkvardefined{\\autordeldocumento}', True)
@@ -2255,14 +2276,42 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nl = find_extract(init_tesis, '% Inicialización de variables', white_end_block=True)
     nl.append(files[fl][ra])
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
+    ra, _ = find_block(files[fl], 'pdfkeywords', True)
+    files[fl][ra] = '\tpdfkeywords={\\nombreuniversidad, \\localizacionuniversidad},\n'
 
-    # Agrega definición de titulodelreporte
-    # nl = ['\def\\titulodelinforme{\\titulodelreporte}\n',
-    #       files[fl][ra]]
-    # files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
+    # ÍNDICE
+    fl = release['INDEX']
+    index_tesis = file_to_list(subrelfile['INDEX'])
+
+    # Agrega inicial
+    ra, _ = find_block(files[fl], 'Crea nueva página y establece estilo de títulos', True)
+    nl = find_extract(index_tesis, '% Inicio índice, desactiva espacio entre objetos', True)
+    files[fl] = add_block_from_list(files[fl], nl, ra)
+
+    ra, _ = find_block(files[fl], 'Se añade una página en blanco', True)
+    nl = find_extract(index_tesis, '% Final del índice, reestablece el espacio', True)
+    files[fl] = add_block_from_list(files[fl], nl, ra)
+
+    w = '% Configuración del punto en índice'
+    nl = find_extract(index_tesis, w, True)
+    files[fl] = find_replace_block(files[fl], w, nl, True)
+    w = '% Cambia tabulación índice de objetos para alinear con contenidos'
+    nl = find_extract(index_tesis, w, True)
+    files[fl] = find_replace_block(files[fl], w, nl, True)
 
     # PAGECONF
     # fl = release['PAGECONFFILE']
+
+    # ENVIRONMENTS
+    fl = release['ENVIRONMENTS']
+    ra, _ = find_block(files[fl], 'counterwithin{equation}')
+    files[fl][ra] = '\\counterwithin{equation}{chapter}\n'
+    ra, _ = find_block(files[fl], 'counterwithin{figure}')
+    files[fl][ra] = '\\counterwithin{figure}{chapter}\n'
+    ra, _ = find_block(files[fl], 'counterwithin{lstlisting}')
+    files[fl][ra] = '\\counterwithin{lstlisting}{chapter}\n'
+    ra, _ = find_block(files[fl], 'counterwithin{table}')
+    files[fl][ra] = '\\counterwithin{table}{chapter}\n'
 
     # CORE FUN
     delfile = release['COREFUN']
@@ -2270,6 +2319,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
     fl = files[delfile]
     files[delfile] = find_delete_block(fl, '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
+    files[delfile] = find_delete_block(fl, '% Para la compatibilidad con template-tesis se define el capítulo',
+                                       white_end_block=True)
 
     # Cambia encabezado archivos
     for fl in files.keys():
@@ -2471,10 +2522,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
             # Se recorre cada versión y se genera el .zip
             for m in release['ZIP']['OTHERS']['DATA']:
                 data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
-                data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
+                data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/uchile2}\n'
                 data_mainsinglefile[fl_pos_dp_mainsinglefile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
-                data_mainsinglefile[fl_pos_im_mainsinglefile] = '\\def\\imagendepartamento {departamentos/' + m[
-                    1] + '}\n'
+                data_mainsinglefile[fl_pos_im_mainsinglefile] = '\\def\\imagendepartamento {departamentos/uchile2}\n'
 
                 # Se reescriben los archivos
                 new_mainfile = open(subrlfolder + mainfile, 'w')

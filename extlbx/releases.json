@@ -1067,6 +1067,7 @@
         "COREFUN": "lib/cmd/core.tex",
         "DIST": "dist/",
         "EXAMPLECLONE": "example.tex",
+        "ENVIRONMENTS": "lib/env/environments.tex",
         "EXAMPLEFILE": "lib/etc/example.tex",
         "FILEDELCOMENTS": {
             "lib/cfg/final.tex": true,
@@ -1142,6 +1143,7 @@
         "ID": 6,
         "IMPORTSFILE": "lib/env/imports.tex",
         "INITCONFFILE": "lib/cfg/init.tex",
+        "INDEX": "lib/page/index.tex",
         "MAINFILE": "main.tex",
         "MESSAGE": "\nCREANDO TEMPLATE-TESIS v{0}",
         "NAME": "Template-Tesis",
@@ -1158,8 +1160,10 @@
         "SUBRELFILES": {
             "MAIN_PREV": "tesis_prev_main.tex",
             "MAIN_DOC": "tesis_doc_main.tex",
-            "INIT": "lib/cfg/tesis_init.tex"
+            "INIT": "lib/cfg/tesis_init.tex",
+            "INDEX": "lib/page/tesis_index.tex"
         },
+        "TITLE": "lib/cmd/title.tex",
         "VERLINE": "Template-Tesis v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
             "MANUAL": "https://latex.ppizarror.com/Template-Tesis/",
