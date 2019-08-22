@@ -1066,8 +1066,8 @@
         "CONFIGFILE": "lib/config.tex",
         "COREFUN": "lib/cmd/core.tex",
         "DIST": "dist/",
-        "EXAMPLECLONE": "example.tex",
         "ENVIRONMENTS": "lib/env/environments.tex",
+        "EXAMPLECLONE": "example.tex",
         "EXAMPLEFILE": "lib/etc/example.tex",
         "FILEDELCOMENTS": {
             "lib/cfg/final.tex": true,
@@ -1109,7 +1109,7 @@
             "lib/env/imports.tex": [],
             "lib/etc/example.tex": [],
             "lib/page/index.tex": [],
-            "lib/page/portrait.tex":  [],
+            "lib/page/portrait.tex": [],
             "lib/style/all.tex": [],
             "lib/style/code.tex": [],
             "lib/style/color.tex": [],
@@ -1142,8 +1142,8 @@
         "GIT": "../Template-Tesis/",
         "ID": 6,
         "IMPORTSFILE": "lib/env/imports.tex",
-        "INITCONFFILE": "lib/cfg/init.tex",
         "INDEX": "lib/page/index.tex",
+        "INITCONFFILE": "lib/cfg/init.tex",
         "MAINFILE": "main.tex",
         "MESSAGE": "\nCREANDO TEMPLATE-TESIS v{0}",
         "NAME": "Template-Tesis",
@@ -1158,10 +1158,11 @@
             "LCODE": ""
         },
         "SUBRELFILES": {
-            "MAIN_PREV": "tesis_prev_main.tex",
-            "MAIN_DOC": "tesis_doc_main.tex",
+            "ENVIRONMENTS": "lib/env/tesis_environments.tex",
+            "INDEX": "lib/page/tesis_index.tex",
             "INIT": "lib/cfg/tesis_init.tex",
-            "INDEX": "lib/page/tesis_index.tex"
+            "MAIN_DOC": "tesis_doc_main.tex",
+            "MAIN_PREV": "tesis_prev_main.tex"
         },
         "TITLE": "lib/cmd/title.tex",
         "VERLINE": "Template-Tesis v{0} | (Pablo Pizarro R.) ppizarror.com",

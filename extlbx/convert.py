@@ -292,7 +292,6 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         lc += len(files[f])
 
     if dosave:
-
         # Se clona archivo de ejemplo
         copyfile(examplefile, release['EXAMPLECLONE'])
         copyfile(examplefile, distfolder + release['EXAMPLECLONE'])
@@ -630,7 +629,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # Se crea el header
     versionhead = versionhead.format(version, dia)
 
+    # -------------------------------------------------------------------------
     # MODIFICA EL MAIN
+    # -------------------------------------------------------------------------
     main_auxiliar = file_to_list(subrelfile['MAIN'])
     nb = find_extract(main_auxiliar, '% EQUIPO DOCENTE')
     nb.append('\n')
@@ -650,7 +651,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                                          jadd=-1)
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
+    # -------------------------------------------------------------------------
     # MODIFICA CONFIGURACIIONES
+    # -------------------------------------------------------------------------
     fl = release['CONFIGFILE']
 
     # Configuraciones que se borran
@@ -686,7 +689,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1,style2\n')
     # files[fl].pop()
 
+    # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
+    # -------------------------------------------------------------------------
     fl = release['IMPORTSFILE']
     idel = ['usepackage{notoccite}']
     for idel in idel:
@@ -698,7 +703,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                                    white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
 
+    # -------------------------------------------------------------------------
     # CAMBIO INITCONF
+    # -------------------------------------------------------------------------
     fl = release['INITCONFFILE']
     ra, _ = find_block(files[fl], '\checkvardefined{\\titulodelinforme}')
     files[fl][ra] = '\checkvardefined{\\tituloauxiliar}\n'
@@ -731,7 +738,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = find_delete_block(files[fl], '% Se añade listings a tocloft', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Se revisa si se importa tikz', white_end_block=True)
 
+    # -------------------------------------------------------------------------
     # PAGECONF
+    # -------------------------------------------------------------------------
     fl = release['PAGECONFFILE']
     aux_pageconf = file_to_list(subrelfile['PAGECONF'])
     nl = find_extract(aux_pageconf, '% Numeración de páginas', True)
@@ -748,7 +757,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         ra, _ = find_block(files[fl], pcfg)
     files[fl].pop(ra)
 
+    # -------------------------------------------------------------------------
     # AUXILIAR FUNCTIONS
+    # -------------------------------------------------------------------------
     fl = release['FUNCTIONS']
     files[fl] = find_delete_block(files[fl], '% COMPILACION', white_end_block=True)
     aux_fun = file_to_list(subrelfile['ENVFUN'])
@@ -774,7 +785,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     files[fl].pop()
 
+    # -------------------------------------------------------------------------
     # CORE FUN
+    # -------------------------------------------------------------------------
     delfile = release['COREFUN']
     fl = files[delfile]
     files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
@@ -827,7 +840,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             fl.close()
 
     if dosave:
-
         # Se crea ejemplo
         fl = open(subrlfolder + exampleclone, 'w')
         data = files[release['EXAMPLEFILE']]
@@ -1054,7 +1066,9 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # Se crea el header
     versionhead = versionhead.format(version, dia)
 
+    # -------------------------------------------------------------------------
     # MODIFICA EL MAIN
+    # -------------------------------------------------------------------------
     main_auxiliar = file_to_list(subrelfile['MAIN'])
     nb = find_extract(main_auxiliar, '% EQUIPO DOCENTE')
     nb.append('\n')
@@ -1068,7 +1082,9 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                                          jadd=-1)
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
+    # -------------------------------------------------------------------------
     # CONTROL
+    # -------------------------------------------------------------------------
     fl = release['FUNCTIONS']
     files[fl][1] = '% Documento:    Funciones exclusivas de Template-Controles\n'
     fun_control = file_to_list(fl)
@@ -1082,13 +1098,17 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files[fl].pop()
     files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
+    # -------------------------------------------------------------------------
     # PAGECONFFILE
+    # -------------------------------------------------------------------------
     fl = release['PAGECONFFILE']
     control_pageconf = file_to_list(subrelfile['PAGECONF'])
     nl = find_extract(control_pageconf, '% Se crean los header-footer', True)
     files[fl] = find_replace_block(files[fl], '% Se crean los header-footer', nl, white_end_block=True, jadd=-1)
 
+    # -------------------------------------------------------------------------
     # CONFIGS
+    # -------------------------------------------------------------------------
     fl = release['CONFIGFILE']
     ra = find_line(files[fl], 'anumsecaddtocounter')
     files[fl][ra] += '\def\\bolditempto {true}            % Puntaje item en negrita\n'
@@ -1097,7 +1117,9 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
 
+    # -------------------------------------------------------------------------
     # CAMBIO INITCONF
+    # -------------------------------------------------------------------------
     fl = release['INITCONFFILE']
     ra, _ = find_block(files[fl], '\checkvardefined{\\tituloauxiliar}')
     files[fl][ra] = '\checkvardefined{\\tituloevaluacion}\n'
@@ -1176,7 +1198,6 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
             fl.close()
 
     if dosave:
-
         # Se crea ejemplo
         fl = open(subrlfolder + exampleclone, 'w')
         data = files[release['EXAMPLEFILE']]
@@ -1403,7 +1424,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # Se crea el header
     versionhead = versionhead.format(version, dia)
 
+    # -------------------------------------------------------------------------
     # MODIFICA EL MAIN
+    # -------------------------------------------------------------------------
     main_reporte = file_to_list(subrelfile['MAIN'])
     nb = find_extract(main_reporte, '% EQUIPO DOCENTE')
     nb.append('\n')
@@ -1427,7 +1450,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[mainfile] = find_replace_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', nl, white_end_block=True,
                                          jadd=-1)
 
+    # -------------------------------------------------------------------------
     # MODIFICA CONFIGURACIIONES
+    # -------------------------------------------------------------------------
     fl = release['CONFIGFILE']
     config_reporte = file_to_list(subrelfile['CONFIG'])
 
@@ -1475,7 +1500,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl] = replace_block_from_list(files[fl], config_reporte, ra, ra)
     # files[fl].pop()
 
+    # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
+    # -------------------------------------------------------------------------
     fl = release['IMPORTSFILE']
     idel = []
     for idel in idel:
@@ -1483,7 +1510,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
 
+    # -------------------------------------------------------------------------
     # CAMBIO INITCONF
+    # -------------------------------------------------------------------------
     fl = release['INITCONFFILE']
     init_auxiliar = file_to_list(subrelfile['INIT'])
     nl = find_extract(init_auxiliar, 'Operaciones especiales Template-Reporte', True)
@@ -1497,10 +1526,14 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
+    # -------------------------------------------------------------------------
     # PAGECONF
+    # -------------------------------------------------------------------------
     # fl = release['PAGECONFFILE']
 
+    # -------------------------------------------------------------------------
     # CORE FUN
+    # -------------------------------------------------------------------------
     delfile = release['COREFUN']
     fl = files[delfile]
     files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
@@ -1662,7 +1695,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
             plot_stats(statsroot + stat['FILE'], statsroot + stat['CTIME'], statsroot + stat['LCODE'])
 
         # Se exporta el proyecto normal
-
         if dosave:
             czip = release['ZIP']['NORMAL']
             export_normal = Zip(czip['FILE'])
@@ -2157,7 +2189,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Se crea el header
     versionhead = versionhead.format(version, dia)
 
+    # -------------------------------------------------------------------------
     # MODIFICA EL MAIN
+    # -------------------------------------------------------------------------
     main_prev_tesis = file_to_list(subrelfile['MAIN_PREV'])
 
     # Cambia el tipo de documento
@@ -2168,34 +2202,15 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', True)
     _, rb = find_block(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', True)
     files[mainfile] = replace_block_from_list(files[mainfile], main_prev_tesis, ra, rb - 1)
-    # nb = find_extract(main_reporte, '% EQUIPO DOCENTE')
-    # nb.append('\n')
-    # files[mainfile] = find_delete_block(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', nb)
-    # files[mainfile][1] = '% Documento:    Archivo principal\n'
-    # files[mainfile] = find_delete_block(files[mainfile], '% PORTADA', white_end_block=True)
-    # files[mainfile] = find_delete_block(files[mainfile], '% RESUMEN O ABSTRACT', white_end_block=True)
-    # files[mainfile] = find_delete_block(files[mainfile], '% TABLA DE CONTENIDOS - ÍNDICE', white_end_block=True)
-    # files[mainfile] = find_delete_block(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
-    # ra, _ = find_block(files[mainfile], '\input{lib/etc/example}', True)
-    # files[mainfile] = add_block_from_list(files[mainfile], main_reporte, ra, addnewline=True)
-    # ra, _ = find_block(files[mainfile], 'imagendepartamentoescala', True)
-    # files[mainfile].pop(ra)
-    # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
-    # Cambia las variables del documento principales
-    # nl = ['% INFORMACIÓN DEL DOCUMENTO\n',
-    #       '\def\\titulodelreporte {Título del reporte}\n',
-    #       '\def\\temaatratar {Tema a tratar}\n',
-    #       '\def\\fechadelreporte {\\today}\n\n']
-    # files[mainfile] = find_replace_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', nl, white_end_block=True,
-    #                                      jadd=-1)
-
+    # -------------------------------------------------------------------------
     # MODIFICA CONFIGURACIIONES
+    # -------------------------------------------------------------------------
     fl = release['CONFIGFILE']
     # config_reporte = file_to_list(subrelfile['CONFIG'])
 
     # Configuraciones que se borran
-    cdel = ['portraitstyle', 'firstpagemargintop']
+    cdel = ['portraitstyle', 'firstpagemargintop', 'twocolumnreferences', 'sectionrefenv']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -2233,6 +2248,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, rb = find_block(files[fl], 'pagemarginleft', True)
     nconf = replace_argument(files[fl][ra], 1, '4.0')
     files[fl][ra] = nconf
+    nl = [nconf,
+          '\\def\\pagemarginleftportrait {2.5} % Margen izquierdo página portada [cm]\n']
+    files[fl] = add_block_from_list(files[fl], nl, ra, False)
     ra, rb = find_block(files[fl], 'pagemarginright', True)
     nconf = replace_argument(files[fl][ra], 1, '2.5')
     files[fl][ra] = nconf
@@ -2245,8 +2263,13 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, rb = find_block(files[fl], 'showappendixsecindex', True)
     nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'namereferences', True)
+    nconf = replace_argument(files[fl][ra], 1, 'Bibliografía').replace(' %', '%')
+    files[fl][ra] = nconf
 
+    # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
+    # -------------------------------------------------------------------------
     fl = release['TITLE']
 
     # Añade número capítulo
@@ -2256,7 +2279,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         if '\\Alph{section}' in files[fl][i]:
             files[fl][i] = files[fl][i].replace('\\Alph{section}', '\\thechapter.\\Alph{section}')
 
+    # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
+    # -------------------------------------------------------------------------
     fl = release['IMPORTSFILE']
     idel = []
     for idel in idel:
@@ -2264,7 +2289,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
 
+    # -------------------------------------------------------------------------
     # CAMBIO INITCONF
+    # -------------------------------------------------------------------------
     fl = release['INITCONFFILE']
     init_tesis = file_to_list(subrelfile['INIT'])
 
@@ -2279,7 +2306,12 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'pdfkeywords', True)
     files[fl][ra] = '\tpdfkeywords={\\nombreuniversidad, \\localizacionuniversidad},\n'
 
+    # Elimina referencias en dos columnas
+    files[fl] = find_delete_block(files[fl], '% Referencias en 2 columnas', True)
+
+    # -------------------------------------------------------------------------
     # ÍNDICE
+    # -------------------------------------------------------------------------
     fl = release['INDEX']
     index_tesis = file_to_list(subrelfile['INDEX'])
 
@@ -2299,11 +2331,23 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nl = find_extract(index_tesis, w, True)
     files[fl] = find_replace_block(files[fl], w, nl, True)
 
+    # -------------------------------------------------------------------------
     # PAGECONF
-    # fl = release['PAGECONFFILE']
+    # -------------------------------------------------------------------------
+    fl = release['PAGECONFFILE']
+    ra, _ = find_block(files[fl], '\\renewcommand{\\refname}', True)
+    nl = [files[fl][ra], '\\renewcommand{\\bibname}{\\namereferences}\n']
+    files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
+    # -------------------------------------------------------------------------
     # ENVIRONMENTS
+    # -------------------------------------------------------------------------
     fl = release['ENVIRONMENTS']
+    env_tesis = file_to_list(subrelfile['ENVIRONMENTS'])
+    w = '% Crea una sección de referencias solo para bibtex'
+    nl = find_extract(env_tesis, w, True)
+    files[fl] = find_replace_block(files[fl], w, nl, True)
+
     ra, _ = find_block(files[fl], 'counterwithin{equation}')
     files[fl][ra] = '\\counterwithin{equation}{chapter}\n'
     ra, _ = find_block(files[fl], 'counterwithin{figure}')
@@ -2313,7 +2357,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'counterwithin{table}')
     files[fl][ra] = '\\counterwithin{table}{chapter}\n'
 
+    # -------------------------------------------------------------------------
     # CORE FUN
+    # -------------------------------------------------------------------------
     delfile = release['COREFUN']
     fl = files[delfile]
     files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
@@ -2341,7 +2387,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
     # Guarda los archivos
     os.chdir(mainroot)
-
     if dosave:
         for f in files.keys():
             fl = open(subrlfolder + f, 'w')
@@ -2477,7 +2522,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
             plot_stats(statsroot + stat['FILE'], statsroot + stat['CTIME'], statsroot + stat['LCODE'])
 
         # Se exporta el proyecto normal
-
         if dosave:
             czip = release['ZIP']['NORMAL']
             export_normal = Zip(czip['FILE'])
