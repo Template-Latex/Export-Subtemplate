@@ -320,6 +320,10 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         files[delfile][a] = files[delfile][a][:-2]
         files[delfile] = find_delete_line_recursive(fl, '\hspace{-0.255cm}', replace='}')
 
+        delfile = 'lib/cfg/final.tex'
+        a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
+        files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-2.75\\baselineskip}\n'
+
         delfile = 'lib/cfg/init.tex'
         fl = files[delfile]
         files[delfile] = find_delete_block(fl,
@@ -860,6 +864,10 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         data = files[mainfile]
         stconfig = False  # Indica si se han escrito comentarios en configuraciones
 
+        delfile = 'lib/cfg/page.tex'
+        a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
+        files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-1\\baselineskip}\n'
+
         # Se buscan los archivos /all y pega contenido
         all_l = 0
         for d in data:
@@ -1218,6 +1226,10 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
         data = files[mainfile]
         stconfig = False  # Indica si se han escrito comentarios en configuraciones
 
+        delfile = 'lib/cfg/page.tex'
+        a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
+        files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-1\\baselineskip}\n'
+
         # Se buscan los archivos /all y pega contenido
         all_l = 0
         for d in data:
@@ -1509,6 +1521,10 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
+    ra, _ = find_block(files[fl], '\showappendixsecindex', False)
+    nl = ['\\def\\showappendixsecindex{false}\n',
+          files[fl][ra]]
+    files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
@@ -1606,6 +1622,10 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         fl = open(subrlfolder + release['SINGLEFILE'], 'w')
         data = files[mainfile]
         stconfig = False  # Indica si se han escrito comentarios en configuraciones
+
+        delfile = 'lib/cfg/final.tex'
+        a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
+        files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-1\\baselineskip}\n'
 
         # Se buscan los archivos /all y pega contenido
         all_l = 0
@@ -2140,7 +2160,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         printfun(MSG_UPV_FILE, end='')
     mainf = RELEASES[REL_INFORME]['FILES']
     files = release['FILES']
-    files['main.tex'] = copy.copy(mainf['main.tex'])
+    files['main.tex'] = file_to_list('tesis_main.tex')
     files['lib/cmd/all.tex'] = copy.copy(mainf['lib/cmd/all.tex'])
     # files['lib/cmd/column.tex'] = copy.copy(mainf['lib/cmd/column.tex'])
     files['lib/cmd/core.tex'] = copy.copy(mainf['lib/cmd/core.tex'])
@@ -2190,35 +2210,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     versionhead = versionhead.format(version, dia)
 
     # -------------------------------------------------------------------------
-    # MODIFICA EL MAIN
-    # -------------------------------------------------------------------------
-    main_prev_tesis = file_to_list(subrelfile['MAIN_PREV'])
-
-    # Cambia el tipo de documento
-    ra, _ = find_block(files[mainfile], 'documentclass', True)
-    files[mainfile][ra] = '\\documentclass[letterpaper,12pt,oneside]{book} % Libro, tamaño carta\n'
-
-    # Borra el bloque de información del template
-    ra, _ = find_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', True)
-    _, rb = find_block(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', True)
-    files[mainfile] = replace_block_from_list(files[mainfile], main_prev_tesis, ra, rb - 1)
-
-    # -------------------------------------------------------------------------
     # MODIFICA CONFIGURACIIONES
     # -------------------------------------------------------------------------
     fl = release['CONFIGFILE']
     # config_reporte = file_to_list(subrelfile['CONFIG'])
-
-    # Configuraciones que se borran
-    cdel = ['portraitstyle', 'firstpagemargintop', 'twocolumnreferences', 'sectionrefenv']
-    for cdel in cdel:
-        ra, rb = find_block(files[fl], cdel, True)
-        files[fl].pop(ra)
-    for cdel in []:
-        ra, rb = find_block(files[fl], cdel, True)
-        files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
-    ra, _ = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
-    files[fl][ra] = '% ESTILO HEADER-FOOTER\n'
 
     # Añade configuraciones
     cfg = '\\def\\objectchaptermargin {false}   % Activa margen de objetos entre capítulos\n'
@@ -2227,45 +2222,96 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl] = add_block_from_list(files[fl], nl, ra, False)
 
     # Modifica configuraciones
-    ra, rb = find_block(files[fl], 'showsectioncaptioncode', True)
+    ra, _ = find_block(files[fl], 'addemptypagetwosides', True)
+    files[fl][ra] = '\\def\\addemptypagespredoc {false}   % Añade pag. en blanco después de portada,etc.\n'
+    ra, _ = find_block(files[fl], 'showsectioncaptioncode', True)
     nconf = replace_argument(files[fl][ra], 1, 'chap')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'showsectioncaptioneqn', True)
+    ra, _ = find_block(files[fl], 'showsectioncaptioneqn', True)
     nconf = replace_argument(files[fl][ra], 1, 'chap')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'showsectioncaptionfig', True)
+    ra, _ = find_block(files[fl], 'showsectioncaptionfig', True)
     nconf = replace_argument(files[fl][ra], 1, 'chap')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'showsectioncaptiontab', True)
+    ra, _ = find_block(files[fl], 'showsectioncaptiontab', True)
     nconf = replace_argument(files[fl][ra], 1, 'chap')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'defaultinterline', True)
+    ra, _ = find_block(files[fl], 'defaultinterline', True)
     nconf = replace_argument(files[fl][ra], 1, '1.25').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'pagemarginbottom', True)
+    ra, _ = find_block(files[fl], 'defaultnewlinesize', True)
+    nconf = replace_argument(files[fl][ra], 1, '12')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'pagemarginbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '2.5').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'pagemarginleft', True)
+    ra, _ = find_block(files[fl], 'pagemarginleft', True)
     nconf = replace_argument(files[fl][ra], 1, '4.0')
     files[fl][ra] = nconf
     nl = [nconf,
           '\\def\\pagemarginleftportrait {2.5} % Margen izquierdo página portada [cm]\n']
     files[fl] = add_block_from_list(files[fl], nl, ra, False)
-    ra, rb = find_block(files[fl], 'pagemarginright', True)
+    ra, _ = find_block(files[fl], 'pagemarginright', True)
     nconf = replace_argument(files[fl][ra], 1, '2.5')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'pagemargintop', True)
+    ra, _ = find_block(files[fl], '\\pagemargintop', True)
     nconf = replace_argument(files[fl][ra], 1, '4.0').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'hfstyle', True)
+    ra, _ = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style7')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'showappendixsecindex', True)
+    ra, _ = find_block(files[fl], 'cfgbookmarksopenlevel', True)
+    nconf = replace_argument(files[fl][ra], 1, '0')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'cfgpdfsecnumbookmarks', True)
     nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'namereferences', True)
+    ra, _ = find_block(files[fl], 'natbibrefstyle', True)
+    nconf = replace_argument(files[fl][ra], 1, 'apa').replace('%', '   %')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'showappendixsecindex', True)
+    nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
+    nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'addindextobookmarks', True)
+    nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
+    files[fl][ra] = nconf
+    nl = ['\\def\\addabstracttobookmarks {true} % Añade el resumen a los marcadores del pdf\n',
+          '\\def\\addagradectobookmarks {true}  % Añade el agradecimiento a los marcadores\n',
+          files[fl][ra],
+          # '\\def\\adddedictobookmarks {true}    % Añade la dedicatoria a los marcadores del pdf\n'
+          ]
+    files[fl] = replace_block_from_list(files[fl], nl, ra, ra - 1)
+    ra, _ = find_block(files[fl], 'namereferences', True)
     nconf = replace_argument(files[fl][ra], 1, 'Bibliografía').replace(' %', '%')
     files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'nomltcont', True)
+    nconf = replace_argument(files[fl][ra], 1, 'Tabla de Contenidos').replace('%', ' %')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'nomltfigure', True)
+    nconf = replace_argument(files[fl][ra], 1, 'Índice de Ilustraciones').replace(' %', '%')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'nameabstract', True)
+    nl = [files[fl][ra],
+          '\\def\\nameagradec {Agradecimientos}    % Nombre del cap. de agradecimientos\n',
+          # '\\def\\nameadedic {Dedicatoria}         % Nombre de la dedicatoria\n'
+          ]
+    files[fl] = add_block_from_list(files[fl], nl, ra, True)
+
+    # Configuraciones que se borran
+    cdel = ['portraitstyle', 'firstpagemargintop', 'twocolumnreferences', 'sectionrefenv',
+            'predocpageromannumber', 'predocresetpagenumber', 'indexnewpagec', 'indexnewpagef',
+            'indexnewpaget', 'showindex', 'showindexofcontents']
+    for cdel in cdel:
+        ra, rb = find_block(files[fl], cdel, True)
+        files[fl].pop(ra)
+    for cdel in []:
+        ra, rb = find_block(files[fl], cdel, True)
+        files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
+    ra, _ = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
+    files[fl][ra] = '% ESTILO HEADER-FOOTER\n'
 
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
@@ -2288,6 +2334,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
+    _, rb = find_block(files[fl], '% PARCHES DE LIBRERÍAS', True)
+    # files[fl] = add_block_from_list(files[fl], ['\\def\\showappendixsecindex{true}\n'], rb, True)
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
@@ -2335,19 +2383,35 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # PAGECONF
     # -------------------------------------------------------------------------
     fl = release['PAGECONFFILE']
+    page_tesis = file_to_list(subrelfile['PAGE'])
     ra, _ = find_block(files[fl], '\\renewcommand{\\refname}', True)
     nl = [files[fl][ra], '\\renewcommand{\\bibname}{\\namereferences}\n']
-    files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
+    files[fl] = replace_block_from_list(files[fl], nl, ra, ra - 1)
+    ra, rb = find_block(files[fl], '% Muestra los números de línea', True)
+    nl = find_extract(page_tesis, '% Añade página en blanco')
+    files[fl] = add_block_from_list(files[fl], nl, rb, True)
 
     # -------------------------------------------------------------------------
     # ENVIRONMENTS
     # -------------------------------------------------------------------------
     fl = release['ENVIRONMENTS']
     env_tesis = file_to_list(subrelfile['ENVIRONMENTS'])
+
+    # Reemplaza bloques
     w = '% Crea una sección de referencias solo para bibtex'
     nl = find_extract(env_tesis, w, True)
     files[fl] = find_replace_block(files[fl], w, nl, True)
+    w = '% Crea una sección de resumen'
+    nl = find_extract(env_tesis, w, True)
+    files[fl] = find_replace_block(files[fl], w, nl, True)
+    _, rb = find_block(files[fl], w, True)
+    nl = find_extract(env_tesis, '% Crea una sección de dedicatoria', True)
+    files[fl] = add_block_from_list(files[fl], nl, rb, True)
+    _, rb = find_block(files[fl], '% Crea una sección de dedicatoria', True)
+    nl = find_extract(env_tesis, '% Crea una sección de agradecimientos', True)
+    files[fl] = add_block_from_list(files[fl], nl, rb, True)
 
+    # Reemplaza líneas
     ra, _ = find_block(files[fl], 'counterwithin{equation}')
     files[fl][ra] = '\\counterwithin{equation}{chapter}\n'
     ra, _ = find_block(files[fl], 'counterwithin{figure}')
@@ -2433,6 +2497,13 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         fl = open(subrlfolder + release['SINGLEFILE'], 'w')
         data = files[mainfile]
         stconfig = False  # Indica si se han escrito comentarios en configuraciones
+
+        delfile = 'lib/page/portrait.tex'
+        files[delfile].append('\\titleclass{\\subsubsubsection}{straight}[\\subsection]~\n')
+
+        delfile = 'lib/cfg/final.tex'
+        a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
+        files[delfile].pop(a)
 
         # Se buscan los archivos /all y pega contenido
         all_l = 0

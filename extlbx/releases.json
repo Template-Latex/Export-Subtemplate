@@ -1161,8 +1161,7 @@
             "ENVIRONMENTS": "lib/env/tesis_environments.tex",
             "INDEX": "lib/page/tesis_index.tex",
             "INIT": "lib/cfg/tesis_init.tex",
-            "MAIN_DOC": "tesis_doc_main.tex",
-            "MAIN_PREV": "tesis_prev_main.tex"
+            "PAGE": "lib/cfg/tesis_page.tex"
         },
         "TITLE": "lib/cmd/title.tex",
         "VERLINE": "Template-Tesis v{0} | (Pablo Pizarro R.) ppizarror.com",
