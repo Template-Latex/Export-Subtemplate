@@ -2334,8 +2334,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
-    _, rb = find_block(files[fl], '% PARCHES DE LIBRERÍAS', True)
+    # _, rb = find_block(files[fl], '% PARCHES DE LIBRERÍAS', True)
     # files[fl] = add_block_from_list(files[fl], ['\\def\\showappendixsecindex{true}\n'], rb, True)
+    files[fl].pop()
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
