@@ -2315,9 +2315,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'stylecitereferences', True)
     nconf = replace_argument(files[fl][ra], 1, 'natbib')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'addindextobookmarks', True)
-    nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
-    files[fl][ra] = nconf
+    # ra, _ = find_block(files[fl], 'addindextobookmarks', True)
+    # nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
+    # files[fl][ra] = nconf
     nl = ['\\def\\addabstracttobookmarks {true} % Añade el resumen a los marcadores del pdf\n',
           '\\def\\addagradectobookmarks {true}  % Añade el agradecimiento a los marcadores\n',
           files[fl][ra],
@@ -2541,6 +2541,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
         delfile = 'lib/page/portrait.tex'
         files[delfile].append('\\titleclass{\\subsubsubsection}{straight}[\\subsection]~\n')
+        a, _ = find_block(files[delfile], '\\hspace*{')
+        files[delfile][a] = '\\hspace*{0.33cm}\n'
 
         delfile = 'lib/cfg/final.tex'
         a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
