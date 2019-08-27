@@ -415,9 +415,15 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             t = time.time()
             call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t2 = time.time() - t
+            t = time.time()
+            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            t3 = time.time() - t
+            t = time.time()
+            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            t4 = time.time() - t
             # tmean = (t1 + t2) / 2
-            tmean = min(t1, t2)
-            printfun(MSG_FOKTIMER.format(t2))
+            tmean = min(t1, t2, t3, t4)
+            printfun(MSG_FOKTIMER.format(tmean))
 
             # Copia a la carpeta pdf_version
             if savepdf:
@@ -939,9 +945,17 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                 call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
+                t = time.time()
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
+                t3 = time.time() - t
+                t = time.time()
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
+                t4 = time.time() - t
                 # tmean = (t1 + t2) / 2
-                tmean = min(t1, t2)
-                printfun(MSG_FOKTIMER.format(t2))
+                tmean = min(t1, t2, t3, t4)
+                printfun(MSG_FOKTIMER.format(tmean))
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
@@ -1300,9 +1314,17 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                 call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
+                t = time.time()
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
+                t3 = time.time() - t
+                t = time.time()
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
+                t4 = time.time() - t
                 # tmean = (t1 + t2) / 2
-                tmean = min(t1, t2)
-                printfun(MSG_FOKTIMER.format(t2))
+                tmean = min(t1, t2, t3, t4)
+                printfun(MSG_FOKTIMER.format(tmean))
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
@@ -1698,9 +1720,17 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
                 call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
+                t = time.time()
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
+                t3 = time.time() - t
+                t = time.time()
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
+                t4 = time.time() - t
                 # tmean = (t1 + t2) / 2
-                tmean = min(t1, t2)
-                printfun(MSG_FOKTIMER.format(t2))
+                tmean = min(t1, t2, t3, t4)
+                printfun(MSG_FOKTIMER.format(tmean))
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
@@ -2072,10 +2102,17 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
             printfun(MSG_DCOMPILE, end='')
             call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t1 = time.time() - t
+            t = time.time()
             call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t2 = time.time() - t
+            t = time.time()
+            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            t3 = time.time() - t
+            t = time.time()
+            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            t4 = time.time() - t
             # tmean = (t1 + t2) / 2
-            tmean = min(t1, t2)
+            tmean = min(t1, t2, t3, t4)
             printfun(MSG_FOKTIMER.format(tmean))
 
             # Copia a la carpeta pdf_version
@@ -2273,7 +2310,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'natbibrefstyle', True)
-    nconf = replace_argument(files[fl][ra], 1, 'plainnat').replace('     %', '%')
+    nconf = replace_argument(files[fl][ra], 1, 'plainnat').replace('  %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'stylecitereferences', True)
     nconf = replace_argument(files[fl][ra], 1, 'natbib')
@@ -2580,8 +2617,16 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                 call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
+                t = time.time()
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
+                t3 = time.time() - t
+                t = time.time()
+                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                     creationflags=CREATE_NO_WINDOW)
+                t4 = time.time() - t
                 # tmean = (t1 + t2) / 2
-                tmean = min(t1, t2)
+                tmean = min(t1, t2, t3, t4)
                 printfun(MSG_FOKTIMER.format(t2))
 
                 # Copia a la carpeta pdf_version
