@@ -1173,6 +1173,7 @@
             "COMPACT": {
                 "ADD": {
                     "FILES": [
+                        "library.bib",
                         "tesis.tex",
                         "example.tex"
                     ],
@@ -1189,7 +1190,8 @@
             "NORMAL": {
                 "ADD": {
                     "FILES": [
-                        "main.tex"
+                        "main.tex",
+                        "library.bib"
                     ],
                     "FOLDER": [
                         "img",
