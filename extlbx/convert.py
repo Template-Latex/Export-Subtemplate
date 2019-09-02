@@ -326,9 +326,8 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
         delfile = 'lib/cfg/init.tex'
         fl = files[delfile]
-        files[delfile] = find_delete_block(fl,
-                                           '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{\importtikzlib}{}',
-                                           white_end_block=True)
+        lnme = '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{\importtikzlib}{}'
+        files[delfile] = find_delete_block(fl, lnme, white_end_block=True)
 
         # Se crea el archivo unificado
         fl = open(mainsinglefile, 'w')
@@ -728,7 +727,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra, _ = find_block(files[fl], '\def\\tablaintegrantes {}')
     files[fl][ra] = '\t\def\\equipodocente {}}{\n'
     ra, _ = find_block(files[fl], 'Template.Nombre')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, 'Template-Auxiliares')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-AUX-N')
     ra, _ = find_block(files[fl], 'Template.Tipo')
@@ -1154,7 +1153,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     _, rb = find_block(files[fl], '\ifthenelse{\isundefined{\equipodocente}}', blankend=True)
     files[fl][rb] = '\ifthenelse{\isundefined{\indicacionevaluacion}}{\n\t\def\indicacionevaluacion {}\n}{}\n\n'
     ra, _ = find_block(files[fl], 'Template.Nombre')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, 'Template-Controles')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-CTR/EXM-N')
     ra, _ = find_block(files[fl], 'Template.Tipo')
@@ -1563,6 +1562,23 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     nl = ['\def\\titulodelinforme{\\titulodelreporte}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
+
+    ra, _ = find_block(files[fl], 'Template.Nombre')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
+    ra, _ = find_block(files[fl], 'Template.Version.Dev')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-CTR/EXM-N')
+    ra, _ = find_block(files[fl], 'Template.Tipo')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
+    ra, _ = find_block(files[fl], 'Template.Web.Dev')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['SOURCE'])
+    ra, _ = find_block(files[fl], 'Template.Web.Manual')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
+    ra, _ = find_block(files[fl], 'pdfproducer')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
+    ra, _ = find_block(files[fl], 'Documento.Titulo')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulodelreporte')
+    ra, _ = find_block(files[fl], 'pdftitle')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulodelreporte')
 
     # -------------------------------------------------------------------------
     # PAGECONF
@@ -2270,6 +2286,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'showsectioncaptionfig', True)
     nconf = replace_argument(files[fl][ra], 1, 'chap')
     files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'showsectioncaptionmat', True)
+    nconf = replace_argument(files[fl][ra], 1, 'chap')
+    files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'showsectioncaptiontab', True)
     nconf = replace_argument(files[fl][ra], 1, 'chap')
     files[fl][ra] = nconf
@@ -2397,6 +2416,23 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
     # Elimina referencias en dos columnas
     files[fl] = find_delete_block(files[fl], '% Referencias en 2 columnas', True)
+
+    ra, _ = find_block(files[fl], 'Template.Nombre')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
+    ra, _ = find_block(files[fl], 'Template.Version.Dev')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-CTR/EXM-N')
+    ra, _ = find_block(files[fl], 'Template.Tipo')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
+    ra, _ = find_block(files[fl], 'Template.Web.Dev')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['SOURCE'])
+    ra, _ = find_block(files[fl], 'Template.Web.Manual')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
+    ra, _ = find_block(files[fl], 'pdfproducer')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
+    ra, _ = find_block(files[fl], 'Documento.Titulo')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulotesis')
+    ra, _ = find_block(files[fl], 'pdftitle')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulotesis')
 
     # -------------------------------------------------------------------------
     # ÍNDICE
