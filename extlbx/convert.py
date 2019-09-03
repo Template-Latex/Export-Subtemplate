@@ -1570,7 +1570,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-CTR/EXM-N')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-REPT-N')
     ra, _ = find_block(files[fl], 'Template.Tipo')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
@@ -1655,7 +1655,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         # Actualización a compacto
         fl = release['INITCONFFILE']
         ra, _ = find_block(files[fl], 'Template.Version.Dev')
-        files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-AUX-C')
+        files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-REPT-C')
         ra, _ = find_block(files[fl], 'Template.Tipo')
         files[fl][ra] = replace_argument(files[fl][ra], 1, 'Compacto')
 
@@ -2436,7 +2436,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-CTR/EXM-N')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-THS-N')
     ra, _ = find_block(files[fl], 'Template.Tipo')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
@@ -2581,7 +2581,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         # Actualización a compacto
         fl = release['INITCONFFILE']
         ra, _ = find_block(files[fl], 'Template.Version.Dev')
-        files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-AUX-C')
+        files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-THS-C')
         ra, _ = find_block(files[fl], 'Template.Tipo')
         files[fl][ra] = replace_argument(files[fl][ra], 1, 'Compacto')
 
