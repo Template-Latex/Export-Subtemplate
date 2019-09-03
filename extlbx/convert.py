@@ -872,6 +872,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         delfile = 'lib/cfg/page.tex'
         a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
         files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-1\\baselineskip}\n'
+        a, _ = find_block(files[delfile], '\\vspace*{-1.30cm}')
+        files[delfile][a] = '\\vspace*{-0.80cm}\n'
 
         # Se buscan los archivos /all y pega contenido
         all_l = 0
@@ -1242,6 +1244,8 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
         delfile = 'lib/cfg/page.tex'
         a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
         files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-1\\baselineskip}\n'
+        a, _ = find_block(files[delfile], '\\vspace*{-1.30cm}')
+        files[delfile][a] = '\\vspace*{-0.80cm}\n'
 
         # Se buscan los archivos /all y pega contenido
         all_l = 0
@@ -2293,25 +2297,37 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, 'chap')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'defaultinterline', True)
-    nconf = replace_argument(files[fl][ra], 1, '1.25').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '1.0')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'defaultnewlinesize', True)
     nconf = replace_argument(files[fl][ra], 1, '12')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginbottom', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.5').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '2.0').replace(' %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginleft', True)
-    nconf = replace_argument(files[fl][ra], 1, '4.0')
+    nconf = replace_argument(files[fl][ra], 1, '3.0')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'fontsizetitle', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\Large')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'fontsizesubtitle', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\large')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'fontsizesubsubtitle', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace(' %', '%')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'indexstyle', True)
+    nconf = replace_argument(files[fl][ra], 1, 'tf').replace('%', ' %')
     files[fl][ra] = nconf
     nl = [nconf,
           '\\def\\pagemarginleftportrait {2.5} % Margen izquierdo página portada [cm]\n']
     files[fl] = add_block_from_list(files[fl], nl, ra, False)
     ra, _ = find_block(files[fl], 'pagemarginright', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.5')
+    nconf = replace_argument(files[fl][ra], 1, '2.0')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], '\\pagemargintop', True)
-    nconf = replace_argument(files[fl][ra], 1, '4.0').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '2.0').replace(' %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style7')
@@ -2362,7 +2378,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Configuraciones que se borran
     cdel = ['portraitstyle', 'firstpagemargintop', 'twocolumnreferences', 'sectionrefenv',
             'predocpageromannumber', 'predocresetpagenumber', 'indexnewpagec', 'indexnewpagef',
-            'indexnewpaget', 'showindex', 'showindexofcontents']
+            'indexnewpaget', 'showindex', 'showindexofcontents', 'fontsizetitlei', 'styletitlei']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
