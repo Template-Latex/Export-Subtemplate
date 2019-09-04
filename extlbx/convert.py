@@ -679,14 +679,15 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra, rb = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
     files[fl] = del_block_from_list(files[fl], ra, rb)
     for cdel in ['namereferences', 'nomltwsrc', 'nomltwfigure', 'nomltwtable', 'nameappendixsection',
-                 'nomltappendixsection']:
+                 'nomltappendixsection', 'namemathcol', 'namemathdefn', 'namemathej', 'namemathlem',
+                 'namemathobs', 'namemathprp', 'namemaththeorem']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     # ra, rb = find_block(files[fl], 'showdotaftersnum', True) Desactivado desde v3.3.4
     # nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     # files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'equationrestart', True)
-    nconf = replace_argument(files[fl][ra], 1, 'none').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, 'none')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemargintop', True)
     nconf = replace_argument(files[fl][ra], 1, '2.30').replace(' %', '%')
@@ -694,8 +695,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra, rb = find_block(files[fl], 'cfgbookmarksopenlevel', True)
     nconf = replace_argument(files[fl][ra], 1, '1')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'tablepadding', True)
-    files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1,style2\n')
+    ra, rb = find_block(files[fl], 'showlinenumbers', True)
+    files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1,style2,style3\n')
     # files[fl].pop()
 
     # -------------------------------------------------------------------------
@@ -873,6 +874,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
         files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-1\\baselineskip}\n'
         a, _ = find_block(files[delfile], '\\vspace*{-1.30cm}')
+        files[delfile][a] = '\\vspace*{-0.80cm}\n'
+        a, _ = find_block(files[delfile], '\\vspace*{-1.3cm}')
         files[delfile][a] = '\\vspace*{-0.80cm}\n'
 
         # Se buscan los archivos /all y pega contenido
@@ -1502,7 +1505,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     for cdel in ['nameabstract', 'nameappendixsection', 'namereferences', 'nomchapter', 'nomltappendixsection',
-                 'nomltwfigure', 'nomltwsrc', 'nomltwtable', 'nomnpageof']:
+                 'nomltwfigure', 'nomltwsrc', 'nomltwtable', 'nomnpageof', 'namemathcol', 'namemathdefn', 'namemathej',
+                 'namemathlem', 'namemathobs', 'namemathprp', 'namemaththeorem']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
@@ -2303,10 +2307,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, '12')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginbottom', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.0').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '2.0')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginleft', True)
-    nconf = replace_argument(files[fl][ra], 1, '3.0')
+    nconf = replace_argument(files[fl][ra], 1, '3.0').replace('%', ' %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'fontsizetitle', True)
     nconf = replace_argument(files[fl][ra], 1, '\\Large')
@@ -2320,14 +2324,16 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'indexstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'tf').replace('%', ' %')
     files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'pagemarginleft', True)
+    nconf = replace_argument(files[fl][ra], 1, '3.0')
     nl = [nconf,
-          '\\def\\pagemarginleftportrait {2.5} % Margen izquierdo página portada [cm]\n']
+          '\\def\\pagemarginleftportrait {2.5}  % Margen izquierdo página portada [cm]\n']
     files[fl] = add_block_from_list(files[fl], nl, ra, False)
     ra, _ = find_block(files[fl], 'pagemarginright', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.0')
+    nconf = replace_argument(files[fl][ra], 1, '2.0').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], '\\pagemargintop', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.0').replace(' %', '%')
+    ra, _ = find_block(files[fl], '\\pagemargintop', True)  # Por alguna extraña razón requiere el \\
+    nconf = replace_argument(files[fl][ra], 1, '2.0')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style7')
@@ -2339,7 +2345,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'showappendixsecindex', True)
-    nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, 'false')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
