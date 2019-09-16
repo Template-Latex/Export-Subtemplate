@@ -3,12 +3,15 @@
 </p>
 
 ## Licencia
+
 Este proyecto está licenciado bajo la licencia MIT [https://opensource.org/licenses/MIT]
 
 ## API
 
-#### Archivos externos
+### Archivos externos
+
 Formato de línea:
+
 ```bash
 \input{file.tex} # !FILE <ARG1,ARG2,...>
 ```
@@ -20,8 +23,10 @@ Formato de línea:
 | NL | Forza una nueva línea al finalizar el archivo |
 | STRIP | Forza el *strip* del archivo |
 
-#### Líneas de codigo
+### Líneas de codigo
+
 Formato de línea:
+
 ```bash
 \latexline # Comment !ARG1 !ARG2
 ```

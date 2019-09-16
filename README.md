@@ -13,12 +13,15 @@
 </p>
 
 ## Licencia
+
 Este proyecto está licenciado bajo la licencia MIT [https://opensource.org/licenses/MIT]
 
 ## API
 
-#### Archivos externos
+### Archivos externos
+
 Formato de línea:
+
 ```bash
 \input{file.tex} # !FILE <ARG1,ARG2,...>
 ```
@@ -30,8 +33,10 @@ Formato de línea:
 | NL | Forza una nueva línea al finalizar el archivo |
 | STRIP | Forza el *strip* del archivo |
 
-#### Líneas de codigo
+### Líneas de codigo
+
 Formato de línea:
+
 ```bash
 \latexline # Comment !ARG1 !ARG2
 ```
@@ -44,6 +49,7 @@ Formato de línea:
 | !STRIP | Forza el *strip* en la línea |
 | !PREVNL | Añade una nueva línea en modo compacto |
 | !PREVDISTNL | Añade una nueva línea solo en el modo distribución |
+
 
 ## Autor
 <a href="https://ppizarror.com" title="ppizarror">Pablo Pizarro R.</a> | 2017 - 2019
