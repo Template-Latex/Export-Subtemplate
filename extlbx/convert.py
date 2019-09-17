@@ -2489,6 +2489,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, rb = find_block(files[fl], '% Muestra los números de línea', True)
     nl = find_extract(page_tesis, '% Añade página en blanco')
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
+    ra, _ = find_block(files[fl], 'hfheaderimagesizeA', True)
+    nconf = replace_argument(files[fl][ra], 1, '0.5').replace('%', ' %')
+    files[fl][ra] = nconf
 
     # -------------------------------------------------------------------------
     # ENVIRONMENTS
