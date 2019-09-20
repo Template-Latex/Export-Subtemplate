@@ -90,7 +90,7 @@
         },
         "VERLINE": "Template-Auxiliares v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
-            "MANUAL": "https://latex.ppizarror.com/Template-Auxiliares/",
+            "MANUAL": "https://latex.ppizarror.com/auxiliares",
             "SOURCE": "https://github.com/Template-Latex/Template-Auxiliares/"
         },
         "ZIP": {
@@ -217,7 +217,7 @@
         },
         "VERLINE": "Template-Controles v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
-            "MANUAL": "https://latex.ppizarror.com/Template-Controles/",
+            "MANUAL": "https://latex.ppizarror.com/controles",
             "SOURCE": "https://github.com/Template-Latex/Template-Controles/"
         },
         "ZIP": {
@@ -347,7 +347,7 @@
         },
         "VERLINE": "Template-Informe v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
-            "MANUAL": "https://latex.ppizarror.com/Template-Informe/",
+            "MANUAL": "https://latex.ppizarror.com/informe",
             "SOURCE": "https://github.com/Template-Latex/Template-Informe/"
         },
         "ZIP": {
@@ -664,7 +664,7 @@
         },
         "VERLINE": "Professional-CV v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
-            "MANUAL": "https://latex.ppizarror.com/Professional-CV/",
+            "MANUAL": "https://latex.ppizarror.com/professional-cv",
             "SOURCE": "https://github.com/Template-Latex/Professional-CV/"
         },
         "ZIP": {
@@ -795,7 +795,7 @@
         },
         "VERLINE": "Template-Reporte v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
-            "MANUAL": "https://latex.ppizarror.com/Template-Reporte/",
+            "MANUAL": "https://latex.ppizarror.com/reporte",
             "SOURCE": "https://github.com/Template-Latex/Template-Reporte/"
         },
         "ZIP": {
@@ -1166,7 +1166,7 @@
         "TITLE": "lib/cmd/title.tex",
         "VERLINE": "Template-Tesis v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
-            "MANUAL": "https://latex.ppizarror.com/Template-Tesis/",
+            "MANUAL": "https://latex.ppizarror.com/tesis",
             "SOURCE": "https://github.com/Template-Latex/Template-Tesis/"
         },
         "ZIP": {

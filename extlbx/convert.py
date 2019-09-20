@@ -318,7 +318,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         files[delfile] = del_block_from_list(fl, a, b)
         a, b = find_block(files[delfile], '\\throwbadconfigondoc{Estilo de portada incorrecto}')
         files[delfile][a] = files[delfile][a][:-2]
-        files[delfile] = find_delete_line_recursive(fl, '\hspace{-0.255cm}', replace='}')
+        files[delfile] = find_delete_line_recursive(fl, '\hspace{-0.255cm}', replace='')
 
         delfile = 'lib/cfg/final.tex'
         a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
@@ -2433,8 +2433,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nl = find_extract(init_tesis, '% Inicialización de variables', white_end_block=True)
     nl.append(files[fl][ra])
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
-    ra, _ = find_block(files[fl], 'pdfkeywords', True)
-    files[fl][ra] = '\tpdfkeywords={\\nombreuniversidad, \\localizacionuniversidad},\n'
+    # ra, _ = find_block(files[fl], 'pdfkeywords', True)
+    # files[fl][ra] = '\tpdfkeywords={pdf, \\nombreuniversidad, \\localizacionuniversidad},\n'
 
     # Elimina referencias en dos columnas
     files[fl] = find_delete_block(files[fl], '% Referencias en 2 columnas', True)
@@ -2483,9 +2483,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # -------------------------------------------------------------------------
     fl = release['PAGECONFFILE']
     page_tesis = file_to_list(subrelfile['PAGE'])
-    ra, _ = find_block(files[fl], '\\renewcommand{\\refname}', True)
-    nl = [files[fl][ra], '\\renewcommand{\\bibname}{\\namereferences}\n']
-    files[fl] = replace_block_from_list(files[fl], nl, ra, ra - 1)
+    # ra, _ = find_block(files[fl], '\\renewcommand{\\refname}', True)
+    # nl = [files[fl][ra], '\\renewcommand{\\bibname}{\\namereferences}\n']
+    # files[fl] = replace_block_from_list(files[fl], nl, ra, ra - 1)
     ra, rb = find_block(files[fl], '% Muestra los números de línea', True)
     nl = find_extract(page_tesis, '% Añade página en blanco')
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
