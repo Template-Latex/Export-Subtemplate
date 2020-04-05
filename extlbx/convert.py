@@ -671,7 +671,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             'portraittitlecolor', 'fontsizetitlei', 'styletitlei',
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
             'nomchapter', 'nomnpageof', 'indexforcenewpage', 'predocpageromannumber',
-            'predocresetpagenumber']
+            'predocresetpagenumber', 'margineqnindexbottom', 'margineqnindextop', 'nomlteqn']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -698,6 +698,12 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra, rb = find_block(files[fl], 'showlinenumbers', True)
     files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1,style2,style3\n')
     # files[fl].pop()
+
+    # -------------------------------------------------------------------------
+    # CAMBIA LAS ECUACIONES
+    # -------------------------------------------------------------------------
+    fl = release['EQNFILE']
+    files[fl] = find_delete_block(files[fl], '% Insertar una ecuación en el índice', white_end_block=True)
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
@@ -1499,7 +1505,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # Configuraciones que se borran
     cdel = ['firstpagemargintop', 'portraitstyle', 'predocpageromannumber', 'predocpageromanupper',
             'predocresetpagenumber', 'fontsizetitlei', 'styletitlei', 'nomltcont', 'nomltfigure', 'nomltsrc',
-            'nomlttable', 'nameportraitpage', 'indextitlecolor', 'addindextobookmarks', 'portraittitlecolor']
+            'nomlttable', 'nameportraitpage', 'indextitlecolor', 'addindextobookmarks', 'portraittitlecolor',
+            'margineqnindexbottom', 'margineqnindextop', 'nomlteqn']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -1540,6 +1547,12 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     ra, rb = find_block(files[fl], 'hfwidthwrap', True)
     files[fl] = replace_block_from_list(files[fl], config_reporte, ra, ra)
     # files[fl].pop()
+
+    # -------------------------------------------------------------------------
+    # CAMBIA LAS ECUACIONES
+    # -------------------------------------------------------------------------
+    fl = release['EQNFILE']
+    files[fl] = find_delete_block(files[fl], '% Insertar una ecuación en el índice', white_end_block=True)
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
@@ -2322,7 +2335,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace(' %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'indexstyle', True)
-    nconf = replace_argument(files[fl][ra], 1, 'tf').replace('%', ' %')
+    nconf = replace_argument(files[fl][ra], 1, 'tf').replace('%', '  %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginleft', True)
     nconf = replace_argument(files[fl][ra], 1, '3.0')
@@ -2384,7 +2397,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Configuraciones que se borran
     cdel = ['portraitstyle', 'firstpagemargintop', 'twocolumnreferences', 'sectionrefenv',
             'predocpageromannumber', 'predocresetpagenumber', 'indexnewpagec', 'indexnewpagef',
-            'indexnewpaget', 'showindex', 'showindexofcontents', 'fontsizetitlei', 'styletitlei']
+            'indexnewpaget', 'showindex', 'showindexofcontents', 'fontsizetitlei', 'styletitlei', 'indexnewpagee']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)

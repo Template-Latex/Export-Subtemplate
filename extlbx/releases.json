@@ -2,6 +2,7 @@
     "AUXILIAR": {
         "CONFIGFILE": "lib/config.tex",
         "COREFUN": "lib/cmd/core.tex",
+        "EQNFILE": "lib/cmd/equation.tex",
         "EXAMPLECLONE": "example.tex",
         "EXAMPLEFILE": "lib/etc/example.tex",
         "FILEDELCOMENTS": {
@@ -703,6 +704,7 @@
         "CONFIGFILE": "lib/config.tex",
         "COREFUN": "lib/cmd/core.tex",
         "DIST": "dist/",
+        "EQNFILE": "lib/cmd/equation.tex",
         "EXAMPLECLONE": "example.tex",
         "EXAMPLEFILE": "lib/etc/example.tex",
         "FILEDELCOMENTS": {
