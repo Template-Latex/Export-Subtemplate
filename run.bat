@@ -1,1 +1,1 @@
-py -2-32 main.pyw
+py -2 main.pyw
