@@ -734,6 +734,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl][ra] = '\t\errmessage{LaTeX Warning: Se borro la variable \\noexpand\\equipodocente, creando una vacia}\n'
     ra, _ = find_block(files[fl], '\def\\tablaintegrantes {}')
     files[fl][ra] = '\t\def\\equipodocente {}}{\n'
+
+    ra, _ = find_block(files[fl], '\pdfmetainfotitulo')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\tituloauxiliar')
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
@@ -742,16 +745,13 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['SOURCE'])
-    ra, _ = find_block(files[fl], 'Documento.Titulo')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\tituloauxiliar')
-    ra, _ = find_block(files[fl], 'pdftitle')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\tituloauxiliar')
     ra, _ = find_block(files[fl], '\setcounter{tocdepth}')
     files[fl][ra] = replace_argument(files[fl][ra], 2, '1')
     ra, _ = find_block(files[fl], 'Template.Web.Manual')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
+
     files[fl] = find_delete_block(files[fl], '% Se añade listings a tocloft', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Se revisa si se importa tikz', white_end_block=True)
 
@@ -1164,6 +1164,11 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files[fl].pop(ra)
     _, rb = find_block(files[fl], '\ifthenelse{\isundefined{\equipodocente}}', blankend=True)
     files[fl][rb] = '\ifthenelse{\isundefined{\indicacionevaluacion}}{\n\t\def\indicacionevaluacion {}\n}{}\n\n'
+
+    ra, _ = find_block(files[fl], '\pdfmetainfotitulo')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\tituloevaluacion')
+    ra, _ = find_block(files[fl], '\pdfmetainfotema')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\tituloevaluacion')
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
@@ -1172,18 +1177,12 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['SOURCE'])
-    ra, _ = find_block(files[fl], 'Documento.Titulo')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\tituloevaluacion')
-    ra, _ = find_block(files[fl], 'pdftitle')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\tituloevaluacion')
     ra, _ = find_block(files[fl], 'Template.Web.Manual')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
     ra, _ = find_block(files[fl], 'Documento.Tema')
     files[fl].pop(ra)
-    ra, _ = find_block(files[fl], 'pdfsubject={')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\tituloevaluacion')
 
     # Cambia encabezado archivos
     for fl in files.keys():
@@ -1585,6 +1584,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
+    ra, _ = find_block(files[fl], '\pdfmetainfotitulo')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulodelreporte')
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
@@ -1597,10 +1598,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
-    ra, _ = find_block(files[fl], 'Documento.Titulo')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulodelreporte')
-    ra, _ = find_block(files[fl], 'pdftitle')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulodelreporte')
 
     # -------------------------------------------------------------------------
     # PAGECONF
@@ -2453,6 +2450,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Elimina referencias en dos columnas
     files[fl] = find_delete_block(files[fl], '% Referencias en 2 columnas', True)
 
+    ra, _ = find_block(files[fl], '\pdfmetainfotitulo')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulotesis')
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
@@ -2465,10 +2464,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
-    ra, _ = find_block(files[fl], 'Documento.Titulo')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulotesis')
-    ra, _ = find_block(files[fl], 'pdftitle')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulotesis')
 
     # -------------------------------------------------------------------------
     # ÍNDICE
@@ -2500,6 +2495,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # ra, _ = find_block(files[fl], '\\renewcommand{\\refname}', True)
     # nl = [files[fl][ra], '\\renewcommand{\\bibname}{\\namereferences}\n']
     # files[fl] = replace_block_from_list(files[fl], nl, ra, ra - 1)
+    ra, _ = find_block(files[fl], '\\renewcommand{\\appendixtocname}{\\nameappendixsection}')
+    files[fl] = add_block_from_list(files[fl], [files[fl][ra],
+                                                '\\renewcommand{\chaptername}{\\nomchapter}\n'], ra)
     ra, rb = find_block(files[fl], '% Muestra los números de línea', True)
     nl = find_extract(page_tesis, '% Añade página en blanco')
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
