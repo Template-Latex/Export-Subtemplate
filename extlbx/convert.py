@@ -2333,7 +2333,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace(' %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'indexstyle', True)
-    nconf = replace_argument(files[fl][ra], 1, 'tf').replace('%', '  %')
+    nconf = replace_argument(files[fl][ra], 1, 'tf').replace('%', '   %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginleft', True)
     nconf = replace_argument(files[fl][ra], 1, '3.0')
