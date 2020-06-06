@@ -1605,6 +1605,13 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # fl = release['PAGECONFFILE']
 
     # -------------------------------------------------------------------------
+    # FINALCONF
+    # -------------------------------------------------------------------------
+    fl = release['FINALCONF']
+    flfinl = files[fl]  # type: list
+    flfinl.insert(len(flfinl) - 2, '\\renewcommand{\\abstractname}{\\nameabstract}\n')
+
+    # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
     delfile = release['COREFUN']

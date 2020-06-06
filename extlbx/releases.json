@@ -707,6 +707,7 @@
         "EQNFILE": "lib/cmd/equation.tex",
         "EXAMPLECLONE": "example.tex",
         "EXAMPLEFILE": "lib/etc/example.tex",
+        "FINALCONF": "lib/cfg/final.tex",
         "FILEDELCOMENTS": {
             "lib/cfg/final.tex": true,
             "lib/cfg/init.tex": true,
