@@ -307,23 +307,17 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             # Se elimina la última linea en blanco si hay doble
             fl.close()
 
+        # Mueve el archivo de configuraciones
+        copyfile(distfolder + configfile, distfolder + 'template_config.tex')
+        copyfile(distfolder + examplefile, distfolder + 'example.tex')
+
+        # Ensambla el archivo del template
+        assemble_template_file(files['template.tex'], configfile, distfolder, headersize)
+
     # Se obtiene la cantidad de líneas de código
     lc = 0
     for f in files.keys():
         lc += len(files[f])
-
-    # Mueve el archivo de configuraciones
-    copyfile(distfolder + configfile, distfolder + 'template_config.tex')
-    copyfile(distfolder + examplefile, distfolder + 'example.tex')
-
-    # Ensambla el archivo del template
-    assemble_template_file(files['template.tex'], configfile, distfolder, headersize)
-
-    # Cambia el archivo de ejemplo de main
-    mainf = file_to_list(distfolder + mainfile)
-    for j in range(len(mainf)):
-        if get_file_from_input(mainf[j]) == examplefile:
-            mainf[j] = '\input{example} % Ejemplo, se puede borrar\n'
 
     printfun(MSG_FOKTIMER.format(time.time() - t))
 
@@ -370,7 +364,10 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         export_normal.save()
 
         # Se exportan los distintos estilos de versiones
-        data_mainfile = copy.copy(mainf)
+        data_mainfile = file_to_list(distfolder + mainfile)
+        for j in range(len(data_mainfile)):
+            if get_file_from_input(data_mainfile[j]) == examplefile:
+                data_mainfile[j] = '\input{example} % Ejemplo, se puede borrar\n'
 
         # Se buscan las líneas del departamento y de la imagen
         fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
@@ -728,12 +725,12 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             # Se elimina la última linea en blanco si hay doble
             fl.close()
 
-    # Mueve el archivo de configuraciones
-    copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
-    copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
+        # Mueve el archivo de configuraciones
+        copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
+        copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
 
-    # Ensambla el archivo del template
-    assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
+        # Ensambla el archivo del template
+        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -1003,12 +1000,12 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
             # Se elimina la última linea en blanco si hay doble
             fl.close()
 
-    # Mueve el archivo de configuraciones
-    copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
-    copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
+        # Mueve el archivo de configuraciones
+        copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
+        copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
 
-    # Ensambla el archivo del template
-    assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
+        # Ensambla el archivo del template
+        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -1349,12 +1346,12 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
             # Se elimina la última linea en blanco si hay doble
             fl.close()
 
-    # Mueve el archivo de configuraciones
-    copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
-    copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
+        # Mueve el archivo de configuraciones
+        copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
+        copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
 
-    # Ensambla el archivo del template
-    assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
+        # Ensambla el archivo del template
+        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -1959,14 +1956,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
     # -------------------------------------------------------------------------
-    fl = release['TITLE']
-
-    # Añade número capítulo
-    for i in range(len(files[fl])):
-        if '\\arabic{section}' in files[fl][i]:
-            files[fl][i] = files[fl][i].replace('\\arabic{section}', '\\thechapter.\\arabic{section}')
-        if '\\Alph{section}' in files[fl][i]:
-            files[fl][i] = files[fl][i].replace('\\Alph{section}', '\\thechapter.\\Alph{section}')
+    # fl = release['TITLE']
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
@@ -2086,6 +2076,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'counterwithin{table}')
     files[fl][ra] = '\\counterwithin{table}{chapter}\n'
 
+    # Cambia valor de anexos sección
+    ra, _ = find_block(files[fl], 'GLOBALsectionalph')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, 'false')
+
     # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
@@ -2142,12 +2136,12 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
             # Se elimina la última linea en blanco si hay doble
             fl.close()
 
-    # Mueve el archivo de configuraciones
-    copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
-    copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
+        # Mueve el archivo de configuraciones
+        copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
+        copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
 
-    # Ensambla el archivo del template
-    assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
+        # Ensambla el archivo del template
+        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
