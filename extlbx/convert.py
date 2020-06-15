@@ -146,15 +146,13 @@ def find_delete_block(data, block, white_end_block=False, iadd=0, jadd=0, altend
 
 # noinspection PyBroadException
 def export_informe(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
-                   addwhitespace=False, deletecoments=True, plotstats=True, doclean=False, addstat=True, savepdf=True,
+                   plotstats=True, doclean=False, addstat=True, savepdf=True,
                    informeroot=None, mainroot=None, backtoroot=False, statsroot=None):
     """
     Exporta el archivo principal, actualiza version.
 
     :param addstat: Agrega las estadísticas
-    :param addwhitespace: Añade espacios en blanco al comprimir archivos
     :param backtoroot: Se devuelve a la carpeta root
-    :param deletecoments: Borra comentarios
     :param doclean: Limpia el diccionario
     :param docompile: Compila automáticamente
     :param dosave: Guarda o no los archivos
@@ -179,20 +177,16 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     # Obtiene archivos
     configfile = release['CONFIGFILE']
     examplefile = release['EXAMPLEFILE']
-    # exampleclone = release['EXAMPLECLONE']
-    filedelcoments = release['FILEDELCOMENTS']
     files = release['FILES']
-    filestrip = release['FILESTRIP']
     initconffile = release['INITCONFFILE']
     mainfile = release['MAINFILE']
     distfolder = release['DIST']
-    mainsinglefile = release['SINGLEFILE']
     stat = release['STATS']
 
     # Constantes
     main_data = open(mainfile)
     main_data.read()
-    initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionheader = '% Versión:      {0} ({1})\n'
@@ -291,116 +285,34 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     for f in files.keys():
         lc += len(files[f])
 
-    if dosave:
-        # Se clona archivo de ejemplo
-        copyfile(examplefile, release['EXAMPLECLONE'])
-        copyfile(examplefile, distfolder + release['EXAMPLECLONE'])
+    # Mueve el archivo de configuraciones
+    copyfile(distfolder + configfile, distfolder + 'template_config.tex')
+    copyfile(distfolder + examplefile, distfolder + 'example.tex')
 
-        # Se modifican propiedades para establecer tipo compacto
-        data = files[initconffile]
-        d_ttype = replace_argument(d_ttype, 1, 'Compacto')
-        d_tvdev = replace_argument(d_tvdev, 1, versiondev + '-C')
-        data[l_thash] = d_thash
-        data[l_ttype] = d_ttype
-        data[l_tvdev] = d_tvdev
-
-        # Se buscan funciones no válidas en compacto
-        delfile = 'lib/cmd/core.tex'
-        fl = files[delfile]
-        files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
-        ra, rb = find_block(fl, 'GLOBALenvimagenewlinemarg', True)
-        nconf = replace_argument(fl[ra], 1, '0.0')
-        files[delfile][ra] = nconf
-
-        delfile = 'lib/page/portrait.tex'
-        fl = files[delfile]
-        a, b = find_block(fl, '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{', altend='}{')
-        files[delfile] = del_block_from_list(fl, a, b)
-        a, b = find_block(files[delfile], '\\throwbadconfigondoc{Estilo de portada incorrecto}')
-        files[delfile][a] = files[delfile][a][:-2]
-        files[delfile] = find_delete_line_recursive(fl, '\hspace{-0.255cm}', replace='')
-
-        delfile = 'lib/cfg/final.tex'
-        a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
-        files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-2.75\\baselineskip}\n'
-
-        delfile = 'lib/cfg/init.tex'
-        fl = files[delfile]
-        lnme = '\ifthenelse{\equal{\portraitstyle}{\\bgtemplatetestcode}}{\importtikzlib}{}'
-        files[delfile] = find_delete_block(fl, lnme, white_end_block=True)
-
-        # Se crea el archivo unificado
-        fl = open(mainsinglefile, 'w')
-        data = files[mainfile]
-        data.pop(1)  # Se elimina el tipo de documento del header
-        data.insert(1,
-                    '% Advertencia:  Documento generado automáticamente a partir del main.tex y\n%               los '
-                    'archivos .tex de la carpeta lib/\n')
-        # data[codetablewidthpos] = data[codetablewidthpos].replace(itableoriginal, itablenew)
-        line = 0
-        stconfig = False  # Indica si se han escrito comentarios en configuraciones
-
-        # Se buscan los archivos /all y pega contenido
-        all_l = 0
-        for d in data:
-            if '/all}' in d:
-                allfile = d.strip().replace('\input{', '').replace('}', '').split(' ')[0] + '.tex'
-                data.pop(all_l)
-                newdata = files[allfile]
-                for k in newdata:
-                    if '%' not in k[0] and k.strip() != '':
-                        data.insert(all_l, k.strip() + '\n')
-            all_l += 1
-
-        # Se recorren las líneas del archivo
-        for d in data:
-            write = True
-            if line < initdocumentline:
-                fl.write(d)
-                write = False
-            # Si es una línea en blanco se agrega
-            if d == '\n' and write:
-                fl.write(d)
+    # Ensambla el archivo del template
+    templatef = files['template.tex']
+    new_template_file = []
+    for d in range(len(templatef)):
+        lined = templatef[d]
+        if '\input{' == lined.strip()[0:7]:
+            ifile = get_file_from_input(lined)
+            if ifile == configfile:
+                new_template_file.append('\input{template_config}\n')
             else:
-                # Si es un import pega el contenido
-                try:
-                    if d[0:6] == '\input':
-                        libr = d.replace('\input{', '').replace('}', '').strip()
-                        libr = libr.split(' ')[0]
-                        if '.tex' not in libr:
-                            libr += '.tex'
-                        if libr != examplefile:
-                            paste_external_tex_into_file(fl, libr, files, headersize, filestrip[libr],
-                                                         filedelcoments[libr], deletecoments, configfile,
-                                                         stconfig, add_ending_line=True)
-                        else:
-                            fl.write(d.replace('lib/etc/', ''))
-                        write = False
-                except:
-                    pass
+                dataifile = file_to_list(distfolder + ifile)
+                for j in range(len(dataifile)):
+                    if j < headersize:
+                        continue
+                    new_template_file.append(dataifile[j])
+        else:
+            new_template_file.append(lined)
+    save_list_to_file(new_template_file, distfolder + 'template.tex')
 
-                # Se agrega un espacio en blanco a la página después del comentario
-                if line >= initdocumentline and write:
-                    if d[0:2] == '% ' and d[3] != ' ' and d != '% CONFIGURACIONES\n':
-                        if d != '% FIN DEL DOCUMENTO\n' and addwhitespace:
-                            fl.write('\n')
-                            pass
-                        d = d.replace('IMPORTACIÓN', 'DECLARACIÓN')
-                        if d == '% RESUMEN O ABSTRACT\n':
-                            d = '% ======================= RESUMEN O ABSTRACT =======================\n'
-                        fl.write(d)
-                    elif d == '% CONFIGURACIONES\n':
-                        pass
-                    else:
-                        fl.write(d)
-
-            # Aumenta la línea
-            line += 1
-
-        fl.close()
-
-        # Se copia el archivo a dist
-        copyfile(mainsinglefile, distfolder + mainsinglefile)
+    # Cambia el archivo de ejemplo de main
+    mainf = file_to_list(distfolder + mainfile)
+    for j in range(len(mainf)):
+        if get_file_from_input(mainf[j]) == examplefile:
+            mainf[j] = '\input{example} % Ejemplo, se puede borrar\n'
 
     printfun(MSG_FOKTIMER.format(time.time() - t))
 
@@ -409,16 +321,16 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         t = time.time()
         with open(os.devnull, 'w') as FNULL:
             printfun(MSG_DCOMPILE, end='')
-            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t1 = time.time() - t
             t = time.time()
-            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t2 = time.time() - t
             t = time.time()
-            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t3 = time.time() - t
             t = time.time()
-            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t4 = time.time() - t
             # tmean = (t1 + t2) / 2
             tmean = min(t1, t2, t3, t4)
@@ -426,7 +338,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
             # Copia a la carpeta pdf_version
             if savepdf:
-                copyfile(mainsinglefile.replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
+                copyfile('main.pdf', release['PDF_FOLDER'].format(version))
 
         # Se agregan las estadísticas
         if addstat:
@@ -446,52 +358,29 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         export_normal.add_folder(czip['ADD']['FOLDER'])
         export_normal.save()
 
-        # Se exporta el proyecto único
-        czip = release['ZIP']['COMPACT']
-        export_single = Zip(mainroot + czip['FILE'])
-        export_single.set_ghostpath(distfolder)
-        export_single.add_file(czip['ADD']['FILES'], 'dist/')
-        export_single.add_folder(czip['ADD']['FOLDER'])
-        export_single.save()
-
         # Se exportan los distintos estilos de versiones
         fl_mainfile = open(mainfile)
-        fl_mainsinglefile = open(mainsinglefile)
 
         # Se cargan los archivos en listas
-        data_mainfile = []
-        data_mainsinglefile = []
-        for i in fl_mainfile:
-            data_mainfile.append(i)
-        for i in fl_mainsinglefile:
-            data_mainsinglefile.append(i)
+        data_mainfile = copy.copy(mainf)
 
         # Se buscan las líneas del departamento y de la imagen
         fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
         fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
-        fl_pos_dp_mainsinglefile = find_line(data_mainsinglefile, '\def\departamentouniversidad')
-        fl_pos_im_mainsinglefile = find_line(data_mainsinglefile, '\def\imagendepartamento')
 
         # Se cierran los archivos
         fl_mainfile.close()
-        fl_mainsinglefile.close()
 
         # Se recorre cada versión y se genera el .zip
         for m in release['ZIP']['OTHERS']['DATA']:
             data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
             data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
-            data_mainsinglefile[fl_pos_dp_mainsinglefile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
-            data_mainsinglefile[fl_pos_im_mainsinglefile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
 
             # Se reescriben los archivos
             new_mainfile = open(distfolder + mainfile, 'w')
             for i in data_mainfile:
                 new_mainfile.write(i)
             new_mainfile.close()
-            new_mainsinglefile = open(distfolder + mainsinglefile, 'w')
-            for i in data_mainsinglefile:
-                new_mainsinglefile.write(i)
-            new_mainsinglefile.close()
 
             # Se genera el .zip
             czip = release['ZIP']['NORMAL']
@@ -499,42 +388,22 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             export_normal.set_ghostpath(distfolder)
             export_normal.add_excepted_file(czip['EXCEPTED'])
             export_normal.add_file(czip['ADD']['FILES'])
-            export_normal.add_folder('dist/lib')
             export_normal.add_folder(release['ZIP']['OTHERS']['EXPATH'])
             export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
             for k in m[2]:
                 export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
             export_normal.save()
 
-            # Se genera el single
-            czip = release['ZIP']['COMPACT']
-            export_single = Zip(mainroot + release['ZIP']['OTHERS']['SINGLE'].format(m[1]))
-            export_single.set_ghostpath(distfolder)
-            export_single.add_file(czip['ADD']['FILES'], 'dist/')
-            export_single.add_folder(release['ZIP']['OTHERS']['EXPATH'])
-            export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
-            for k in m[2]:
-                export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
-            export_single.save()
-
         data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
                                                              'Departamento de la Universidad')
         data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
                                                              'departamentos/fcfm')
-        data_mainsinglefile[fl_pos_dp_mainsinglefile] = replace_argument(data_mainsinglefile[fl_pos_dp_mainsinglefile],
-                                                                         1, 'Departamento de la Universidad')
-        data_mainsinglefile[fl_pos_im_mainsinglefile] = replace_argument(data_mainsinglefile[fl_pos_im_mainsinglefile],
-                                                                         1, 'departamentos/fcfm')
 
         # Se reescriben los archivos
         new_mainfile = open(distfolder + mainfile, 'w')
         for i in data_mainfile:
             new_mainfile.write(i)
         new_mainfile.close()
-        new_mainsinglefile = open(distfolder + mainsinglefile, 'w')
-        for i in data_mainsinglefile:
-            new_mainsinglefile.write(i)
-        new_mainsinglefile.close()
 
     # try:
     #     pyperclip.copy('Version ' + versiondev)
@@ -585,8 +454,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # Genera informe
     # noinspection PyTypeChecker
     export_informe(version, versiondev, versionhash, dosave=False, docompile=False,
-                   plotstats=False, addwhitespace=addwhitespace, deletecoments=deletecoments,
-                   printfun=nonprint, addstat=False, savepdf=False, informeroot=informeroot)
+                   plotstats=False, printfun=nonprint, addstat=False, savepdf=False,
+                   informeroot=informeroot)
 
     if dosave:
         printfun(MSG_GEN_FILE, end='')
@@ -856,91 +725,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             # Se elimina la última linea en blanco si hay doble
             fl.close()
 
-    if dosave:
-        # Se crea ejemplo
-        fl = open(subrlfolder + exampleclone, 'w')
-        data = files[release['EXAMPLEFILE']]
-        for k in data:
-            fl.write(k)
-        fl.close()
-
-        # Actualización a compacto
-        fl = release['INITCONFFILE']
-        ra, _ = find_block(files[fl], 'Template.Version.Dev')
-        files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-AUX-C')
-        ra, _ = find_block(files[fl], 'Template.Tipo')
-        files[fl][ra] = replace_argument(files[fl][ra], 1, 'Compacto')
-
-        # Se crea compacto
-        line = 0
-        fl = open(subrlfolder + release['SINGLEFILE'], 'w')
-        data = files[mainfile]
-        stconfig = False  # Indica si se han escrito comentarios en configuraciones
-
-        delfile = 'lib/cfg/page.tex'
-        a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
-        files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-1\\baselineskip}\n'
-        a, _ = find_block(files[delfile], '\\vspace*{-1.30cm}')
-        files[delfile][a] = '\\vspace*{-0.80cm}\n'
-        a, _ = find_block(files[delfile], '\\vspace*{-1.3cm}')
-        files[delfile][a] = '\\vspace*{-0.80cm}\n'
-
-        # Se buscan los archivos /all y pega contenido
-        all_l = 0
-        for d in data:
-            if '/all}' in d:
-                allfile = d.strip().replace('\input{', '').replace('}', '').split(' ')[0] + '.tex'
-                data.pop(all_l)
-                newdata = files[allfile]
-                for k in newdata:
-                    if '%' not in k[0] and k.strip() != '':
-                        data.insert(all_l, k.strip() + '\n')
-            all_l += 1
-
-        for d in data:
-            write = True
-            if line < initdocumentline:
-                fl.write(d)
-                write = False
-            # Si es una línea en blanco se agrega
-            if d == '\n' and write:
-                fl.write(d)
-            else:
-                # Si es un import pega el contenido
-                # noinspection PyBroadException
-                try:
-                    if d[0:6] == '\input':
-                        libr = d.replace('\input{', '').replace('}', '').strip()
-                        libr = libr.split(' ')[0]
-                        if '.tex' not in libr:
-                            libr += '.tex'
-                        if libr != examplefile:
-                            paste_external_tex_into_file(fl, libr, files, headersize, filestrip[libr],
-                                                         filedelcoments[libr], deletecoments, configfile,
-                                                         stconfig, add_ending_line=True)
-
-                        else:
-                            fl.write(d.replace('lib/etc/', ''))
-                        write = False
-                except:
-                    pass
-
-                # Se agrega un espacio en blanco a la página después del comentario
-                if line >= initdocumentline and write:
-                    if d[0:2] == '% ' and d[3] != ' ' and d != '% CONFIGURACIONES\n':
-                        if d != '% FIN DEL DOCUMENTO\n' and addwhitespace:
-                            fl.write('\n')
-                        d = d.replace('IMPORTACIÓN', 'DECLARACIÓN')
-                        fl.write(d)
-                    elif d == '% CONFIGURACIONES\n':
-                        pass
-                    else:
-                        fl.write(d)
-
-            # Aumenta la línea
-            line += 1
-        fl.close()
-
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
     # Compila el archivo
@@ -990,16 +774,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             export_normal.add_file(czip['ADD']['FILES'])
             export_normal.add_folder(czip['ADD']['FOLDER'])
         export_normal.save()
-
-        # Se exporta el proyecto único
-        czip = release['ZIP']['COMPACT']
-        export_single = Zip(czip['FILE'])
-        with Cd(subrlfolder):
-            export_single.set_ghostpath(czip['GHOST'])
-            export_single.add_file(release['SINGLEFILE'])
-            export_single.add_folder('img')
-            export_single.add_file('lib/etc/example.tex', 'lib/etc/')
-        export_single.save()
 
     # Limpia el diccionario
     if doclean:
@@ -1414,8 +1188,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # Genera informe
     # noinspection PyTypeChecker
     export_informe(version, versiondev, versionhash, dosave=False, docompile=False,
-                   plotstats=False, addwhitespace=addwhitespace, deletecoments=deletecoments,
-                   printfun=nonprint, addstat=False, savepdf=False, informeroot=informeroot)
+                   plotstats=False, printfun=nonprint, addstat=False, savepdf=False, informeroot=informeroot)
 
     if dosave:
         printfun(MSG_GEN_FILE, end='')
@@ -2230,8 +2003,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Genera informe
     # noinspection PyTypeChecker
     export_informe(version, versiondev, versionhash, dosave=False, docompile=False,
-                   plotstats=False, addwhitespace=addwhitespace, deletecoments=deletecoments,
-                   printfun=nonprint, addstat=False, savepdf=False, informeroot=informeroot)
+                   plotstats=False, printfun=nonprint, addstat=False, savepdf=False, informeroot=informeroot)
 
     if dosave:
         printfun(MSG_GEN_FILE, end='')

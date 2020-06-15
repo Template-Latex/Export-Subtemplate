@@ -302,3 +302,26 @@ def sum_str_to_list(s, l, pos):
         return sum_str_to_list_der(s, l)
     else:
         raise Exception('Pos desconocida')
+
+
+def get_file_from_input(line):
+    """
+    Retorna el archivo importado en input.
+
+    :param line: Linea de codigo latex
+    :return: Archivo
+    """
+    return line.strip().replace('\input{', '').replace('}', '').split(' ')[0] + '.tex'
+
+
+def save_list_to_file(lst, filename):
+    """
+    Guarda la lista a un archivo.
+
+    :param lst: Lista
+    :param filename: Archivo
+    """
+    o = open(filename, 'w')
+    for j in lst:
+        o.write(j)
+    o.close()
