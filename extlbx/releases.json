@@ -110,8 +110,8 @@
             "LCODE": ""
         },
         "SUBRELFILES": {
-            "MAIN": "control_main.tex",
-            "PAGECONF": "src/cfg/control_page.tex"
+            "MAIN": "main_control.tex",
+            "PAGECONF": "src/cfg/page_control.tex"
         },
         "VERLINE": "Template-Controles v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
@@ -119,28 +119,16 @@
             "SOURCE": "https://github.com/Template-Latex/Template-Controles/"
         },
         "ZIP": {
-            "COMPACT": {
-                "ADD": {
-                    "FILES": [
-                        "main.tex"
-                    ],
-                    "FOLDER": [
-                        "img",
-                        "lib"
-                    ]
-                },
-                "EXCEPTED": [],
-                "FILE": "dist/Template-Controles.min.zip",
-                "GHOST": "../Template-Controles/"
-            },
             "NORMAL": {
                 "ADD": {
                     "FILES": [
-                        "main.tex"
+                        "example.tex",
+                        "main.tex",
+                        "template.tex",
+                        "template_config.tex"
                     ],
                     "FOLDER": [
-                        "img",
-                        "lib"
+                        "img"
                     ]
                 },
                 "EXCEPTED": [
