@@ -72,7 +72,6 @@
     },
     "CONTROLES": {
         "CONFIGFILE": "src/config.tex",
-        "EXAMPLECLONE": "example.tex",
         "EXAMPLEFILE": "src/etc/example.tex",
         "FILES": {
             "src/cfg/init.tex": [],
@@ -142,7 +141,6 @@
     "INFORME": {
         "CONFIGFILE": "src/config.tex",
         "DIST": "dist/",
-        "EXAMPLECLONE": "example.tex",
         "EXAMPLEFILE": "src/etc/example.tex",
         "FILES": {
             "src/cfg/final.tex": [],
@@ -525,7 +523,6 @@
         "COREFUN": "src/cmd/core.tex",
         "DIST": "dist/",
         "EQNFILE": "src/cmd/equation.tex",
-        "EXAMPLECLONE": "example.tex",
         "EXAMPLEFILE": "src/etc/example.tex",
         "FINALCONF": "src/cfg/final.tex",
         "FILES": {
@@ -565,9 +562,9 @@
             "LCODE": ""
         },
         "SUBRELFILES": {
-            "CONFIG": "src/reporte_config.tex",
-            "INIT": "src/cfg/reporte_init.tex",
-            "MAIN": "reporte_main.tex"
+            "CONFIG": "src/config_reporte.tex",
+            "INIT": "src/cfg/init_reporte.tex",
+            "MAIN": "main_reporte.tex"
         },
         "VERLINE": "Template-Reporte v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
@@ -575,30 +572,16 @@
             "SOURCE": "https://github.com/Template-Latex/Template-Reporte/"
         },
         "ZIP": {
-            "COMPACT": {
-                "ADD": {
-                    "FILES": [
-                        "reporte.tex",
-                        "example.tex"
-                    ],
-                    "FOLDER": [
-                        "img"
-                    ]
-                },
-                "EXCEPTED": [
-                    ".gitkeep"
-                ],
-                "FILE": "dist/Template-Reporte.min.zip",
-                "GHOST": "Template-Reporte/"
-            },
             "NORMAL": {
                 "ADD": {
                     "FILES": [
-                        "main.tex"
+                        "example.tex",
+                        "main.tex",
+                        "template.tex",
+                        "template_config.tex"
                     ],
                     "FOLDER": [
-                        "img",
-                        "lib"
+                        "img"
                     ]
                 },
                 "EXCEPTED": [
@@ -833,8 +816,7 @@
                 ],
                 "EXPATH": "img/ejemplos/",
                 "IMGPATH": "img/departamentos/{0}.pdf",
-                "NORMAL": "dist/Template-Reporte-{0}.zip",
-                "SINGLE": "dist/Template-Reporte-{0}.min.zip"
+                "NORMAL": "dist/Template-Reporte-{0}.zip"
             }
         }
     },
@@ -843,7 +825,6 @@
         "COREFUN": "src/cmd/core.tex",
         "DIST": "dist/",
         "ENVIRONMENTS": "src/env/environments.tex",
-        "EXAMPLECLONE": "example.tex",
         "EXAMPLEFILE": "src/etc/example.tex",
         "FILES": {
             "src/cfg/final.tex": [],
@@ -897,32 +878,17 @@
             "SOURCE": "https://github.com/Template-Latex/Template-Tesis/"
         },
         "ZIP": {
-            "COMPACT": {
-                "ADD": {
-                    "FILES": [
-                        "library.bib",
-                        "tesis.tex",
-                        "example.tex"
-                    ],
-                    "FOLDER": [
-                        "img"
-                    ]
-                },
-                "EXCEPTED": [
-                    ".gitkeep"
-                ],
-                "FILE": "dist/Template-Tesis.min.zip",
-                "GHOST": "Template-Tesis/"
-            },
             "NORMAL": {
                 "ADD": {
                     "FILES": [
+                        "example.tex",
                         "main.tex",
+                        "template.tex",
+                        "template_config.tex",
                         "library.bib"
                     ],
                     "FOLDER": [
-                        "img",
-                        "lib"
+                        "img"
                     ]
                 },
                 "EXCEPTED": [
@@ -1157,8 +1123,7 @@
                 ],
                 "EXPATH": "img/ejemplos/",
                 "IMGPATH": "img/departamentos/{0}.pdf",
-                "NORMAL": "dist/Template-Tesis-{0}.zip",
-                "SINGLE": "dist/Template-Tesis-{0}.min.zip"
+                "NORMAL": "dist/Template-Tesis-{0}.zip"
             }
         }
     }
