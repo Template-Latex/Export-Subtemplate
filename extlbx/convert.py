@@ -165,9 +165,13 @@ def assemble_template_file(templatef, configfile, distfolder, headersize):
                 for j in range(len(dataifile)):
                     if j < headersize:
                         continue
+                    if dataifile[j].strip() == '':
+                        continue
                     new_template_file.append(dataifile[j])
         else:
             new_template_file.append(lined)
+    # tlen = len(new_template_file) - 1
+    # new_template_file[tlen] = new_template_file[tlen].strip()
     save_list_to_file(new_template_file, distfolder + 'template.tex')
 
 
@@ -240,7 +244,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     d_tdate = replace_argument(d_tdate, 1, dia)
     d_thash = replace_argument(d_thash, 1, versionhash)
     d_ttype = replace_argument(d_ttype, 1, 'Normal')
-    d_tvdev = replace_argument(d_tvdev, 1, versiondev + '-N')
+    d_tvdev = replace_argument(d_tvdev, 1, versiondev)
     d_tvrel = replace_argument(d_tvrel, 1, version)
     d_vcmtd = replace_argument(d_vcmtd, 1, release['VERLINE'].format(version))
 
@@ -606,7 +610,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-AUX-N')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-AUX')
     ra, _ = find_block(files[fl], 'Template.Tipo')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
@@ -943,7 +947,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-CTR/EXM-N')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-CTR/EXM')
     ra, _ = find_block(files[fl], 'Template.Tipo')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
@@ -1266,7 +1270,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-REPT-N')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-REPT')
     ra, _ = find_block(files[fl], 'Template.Tipo')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
@@ -1527,7 +1531,7 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
     d_tdate = replace_argument(d_tdate, 1, dia)
     d_thash = replace_argument(d_thash, 1, versionhash)
     d_ttype = replace_argument(d_ttype, 1, 'Normal')
-    d_tvdev = replace_argument(d_tvdev, 1, versiondev + '-N')
+    d_tvdev = replace_argument(d_tvdev, 1, versiondev)
     d_tvrel = replace_argument(d_tvrel, 1, version)
     d_vcmtd = replace_argument(d_vcmtd, 1, release['VERLINE'].format(version))
 
@@ -1996,7 +2000,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-THS-N')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-THS')
     ra, _ = find_block(files[fl], 'Template.Tipo')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
