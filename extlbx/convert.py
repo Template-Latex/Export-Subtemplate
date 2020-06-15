@@ -349,7 +349,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
             # Copia a la carpeta pdf_version
             if savepdf:
-                copyfile('main.pdf', release['PDF_FOLDER'].format(version))
+                copyfile(mainfile.replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
 
         # Se agregan las estadísticas
         if addstat:
@@ -743,19 +743,19 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         with open(os.devnull, 'w') as FNULL:
             printfun(MSG_DCOMPILE, end='')
             with Cd(subrlfolder):
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t1 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t3 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t4 = time.time() - t
                 # tmean = (t1 + t2) / 2
@@ -764,7 +764,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
-                    copyfile('main.pdf', release['PDF_FOLDER'].format(version))
+                    copyfile(mainfile.replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
 
         # Se agregan las estadísticas
         if addstat:
@@ -1018,19 +1018,19 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
         with open(os.devnull, 'w') as FNULL:
             printfun(MSG_DCOMPILE, end='')
             with Cd(subrlfolder):
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t1 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t3 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t4 = time.time() - t
                 # tmean = (t1 + t2) / 2
@@ -1039,7 +1039,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
-                    copyfile(release['SINGLEFILE'].replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
+                    copyfile(mainfile.replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
 
         # Se agregan las estadísticas
         if addstat:
@@ -1364,19 +1364,19 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         with open(os.devnull, 'w') as FNULL:
             printfun(MSG_DCOMPILE, end='')
             with Cd(subrlfolder):
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t1 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t3 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t4 = time.time() - t
                 # tmean = (t1 + t2) / 2
@@ -1385,7 +1385,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
-                    copyfile(release['SINGLEFILE'].replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
+                    copyfile(mainfile.replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
 
         # Se agregan las estadísticas
         if addstat:
@@ -1752,14 +1752,12 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
 
 # noinspection PyUnboundLocalVariable
 def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
-                 addwhitespace=False, deletecoments=True, plotstats=True, addstat=True, doclean=True,
+                 plotstats=True, addstat=True, doclean=True,
                  savepdf=True, informeroot=None, mainroot=None, statsroot=None):
     """
     Exporta las tesis.
 
     :param addstat: Agrega las estadísticas
-    :param addwhitespace: Añade espacios en blanco al comprimir archivos
-    :param deletecoments: Borra comentarios
     :param doclean: Borra los archivos generados en lista
     :param docompile: Compila automáticamente
     :param dosave: Guarda o no los archivos
@@ -1792,17 +1790,18 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         printfun(MSG_UPV_FILE, end='')
     mainf = RELEASES[REL_INFORME]['FILES']
     files = release['FILES']
-    files['main.tex'] = file_to_list('tesis_main.tex')
+    files['main.tex'] = file_to_list('main_tesis.tex')
+    files['template.tex'] = file_to_list('template_tesis.tex')
     files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
     files['src/cmd/math.tex'] = copy.copy(mainf['src/cmd/math.tex'])
     files['src/cmd/equation.tex'] = copy.copy(mainf['src/cmd/equation.tex'])
     files['src/env/environments.tex'] = copy.copy(mainf['src/env/environments.tex'])
     files['src/cmd/image.tex'] = copy.copy(mainf['src/cmd/image.tex'])
-    files['src/page/portrait.tex'] = file_to_list('src/page/tesis_portrait.tex')
+    files['src/page/portrait.tex'] = file_to_list('src/page/portrait_tesis.tex')
     files['src/page/index.tex'] = copy.copy(mainf['src/page/index.tex'])
     files['src/cmd/title.tex'] = copy.copy(mainf['src/cmd/title.tex'])
     files['src/cmd/other.tex'] = copy.copy(mainf['src/cmd/other.tex'])
-    files['src/etc/example.tex'] = file_to_list('src/etc/tesis_example.tex')
+    files['src/etc/example.tex'] = file_to_list('src/etc/example_tesis.tex')
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
     files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
@@ -1811,8 +1810,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
-    filedelcoments = release['FILEDELCOMENTS']
-    filestrip = release['FILESTRIP']
     mainfile = release['MAINFILE']
     subrelfile = release['SUBRELFILES']
     examplefile = release['EXAMPLEFILE']
@@ -1820,12 +1817,11 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     stat = release['STATS']
     configfile = release['CONFIGFILE']
     distfolder = release['DIST']
-    mainsinglefile = release['SINGLEFILE']
 
     # Constantes
     main_data = open(mainfile)
     main_data.read()
-    initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionhead = '% Versión:      {0} ({1})\n'
@@ -1841,7 +1837,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # MODIFICA CONFIGURACIIONES
     # -------------------------------------------------------------------------
     fl = release['CONFIGFILE']
-    # config_reporte = file_to_list(subrelfile['CONFIG'])
 
     # Añade configuraciones
     cfg = '\\def\\objectchaptermargin {false}   % Activa margen de objetos entre capítulos\n'
@@ -2147,6 +2142,13 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
             # Se elimina la última linea en blanco si hay doble
             fl.close()
 
+    # Mueve el archivo de configuraciones
+    copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
+    copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
+
+    # Ensambla el archivo del template
+    assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
+
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
     # Compila el archivo
@@ -2155,19 +2157,19 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         with open(os.devnull, 'w') as FNULL:
             printfun(MSG_DCOMPILE, end='')
             with Cd(subrlfolder):
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t1 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t2 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t3 = time.time() - t
                 t = time.time()
-                call(['pdflatex', '-interaction=nonstopmode', release['SINGLEFILE']], stdout=FNULL,
+                call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL,
                      creationflags=CREATE_NO_WINDOW)
                 t4 = time.time() - t
                 # tmean = (t1 + t2) / 2
@@ -2176,7 +2178,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
-                    copyfile(release['SINGLEFILE'].replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
+                    copyfile(mainfile.replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
 
         # Se agregan las estadísticas
         if addstat:
@@ -2197,53 +2199,23 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                 export_normal.add_folder(czip['ADD']['FOLDER'])
             export_normal.save()
 
-            # Se exporta el proyecto único
-            czip = release['ZIP']['COMPACT']
-            export_single = Zip(czip['FILE'])
-            with Cd(subrlfolder):
-                export_single.set_ghostpath(distfolder)
-                # export_single.add_file(czip['ADD']['FILES'], 'dist/')
-                export_single.add_folder(czip['ADD']['FOLDER'])
-            export_single.save()
-
             # Se exportan los distintos estilos de versiones
-            fl_mainfile = open(subrlfolder + mainfile)
-            fl_mainsinglefile = open(subrlfolder + mainsinglefile)
-
-            # Se cargan los archivos en listas
-            data_mainfile = []
-            data_mainsinglefile = []
-            for i in fl_mainfile:
-                data_mainfile.append(i)
-            for i in fl_mainsinglefile:
-                data_mainsinglefile.append(i)
+            data_mainfile = file_to_list(subrlfolder + mainfile)
 
             # Se buscan las líneas del departamento y de la imagen
             fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
             fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
-            fl_pos_dp_mainsinglefile = find_line(data_mainsinglefile, '\def\departamentouniversidad')
-            fl_pos_im_mainsinglefile = find_line(data_mainsinglefile, '\def\imagendepartamento')
-
-            # Se cierran los archivos
-            fl_mainfile.close()
-            fl_mainsinglefile.close()
 
             # Se recorre cada versión y se genera el .zip
             for m in release['ZIP']['OTHERS']['DATA']:
                 data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
                 data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/uchile2}\n'
-                data_mainsinglefile[fl_pos_dp_mainsinglefile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
-                data_mainsinglefile[fl_pos_im_mainsinglefile] = '\\def\\imagendepartamento {departamentos/uchile2}\n'
 
                 # Se reescriben los archivos
                 new_mainfile = open(subrlfolder + mainfile, 'w')
                 for i in data_mainfile:
                     new_mainfile.write(i)
                 new_mainfile.close()
-                new_mainsinglefile = open(subrlfolder + mainsinglefile, 'w')
-                for i in data_mainsinglefile:
-                    new_mainsinglefile.write(i)
-                new_mainsinglefile.close()
 
                 # Se genera el .zip
                 czip = release['ZIP']['NORMAL']
@@ -2252,45 +2224,22 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                     export_normal.set_ghostpath(distfolder)
                     export_normal.add_excepted_file(czip['EXCEPTED'])
                     export_normal.add_file(czip['ADD']['FILES'])
-                    export_normal.add_folder('lib')
                     export_normal.add_folder(release['ZIP']['OTHERS']['EXPATH'])
                     export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
                     for k in m[2]:
                         export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
                 export_normal.save()
 
-                # Se genera el single
-                czip = release['ZIP']['COMPACT']
-                export_single = Zip(release['ZIP']['OTHERS']['SINGLE'].format(m[1]))
-                with Cd(subrlfolder):
-                    export_single.set_ghostpath(distfolder)
-                    export_single.add_file(czip['ADD']['FILES'], '')
-                    export_single.add_folder(release['ZIP']['OTHERS']['EXPATH'])
-                    export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
-                    for k in m[2]:
-                        export_single.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
-                export_single.save()
-
             data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
                                                                  'Departamento de la Universidad')
             data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
                                                                  'departamentos/uchile2')
-            data_mainsinglefile[fl_pos_dp_mainsinglefile] = replace_argument(
-                data_mainsinglefile[fl_pos_dp_mainsinglefile],
-                1, 'Departamento de la Universidad')
-            data_mainsinglefile[fl_pos_im_mainsinglefile] = replace_argument(
-                data_mainsinglefile[fl_pos_im_mainsinglefile],
-                1, 'departamentos/uchile2')
 
             # Se reescriben los archivos
             new_mainfile = open(subrlfolder + mainfile, 'w')
             for i in data_mainfile:
                 new_mainfile.write(i)
             new_mainfile.close()
-            new_mainsinglefile = open(subrlfolder + mainsinglefile, 'w')
-            for i in data_mainsinglefile:
-                new_mainsinglefile.write(i)
-            new_mainsinglefile.close()
 
     # Limpia el diccionario
     if doclean:

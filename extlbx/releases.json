@@ -101,7 +101,6 @@
         "PAGECONFFILE": "src/cfg/page.tex",
         "PDF_FOLDER": "../pdf-version/Controles/Template-Controles v{0}.pdf",
         "ROOT": "../Template-Controles/",
-        "SINGLEFILE": "control.tex",
         "STATS": {
             "CTIME": "",
             "FILE": "stats/data/controles.txt",
@@ -554,7 +553,6 @@
         "PAGECONFFILE": "src/cfg/page.tex",
         "PDF_FOLDER": "../pdf-version/Reporte/Template-Reporte v{0}.pdf",
         "ROOT": "../Template-Reporte/",
-        "SINGLEFILE": "reporte.tex",
         "STATS": {
             "CTIME": "",
             "FILE": "stats/data/reporte.txt",
@@ -858,7 +856,6 @@
         "PAGECONFFILE": "src/cfg/page.tex",
         "PDF_FOLDER": "../pdf-version/Tesis/Template-Tesis v{0}.pdf",
         "ROOT": "../Template-Tesis/",
-        "SINGLEFILE": "tesis.tex",
         "STATS": {
             "CTIME": "",
             "FILE": "stats/data/tesis.txt",
@@ -866,10 +863,10 @@
             "LCODE": ""
         },
         "SUBRELFILES": {
-            "ENVIRONMENTS": "src/env/tesis_environments.tex",
-            "INDEX": "src/page/tesis_index.tex",
-            "INIT": "src/cfg/tesis_init.tex",
-            "PAGE": "src/cfg/tesis_page.tex"
+            "ENVIRONMENTS": "src/env/environments_tesis.tex",
+            "INDEX": "src/page/index_tesis.tex",
+            "INIT": "src/cfg/init_tesis.tex",
+            "PAGE": "src/cfg/page_tesis.tex"
         },
         "TITLE": "src/cmd/title.tex",
         "VERLINE": "Template-Tesis v{0} | (Pablo Pizarro R.) ppizarror.com",
