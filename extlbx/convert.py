@@ -144,6 +144,33 @@ def find_delete_block(data, block, white_end_block=False, iadd=0, jadd=0, altend
     return del_block_from_list(data, ra + iadd, rb + jadd)
 
 
+def assemble_template_file(templatef, configfile, distfolder, headersize):
+    """
+    Genera el archivo del template.
+
+    :param templatef: Lista del archivo del template
+    :param configfile: Archivo de configuraciones
+    :param distfolder: Carpeta output
+    :param headersize: Tamaño del header
+    """
+    new_template_file = []
+    for d in range(len(templatef)):
+        lined = templatef[d]
+        if '\input{' == lined.strip()[0:7]:
+            ifile = get_file_from_input(lined)
+            if ifile == configfile:
+                new_template_file.append('\input{template_config}\n')
+            else:
+                dataifile = file_to_list(distfolder + ifile)
+                for j in range(len(dataifile)):
+                    if j < headersize:
+                        continue
+                    new_template_file.append(dataifile[j])
+        else:
+            new_template_file.append(lined)
+    save_list_to_file(new_template_file, distfolder + 'template.tex')
+
+
 # noinspection PyBroadException
 def export_informe(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
                    plotstats=True, doclean=False, addstat=True, savepdf=True,
@@ -290,23 +317,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     copyfile(distfolder + examplefile, distfolder + 'example.tex')
 
     # Ensambla el archivo del template
-    templatef = files['template.tex']
-    new_template_file = []
-    for d in range(len(templatef)):
-        lined = templatef[d]
-        if '\input{' == lined.strip()[0:7]:
-            ifile = get_file_from_input(lined)
-            if ifile == configfile:
-                new_template_file.append('\input{template_config}\n')
-            else:
-                dataifile = file_to_list(distfolder + ifile)
-                for j in range(len(dataifile)):
-                    if j < headersize:
-                        continue
-                    new_template_file.append(dataifile[j])
-        else:
-            new_template_file.append(lined)
-    save_list_to_file(new_template_file, distfolder + 'template.tex')
+    assemble_template_file(files['template.tex'], configfile, distfolder, headersize)
 
     # Cambia el archivo de ejemplo de main
     mainf = file_to_list(distfolder + mainfile)
@@ -422,14 +433,12 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
 # noinspection PyUnboundLocalVariable
 def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
-                      addwhitespace=False, deletecoments=True, plotstats=True, addstat=True, doclean=True,
+                      plotstats=True, addstat=True, doclean=True,
                       savepdf=True, informeroot=None, mainroot=None, statsroot=None):
     """
     Exporta las auxiliares.
 
     :param addstat: Agrega las estadísticas
-    :param addwhitespace: Añade espacios en blanco al comprimir archivos
-    :param deletecoments: Borra comentarios
     :param doclean: Borra los archivos generados en lista
     :param docompile: Compila automáticamente
     :param dosave: Guarda o no los archivos
@@ -464,29 +473,25 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     mainf = RELEASES[REL_INFORME]['FILES']
     files = release['FILES']
     files['main.tex'] = copy.copy(mainf['main.tex'])
-    files['lib/cmd/all.tex'] = file_to_list('lib/cmd/all_auxiliar.tex')
-    # files['lib/cmd/column.tex'] = copy.copy(mainf['lib/cmd/column.tex'])
-    files['lib/cmd/core.tex'] = copy.copy(mainf['lib/cmd/core.tex'])
-    files['lib/cmd/math.tex'] = copy.copy(mainf['lib/cmd/math.tex'])
-    files['lib/cmd/equation.tex'] = copy.copy(mainf['lib/cmd/equation.tex'])
-    files['lib/cmd/image.tex'] = copy.copy(mainf['lib/cmd/image.tex'])
-    files['lib/cmd/title.tex'] = file_to_list('lib/cmd/auxiliar_title.tex')
-    files['lib/cmd/other.tex'] = copy.copy(mainf['lib/cmd/other.tex'])
-    files['lib/cmd/auxiliar.tex'] = file_to_list('lib/cmd/auxiliar.tex')
-    files['lib/etc/example.tex'] = file_to_list('lib/etc/auxiliar_example.tex')
-    files['lib/cfg/init.tex'] = copy.copy(mainf['lib/cfg/init.tex'])
-    files['lib/config.tex'] = copy.copy(mainf['lib/config.tex'])
-    files['lib/cfg/page.tex'] = copy.copy(mainf['lib/cfg/page.tex'])
-    files['lib/style/all.tex'] = copy.copy(mainf['lib/style/all.tex'])
-    files['lib/style/color.tex'] = copy.copy(mainf['lib/style/color.tex'])
-    files['lib/style/code.tex'] = copy.copy(mainf['lib/style/code.tex'])
-    files['lib/style/other.tex'] = copy.copy(mainf['lib/style/other.tex'])
-    files['lib/env/imports.tex'] = copy.copy(mainf['lib/env/imports.tex'])
-    filedelcoments = release['FILEDELCOMENTS']
-    filestrip = release['FILESTRIP']
+    files['template.tex'] = file_to_list('template_auxiliar.tex')
+    # files['src/cmd/column.tex'] = copy.copy(mainf['src/cmd/column.tex'])
+    files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
+    files['src/cmd/math.tex'] = copy.copy(mainf['src/cmd/math.tex'])
+    files['src/cmd/equation.tex'] = copy.copy(mainf['src/cmd/equation.tex'])
+    files['src/cmd/image.tex'] = copy.copy(mainf['src/cmd/image.tex'])
+    files['src/cmd/title.tex'] = file_to_list('src/cmd/auxiliar_title.tex')
+    files['src/cmd/other.tex'] = copy.copy(mainf['src/cmd/other.tex'])
+    files['src/cmd/auxiliar.tex'] = file_to_list('src/cmd/auxiliar.tex')
+    files['src/etc/example.tex'] = file_to_list('src/etc/example_auxiliar.tex')
+    files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
+    files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
+    files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
+    files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
+    files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
+    files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     mainfile = release['MAINFILE']
     subrelfile = release['SUBRELFILES']
-    exampleclone = release['EXAMPLECLONE']
     examplefile = release['EXAMPLEFILE']
     subrlfolder = release['ROOT']
     stat = release['STATS']
@@ -495,7 +500,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # Constantes
     main_data = open(mainfile)
     main_data.read()
-    initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionhead = '% Versión:      {0} ({1})\n'
@@ -524,9 +529,10 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[mainfile][ra] = '\def\\tituloauxiliar {Título de la auxiliar}\n'
     ra = find_line(files[mainfile], 'temaatratar')
     files[mainfile][ra] = '\def\\temaatratar {Tema de la auxiliar}\n'
-    nl = find_extract(main_auxiliar, '% IMPORTACIÓN DE FUNCIONES', True)
-    files[mainfile] = find_replace_block(files[mainfile], '% IMPORTACIÓN DE FUNCIONES', nl, white_end_block=True,
-                                         jadd=-1)
+    for j in range(len(files[mainfile])):
+        if get_file_from_input(files[mainfile][j]) == examplefile:
+            files[mainfile][j] = '\input{example} % Ejemplo, se puede borrar\n'
+
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # -------------------------------------------------------------------------
@@ -642,6 +648,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     for pcfg in pcfg:
         ra, _ = find_block(files[fl], pcfg)
     files[fl].pop(ra)
+    a, _ = find_block(files[fl], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
+    files[fl].pop()
+    files[fl].append(files[fl].pop(a))
 
     # -------------------------------------------------------------------------
     # AUXILIAR FUNCTIONS
@@ -725,6 +734,19 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             # Se elimina la última linea en blanco si hay doble
             fl.close()
 
+    # Mueve el archivo de configuraciones
+    copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
+    copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
+
+    # Ensambla el archivo del template
+    assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
+
+    # Cambia el archivo de ejemplo de main
+    mainf = file_to_list(subrlfolder + mainfile)
+    for j in range(len(mainf)):
+        if get_file_from_input(mainf[j]) == examplefile:
+            mainf[j] = '\input{example} % Ejemplo, se puede borrar\n'
+
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
     # Compila el archivo
@@ -754,7 +776,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
-                    copyfile(release['SINGLEFILE'].replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
+                    copyfile('main.pdf', release['PDF_FOLDER'].format(version))
 
         # Se agregan las estadísticas
         if addstat:
@@ -817,9 +839,8 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # Genera auxiliares
     # noinspection PyTypeChecker
     export_auxiliares(version, versiondev, versionhash, dosave=False, docompile=False,
-                      plotstats=False, addwhitespace=addwhitespace, deletecoments=deletecoments,
-                      printfun=nonprint, addstat=False, doclean=False, savepdf=False, informeroot=informeroot,
-                      mainroot=mainroot)
+                      plotstats=False, printfun=nonprint, addstat=False, doclean=False, savepdf=False,
+                      informeroot=informeroot, mainroot=mainroot)
 
     if dosave:
         printfun(MSG_GEN_FILE, end='')
@@ -830,24 +851,23 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     mainf = RELEASES[REL_AUXILIAR]['FILES']
     files = release['FILES']
     files['main.tex'] = copy.copy(mainf['main.tex'])
-    files['lib/cmd/all.tex'] = file_to_list('lib/cmd/all_control.tex')
-    files['lib/cmd/core.tex'] = copy.copy(mainf['lib/cmd/core.tex'])
-    # files['lib/cmd/column.tex'] = copy.copy(mainf['lib/cmd/column.tex'])
-    files['lib/cmd/control.tex'] = copy.copy(mainf['lib/cmd/auxiliar.tex'])
-    files['lib/cmd/math.tex'] = copy.copy(mainf['lib/cmd/math.tex'])
-    files['lib/cmd/equation.tex'] = copy.copy(mainf['lib/cmd/equation.tex'])
-    files['lib/cmd/image.tex'] = copy.copy(mainf['lib/cmd/image.tex'])
-    files['lib/cmd/title.tex'] = copy.copy(mainf['lib/cmd/title.tex'])
-    files['lib/cmd/other.tex'] = copy.copy(mainf['lib/cmd/other.tex'])
-    files['lib/etc/example.tex'] = file_to_list('lib/etc/control_example.tex')
-    files['lib/cfg/init.tex'] = copy.copy(mainf['lib/cfg/init.tex'])
-    files['lib/config.tex'] = copy.copy(mainf['lib/config.tex'])
-    files['lib/cfg/page.tex'] = copy.copy(mainf['lib/cfg/page.tex'])
-    files['lib/style/all.tex'] = copy.copy(mainf['lib/style/all.tex'])
-    files['lib/style/color.tex'] = copy.copy(mainf['lib/style/color.tex'])
-    files['lib/style/code.tex'] = copy.copy(mainf['lib/style/code.tex'])
-    files['lib/style/other.tex'] = copy.copy(mainf['lib/style/other.tex'])
-    files['lib/env/imports.tex'] = copy.copy(mainf['lib/env/imports.tex'])
+    files['template.tex'] = copy.copy(mainf['template.tex'])
+    files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
+    # files['src/cmd/column.tex'] = copy.copy(mainf['src/cmd/column.tex'])
+    files['src/cmd/control.tex'] = copy.copy(mainf['src/cmd/auxiliar.tex'])
+    files['src/cmd/math.tex'] = copy.copy(mainf['src/cmd/math.tex'])
+    files['src/cmd/equation.tex'] = copy.copy(mainf['src/cmd/equation.tex'])
+    files['src/cmd/image.tex'] = copy.copy(mainf['src/cmd/image.tex'])
+    files['src/cmd/title.tex'] = copy.copy(mainf['src/cmd/title.tex'])
+    files['src/cmd/other.tex'] = copy.copy(mainf['src/cmd/other.tex'])
+    files['src/etc/example.tex'] = file_to_list('src/etc/control_example.tex')
+    files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
+    files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
+    files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
+    files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
+    files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
+    files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     filedelcoments = release['FILEDELCOMENTS']
     filestrip = release['FILESTRIP']
     mainfile = release['MAINFILE']
@@ -1024,7 +1044,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
         data = files[mainfile]
         stconfig = False  # Indica si se han escrito comentarios en configuraciones
 
-        delfile = 'lib/cfg/page.tex'
+        delfile = 'src/cfg/page.tex'
         a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
         files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-1\\baselineskip}\n'
         a, _ = find_block(files[delfile], '\\vspace*{-1.30cm}')
@@ -1064,7 +1084,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                                                          filedelcoments[libr], deletecoments, configfile,
                                                          stconfig, add_ending_line=True)
                         else:
-                            fl.write(d.replace('lib/etc/', ''))
+                            fl.write(d.replace('src/etc/', ''))
                         write = False
                 except:
                     pass
@@ -1142,7 +1162,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
             export_single.set_ghostpath(czip['GHOST'])
             export_single.add_file(subrlfolder + release['SINGLEFILE'])
             export_single.add_folder(subrlfolder + 'img')
-            export_single.add_file(subrlfolder + 'lib/etc/example.tex', subrlfolder + 'lib/etc/')
+            export_single.add_file(subrlfolder + 'src/etc/example.tex', subrlfolder + 'src/etc/')
         export_single.save()
 
     # Limpia el diccionario
@@ -1197,25 +1217,22 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     mainf = RELEASES[REL_INFORME]['FILES']
     files = release['FILES']
     files['main.tex'] = copy.copy(mainf['main.tex'])
-    files['lib/cmd/all.tex'] = copy.copy(mainf['lib/cmd/all.tex'])
-    # files['lib/cmd/column.tex'] = copy.copy(mainf['lib/cmd/column.tex'])
-    files['lib/cmd/core.tex'] = copy.copy(mainf['lib/cmd/core.tex'])
-    files['lib/cmd/math.tex'] = copy.copy(mainf['lib/cmd/math.tex'])
-    files['lib/cmd/equation.tex'] = copy.copy(mainf['lib/cmd/equation.tex'])
-    files['lib/env/environments.tex'] = copy.copy(mainf['lib/env/environments.tex'])
-    files['lib/cmd/image.tex'] = copy.copy(mainf['lib/cmd/image.tex'])
-    files['lib/cmd/title.tex'] = copy.copy(mainf['lib/cmd/title.tex'])
-    files['lib/cmd/other.tex'] = copy.copy(mainf['lib/cmd/other.tex'])
-    files['lib/etc/example.tex'] = file_to_list('lib/etc/reporte_example.tex')
-    files['lib/cfg/init.tex'] = copy.copy(mainf['lib/cfg/init.tex'])
-    files['lib/cfg/final.tex'] = copy.copy(mainf['lib/cfg/final.tex'])
-    files['lib/config.tex'] = copy.copy(mainf['lib/config.tex'])
-    files['lib/cfg/page.tex'] = copy.copy(mainf['lib/cfg/page.tex'])
-    files['lib/style/all.tex'] = copy.copy(mainf['lib/style/all.tex'])
-    files['lib/style/color.tex'] = copy.copy(mainf['lib/style/color.tex'])
-    files['lib/style/code.tex'] = copy.copy(mainf['lib/style/code.tex'])
-    files['lib/style/other.tex'] = copy.copy(mainf['lib/style/other.tex'])
-    files['lib/env/imports.tex'] = copy.copy(mainf['lib/env/imports.tex'])
+    files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
+    files['src/cmd/math.tex'] = copy.copy(mainf['src/cmd/math.tex'])
+    files['src/cmd/equation.tex'] = copy.copy(mainf['src/cmd/equation.tex'])
+    files['src/env/environments.tex'] = copy.copy(mainf['src/env/environments.tex'])
+    files['src/cmd/image.tex'] = copy.copy(mainf['src/cmd/image.tex'])
+    files['src/cmd/title.tex'] = copy.copy(mainf['src/cmd/title.tex'])
+    files['src/cmd/other.tex'] = copy.copy(mainf['src/cmd/other.tex'])
+    files['src/etc/example.tex'] = file_to_list('src/etc/reporte_example.tex')
+    files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
+    files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
+    files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
+    files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
+    files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
+    files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
+    files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     filedelcoments = release['FILEDELCOMENTS']
     filestrip = release['FILESTRIP']
     mainfile = release['MAINFILE']
@@ -1255,7 +1272,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[mainfile] = find_delete_block(files[mainfile], '% RESUMEN O ABSTRACT', white_end_block=True)
     files[mainfile] = find_delete_block(files[mainfile], '% TABLA DE CONTENIDOS - ÍNDICE', white_end_block=True)
     files[mainfile] = find_delete_block(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
-    ra, _ = find_block(files[mainfile], '\input{lib/etc/example}', True)
+    ra, _ = find_block(files[mainfile], '\input{src/etc/example}', True)
     files[mainfile] = add_block_from_list(files[mainfile], main_reporte, ra, addnewline=True)
     ra, _ = find_block(files[mainfile], 'imagendepartamentoescala', True)
     files[mainfile].pop(ra)
@@ -1460,7 +1477,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         data = files[mainfile]
         stconfig = False  # Indica si se han escrito comentarios en configuraciones
 
-        delfile = 'lib/cfg/final.tex'
+        delfile = 'src/cfg/final.tex'
         a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
         files[delfile][a] = '\\titleclass{\\subsubsubsection}{straight}[\subsection]~\\vspace{-1\\baselineskip}\n'
 
@@ -1499,7 +1516,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
                                                          stconfig, add_ending_line=True)
 
                         else:
-                            fl.write(d.replace('lib/etc/', ''))
+                            fl.write(d.replace('src/etc/', ''))
                         write = False
                 except:
                     pass
@@ -2012,27 +2029,24 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     mainf = RELEASES[REL_INFORME]['FILES']
     files = release['FILES']
     files['main.tex'] = file_to_list('tesis_main.tex')
-    files['lib/cmd/all.tex'] = copy.copy(mainf['lib/cmd/all.tex'])
-    # files['lib/cmd/column.tex'] = copy.copy(mainf['lib/cmd/column.tex'])
-    files['lib/cmd/core.tex'] = copy.copy(mainf['lib/cmd/core.tex'])
-    files['lib/cmd/math.tex'] = copy.copy(mainf['lib/cmd/math.tex'])
-    files['lib/cmd/equation.tex'] = copy.copy(mainf['lib/cmd/equation.tex'])
-    files['lib/env/environments.tex'] = copy.copy(mainf['lib/env/environments.tex'])
-    files['lib/cmd/image.tex'] = copy.copy(mainf['lib/cmd/image.tex'])
-    files['lib/page/portrait.tex'] = file_to_list('lib/page/tesis_portrait.tex')
-    files['lib/page/index.tex'] = copy.copy(mainf['lib/page/index.tex'])
-    files['lib/cmd/title.tex'] = copy.copy(mainf['lib/cmd/title.tex'])
-    files['lib/cmd/other.tex'] = copy.copy(mainf['lib/cmd/other.tex'])
-    files['lib/etc/example.tex'] = file_to_list('lib/etc/tesis_example.tex')
-    files['lib/cfg/init.tex'] = copy.copy(mainf['lib/cfg/init.tex'])
-    files['lib/cfg/final.tex'] = copy.copy(mainf['lib/cfg/final.tex'])
-    files['lib/config.tex'] = copy.copy(mainf['lib/config.tex'])
-    files['lib/cfg/page.tex'] = copy.copy(mainf['lib/cfg/page.tex'])
-    files['lib/style/all.tex'] = copy.copy(mainf['lib/style/all.tex'])
-    files['lib/style/color.tex'] = copy.copy(mainf['lib/style/color.tex'])
-    files['lib/style/code.tex'] = copy.copy(mainf['lib/style/code.tex'])
-    files['lib/style/other.tex'] = copy.copy(mainf['lib/style/other.tex'])
-    files['lib/env/imports.tex'] = copy.copy(mainf['lib/env/imports.tex'])
+    files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
+    files['src/cmd/math.tex'] = copy.copy(mainf['src/cmd/math.tex'])
+    files['src/cmd/equation.tex'] = copy.copy(mainf['src/cmd/equation.tex'])
+    files['src/env/environments.tex'] = copy.copy(mainf['src/env/environments.tex'])
+    files['src/cmd/image.tex'] = copy.copy(mainf['src/cmd/image.tex'])
+    files['src/page/portrait.tex'] = file_to_list('src/page/tesis_portrait.tex')
+    files['src/page/index.tex'] = copy.copy(mainf['src/page/index.tex'])
+    files['src/cmd/title.tex'] = copy.copy(mainf['src/cmd/title.tex'])
+    files['src/cmd/other.tex'] = copy.copy(mainf['src/cmd/other.tex'])
+    files['src/etc/example.tex'] = file_to_list('src/etc/tesis_example.tex')
+    files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
+    files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
+    files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
+    files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
+    files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
+    files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
+    files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     filedelcoments = release['FILEDELCOMENTS']
     filestrip = release['FILESTRIP']
     mainfile = release['MAINFILE']
@@ -2174,7 +2188,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Configuraciones que se borran
     cdel = ['portraitstyle', 'firstpagemargintop', 'twocolumnreferences', 'sectionrefenv',
             'predocpageromannumber', 'predocresetpagenumber', 'indexnewpagec', 'indexnewpagef',
-            'indexnewpaget', 'showindex', 'showindexofcontents', 'fontsizetitlei', 'styletitlei', 'indexnewpagee']
+            'indexnewpaget', 'showindexofcontents', 'fontsizetitlei', 'styletitlei', 'indexnewpagee']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -2391,12 +2405,12 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         data = files[mainfile]
         stconfig = False  # Indica si se han escrito comentarios en configuraciones
 
-        delfile = 'lib/page/portrait.tex'
+        delfile = 'src/page/portrait.tex'
         files[delfile].append('\\titleclass{\\subsubsubsection}{straight}[\\subsection]~\n')
         a, _ = find_block(files[delfile], '\\hspace*{')
         files[delfile][a] = '\\hspace*{0.33cm}\n'
 
-        delfile = 'lib/cfg/final.tex'
+        delfile = 'src/cfg/final.tex'
         a, _ = find_block(files[delfile], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
         files[delfile].pop(a)
 
@@ -2435,7 +2449,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                                                          stconfig, add_ending_line=True)
 
                         else:
-                            fl.write(d.replace('lib/etc/', ''))
+                            fl.write(d.replace('src/etc/', ''))
                         write = False
                 except:
                     pass
