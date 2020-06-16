@@ -47,6 +47,7 @@ MSG_GEN_FILE = 'GENERANDO ARCHIVOS ... '
 MSG_LAST_VER = 'ULTIMA VERSION:\t {0}'
 MSG_UPV_FILE = 'ACTUALIZANDO VERSION ...'
 STRIP_ALL_GENERATED_FILES = False  # Aplica strip a todos los archivos en dist/
+STRIP_TEMPLATE_FILE = False  # Elimina comentarios y aplica strip a archivo del template
 
 
 # noinspection PyUnusedLocal
@@ -144,7 +145,7 @@ def find_delete_block(data, block, white_end_block=False, iadd=0, jadd=0, altend
     return del_block_from_list(data, ra + iadd, rb + jadd)
 
 
-def assemble_template_file(templatef, configfile, distfolder, headersize):
+def assemble_template_file(templatef, configfile, distfolder, headersize, files):
     """
     Genera el archivo del template.
 
@@ -152,6 +153,7 @@ def assemble_template_file(templatef, configfile, distfolder, headersize):
     :param configfile: Archivo de configuraciones
     :param distfolder: Carpeta output
     :param headersize: Tamaño del header
+    :param files: Lista de archivos
     """
     new_template_file = []
     for d in range(len(templatef)):
@@ -161,11 +163,16 @@ def assemble_template_file(templatef, configfile, distfolder, headersize):
             if ifile == configfile:
                 new_template_file.append('\input{template_config}\n')
             else:
-                dataifile = file_to_list(distfolder + ifile)
+                if STRIP_TEMPLATE_FILE:
+                    dataifile = file_to_list(distfolder + ifile)
+                else:
+                    dataifile = files[ifile]
                 for j in range(len(dataifile)):
                     if j < headersize:
                         continue
-                    if dataifile[j].strip() == '':
+                    if dataifile[j].strip() == '' and STRIP_TEMPLATE_FILE:
+                        continue
+                    if j == len(dataifile) - 1 and dataifile[j].strip() == '':
                         continue
                     new_template_file.append(dataifile[j])
         else:
@@ -316,7 +323,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         copyfile(distfolder + examplefile, distfolder + 'example.tex')
 
         # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, distfolder, headersize)
+        assemble_template_file(files['template.tex'], configfile, distfolder, headersize, files)
 
     # Se obtiene la cantidad de líneas de código
     lc = 0
@@ -734,7 +741,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
 
         # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
+        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize, files)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -1009,7 +1016,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
         copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
 
         # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
+        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize, files)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -1293,7 +1300,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     flfinl.insert(len(flfinl) - 2, '\\renewcommand{\\abstractname}{\\nameabstract}\n')
     a, _ = find_block(files[fl], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
     files[fl].pop()
-    files[fl].append(files[fl].pop(a))
+    files[fl].append(files[fl].pop(a).strip() + '\n')
 
     # -------------------------------------------------------------------------
     # CORE FUN
@@ -1355,7 +1362,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
 
         # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
+        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize, files)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -2145,7 +2152,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
 
         # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize)
+        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize, files)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
