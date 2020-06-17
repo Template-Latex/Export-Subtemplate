@@ -167,6 +167,20 @@ def replace_block_from_list(data, new, ra, rb):
     return add_block_from_list(del_block_from_list(data, ra, rb), new, ra)
 
 
+def search_append_line(data, search_line, append_line):
+    """
+    Busca y añade una nueva línea.
+
+    :param data: Lista
+    :param search_line: Línea a buscar
+    :param append_line: Línea a añadir
+    :return:
+    """
+    ra, _ = find_line(data, search_line, True)
+    nl = [data[ra], append_line]
+    return replace_block_from_list(data, nl, ra, ra - 1)
+
+
 def file_to_list(filename):
     """
     Carga un archivo y lo pasa a una lista
@@ -249,57 +263,57 @@ def natural_keys(text):
     return [atoi(c) for c in re.split('(\d+)', text)]
 
 
-def sum_str_to_list_izq(s, l):
+def sum_str_to_list_izq(s, lst):
     """
     Suma un string a una lista u otro string por la izquierda
 
     :param s: String
-    :param l: Lista o strng
+    :param lst: Lista o strng
     :return: Lista o string sumado
     """
     assert isinstance(s, str)
-    if isinstance(l, str):
-        return s + l
-    elif isinstance(l, list):
-        for i in range(len(l)):
-            l[i] = s + l[i]
-        return l
+    if isinstance(lst, str):
+        return s + lst
+    elif isinstance(lst, list):
+        for i in range(len(lst)):
+            lst[i] = s + lst[i]
+        return lst
     else:
         raise Exception('Tipo l incorrecto')
 
 
-def sum_str_to_list_der(s, l):
+def sum_str_to_list_der(s, lst):
     """
     Suma un string a una lista u otro string por la derecha.
 
     :param s: String
-    :param l: Lista o strng
+    :param lst: Lista o strng
     :return: Lista o string sumado
     """
     assert isinstance(s, str)
-    if isinstance(l, str):
-        return l + s
-    elif isinstance(l, list):
-        for i in range(len(l)):
-            l[i] += s
-        return l
+    if isinstance(lst, str):
+        return lst + s
+    elif isinstance(lst, list):
+        for i in range(len(lst)):
+            lst[i] += s
+        return lst
     else:
         raise Exception('Tipo l incorrecto')
 
 
-def sum_str_to_list(s, l, pos):
+def sum_str_to_list(s, lst, pos):
     """
     Suma un string a una lista u otro string.
 
     :param s: String
-    :param l: Lista
+    :param lst: Lista
     :param pos: Posición
     :return:
     """
     if pos is POS_IZQ:
-        return sum_str_to_list_izq(s, l)
+        return sum_str_to_list_izq(s, lst)
     elif pos is POS_DER:
-        return sum_str_to_list_der(s, l)
+        return sum_str_to_list_der(s, lst)
     else:
         raise Exception('Pos desconocida')
 

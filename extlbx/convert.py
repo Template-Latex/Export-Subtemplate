@@ -1870,11 +1870,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'showsectioncaptiontab', True)
     nconf = replace_argument(files[fl][ra], 1, 'chap')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'defaultinterline', True)
+    ra, _ = find_block(files[fl], 'documentinterline', True)
     nconf = replace_argument(files[fl][ra], 1, '1.0')
-    files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'defaultnewlinesize', True)
-    nconf = replace_argument(files[fl][ra], 1, '12')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '2.0')
@@ -1893,6 +1890,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'indexstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'tf').replace('%', '   %')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'documentfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '12')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginleft', True)
     nconf = replace_argument(files[fl][ra], 1, '3.0')
@@ -1952,7 +1952,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl] = add_block_from_list(files[fl], nl, ra, True)
 
     # Configuraciones que se borran
-    cdel = ['portraitstyle', 'firstpagemargintop', 'twocolumnreferences', 'sectionrefenv',
+    cdel = ['portraitstyle', 'firstpagemargintop', 'sectionrefenv',
             'predocpageromannumber', 'predocresetpagenumber', 'indexnewpagec', 'indexnewpagef',
             'indexnewpaget', 'showindexofcontents', 'fontsizetitlei', 'styletitlei', 'indexnewpagee']
     for cdel in cdel:
@@ -1963,6 +1963,14 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     ra, _ = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
     files[fl][ra] = '% ESTILO HEADER-FOOTER\n'
+
+    # Añade nuevas entradas
+    files[fl] = search_append_line(files[fl], 'captiontextcolor',
+                                   '\\def\\chaptercolor {black}          % Color de los capítulos\n')
+    files[fl] = search_append_line(files[fl], 'anumsecaddtocounter',
+                                   '\\def\\fontsizechapter {\\huge}       % Tamaño fuente de los capítulos\n')
+    files[fl] = search_append_line(files[fl], 'showdotaftersnum',
+                                   '\\def\\stylechapter {\\bfseries}      % Estilo de los capítulos\n')
 
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
@@ -1981,6 +1989,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # _, rb = find_block(files[fl], '% PARCHES DE LIBRERÍAS', True)
     # files[fl] = add_block_from_list(files[fl], ['\\def\\showappendixsecindex{true}\n'], rb, True)
     files[fl].pop()
+    a, _ = find_block(files[fl], '\\usepackage{apacite}', True)
+    files[fl][a] = files[fl][a].replace('{apacite}', '[nosectionbib]{apacite}')
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
@@ -2000,7 +2010,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # files[fl][ra] = '\tpdfkeywords={pdf, \\nombreuniversidad, \\localizacionuniversidad},\n'
 
     # Elimina referencias en dos columnas
-    files[fl] = find_delete_block(files[fl], '% Referencias en 2 columnas', True)
+    # files[fl] = find_delete_block(files[fl], '% Referencias en 2 columnas', True)
+    ra, _ = find_block(files[fl], '{\\begin{multicols}{2}[\section*{\\refname}', True)
+    files[fl][ra] = '\t{\\begin{multicols}{2}[\\chapter*{\\refname}]\n'
 
     ra, _ = find_block(files[fl], '\pdfmetainfotitulo')
     files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulotesis')
@@ -2049,13 +2061,16 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # files[fl] = replace_block_from_list(files[fl], nl, ra, ra - 1)
     ra, _ = find_block(files[fl], '\\renewcommand{\\appendixtocname}{\\nameappendixsection}')
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
-                                                '\\renewcommand{\chaptername}{\\nomchapter}\n'], ra)
+                                                '\t\\renewcommand{\chaptername}{\\nomchapter}  % Nombre de los capítulos\n'], ra)
     ra, rb = find_block(files[fl], '% Muestra los números de línea', True)
     nl = find_extract(page_tesis, '% Añade página en blanco')
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
     ra, _ = find_block(files[fl], 'hfheaderimagesizeA', True)
     nconf = replace_argument(files[fl][ra], 1, '0.5').replace('%', ' %')
     files[fl][ra] = nconf
+
+    files[fl] = search_append_line(files[fl], '\\sectionfont{\\color',
+                                   '\t\\chaptertitlefont{\\color{\\chaptercolor} \\fontsizechapter \\stylechapter \\selectfont}\n')
 
     # -------------------------------------------------------------------------
     # ENVIRONMENTS
