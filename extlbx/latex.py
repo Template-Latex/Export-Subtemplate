@@ -273,7 +273,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
 
         # Se borran los comentarios
         if deletecoments and libdelcom or forcedelcom:
-            if '%' in srclin and '\%' not in srclin:
+            if '%' in srclin and '\%' not in srclin and '}%' not in srclin and '{%' not in srclin:
                 if libr == configfile:
                     if srclin.upper() == srclin:
                         if stconfig:
