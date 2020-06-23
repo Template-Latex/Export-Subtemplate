@@ -1871,7 +1871,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, 'chap')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'documentinterline', True)
-    nconf = replace_argument(files[fl][ra], 1, '1.0')
+    nconf = replace_argument(files[fl][ra], 1, '1.0').replace('%', '  %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '2.0')
