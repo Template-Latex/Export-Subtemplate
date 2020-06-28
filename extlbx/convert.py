@@ -595,7 +595,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = find_replace_block(files[fl], '\ifthenelse{\equal{\showappendixsecindex}', nl, jadd=-1,
                                    white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
-    files[fl] = find_delete_block(files[fl], '% Importa la librería tikz', white_end_block=True)
+    # files[fl] = find_delete_block(files[fl], '% Importa la librería tikz', white_end_block=True)
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
