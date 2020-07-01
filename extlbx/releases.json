@@ -434,18 +434,9 @@
     },
     "PROFESSIONAL-CV": {
         "CONFIGFILE": "lib/config.tex",
-        "FILEDELCOMENTS": {
-            "cv.tex": false,
-            "lib/config.tex": false,
-            "lib/env.tex": true,
-            "lib/function.tex": true,
-            "lib/imports.tex": true,
-            "lib/initconf.tex": true,
-            "lib/pageconf.tex": true,
-            "lib/styles.tex": true
-        },
         "FILES": {
             "cv.tex": [],
+            "source_template.tex": [],
             "lib/config.tex": [],
             "lib/env.tex": [],
             "lib/function.tex": [],
@@ -453,16 +444,6 @@
             "lib/initconf.tex": [],
             "lib/pageconf.tex": [],
             "lib/styles.tex": []
-        },
-        "FILESTRIP": {
-            "cv.tex": false,
-            "lib/config.tex": false,
-            "lib/env.tex": true,
-            "lib/function.tex": true,
-            "lib/imports.tex": true,
-            "lib/initconf.tex": true,
-            "lib/pageconf.tex": true,
-            "lib/styles.tex": true
         },
         "FUNCTIONFILE": "lib/function.tex",
         "GIT": "../Professional-CV/",
@@ -473,7 +454,6 @@
         "NAME": "Professional-CV",
         "PDF_FOLDER": "../pdf-version/Professional-CV/Professional-CV v{0}.pdf",
         "ROOT": "../Professional-CV/",
-        "SINGLEFILE": "cv_single.tex",
         "STATS": {
             "CTIME": "",
             "FILE": "stats/data/professional-cv.txt",
@@ -486,27 +466,15 @@
             "SOURCE": "https://github.com/Template-Latex/Professional-CV/"
         },
         "ZIP": {
-            "COMPACT": {
-                "ADD": {
-                    "FILES": [
-                        "cv_single.tex"
-                    ],
-                    "FOLDER": [
-                        "images"
-                    ]
-                },
-                "EXCEPTED": [],
-                "FILE": "dist/ProfessionalCV.min.zip",
-                "GHOST": ""
-            },
             "NORMAL": {
                 "ADD": {
                     "FILES": [
-                        "cv.tex"
+                        "cv.tex",
+                        "template.tex",
+                        "template_config.tex"
                     ],
                     "FOLDER": [
-                        "images",
-                        "lib"
+                        "img"
                     ]
                 },
                 "EXCEPTED": [

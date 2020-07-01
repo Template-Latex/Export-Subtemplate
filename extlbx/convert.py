@@ -1468,15 +1468,13 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
 # noinspection PyBroadException
 def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
-             addwhitespace=False, deletecoments=True, plotstats=False, doclean=True, addstat=True, savepdf=True,
+             plotstats=False, doclean=True, addstat=True, savepdf=True,
              mainroot=None, backtoroot=False, statsroot=None):
     """
     Exporta Professional-CV.
 
     :param addstat: Añade estadísticas
-    :param addwhitespace: Añade espacio en blanco al comprimir archivos
     :param backtoroot: Devuelve al root
-    :param deletecoments: Borra comentarios
     :param doclean: Limpia las variables al terminar
     :param docompile: Indica si compila
     :param dosave: Indica si guarda
@@ -1500,18 +1498,15 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
 
     # Obtiene archivos
     configfile = release['CONFIGFILE']
-    filedelcoments = release['FILEDELCOMENTS']
     files = release['FILES']
-    filestrip = release['FILESTRIP']
     initconffile = release['INITCONFFILE']
     mainfile = release['MAINFILE']
-    mainsinglefile = release['SINGLEFILE']
     stat = release['STATS']
 
     # Constantes
     main_data = open(mainfile)
     main_data.read()
-    initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionheader = '% Versión:      {0} ({1})\n'
@@ -1583,119 +1578,17 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
     for f in files.keys():
         lc += len(files[f])
 
+    # -------------------------------------------------------------------------
+    # MODIFICA EL MAIN
+    # -------------------------------------------------------------------------
+    # ra = find_line(files[mainfile], 'titulodelinforme')
+
     if dosave:
+        # Mueve el archivo de configuraciones
+        copyfile(configfile, 'template_config.tex')
 
-        # Se modifican propiedades para establecer tipo compacto
-        data = files[initconffile]
-        d_ttype = replace_argument(d_ttype, 1, 'Compacto')
-        d_tvdev = replace_argument(d_tvdev, 1, versiondev + '-C')
-        data[l_thash] = d_thash
-        data[l_ttype] = d_ttype
-        data[l_tvdev] = d_tvdev
-
-        # Se añade salto de línea a función maintitle
-        funfile = release['FUNCTIONFILE']
-        fl = files[funfile]
-        a, b = find_block(fl, '\\noindent {\\fontsizemaintitle \stylemaintitle #1} \quad')
-        files[funfile][a] = '\\noindent {\\fontsizemaintitle \stylemaintitle #1} \quad \emph{#2} \hfill \quad {' \
-                            '\scriptsize #3} \\\\ \\vspace{-1em} \\\\ '
-
-        # Se crea el archivo unificado
-        fl = open(mainsinglefile, 'w')
-        data = files[mainfile]
-        data.pop(1)  # Se elimina el tipo de documento del header
-        data.insert(1,
-                    '% Advertencia:  Documento generado automáticamente a partir de cv.tex y\n%               los '
-                    'archivos .tex de la carpeta lib/\n')
-        line = 0
-        stconfig = False  # Indica si se han escrito comentarios en configuraciones
-
-        # Se recorren las líneas del archivo
-        for d in data:
-            write = True
-            if line < initdocumentline:
-                fl.write(d)
-                write = False
-            # Si es una línea en blanco se agrega
-            if d == '\n' and write:
-                fl.write(d)
-            else:
-                # Si es un import pega el contenido
-                try:
-                    if d[0:6] == '\input':
-                        libr = d.replace('\input{', '').replace('}', '').strip()
-                        libr = libr.split(' ')[0]
-                        if '.tex' not in libr:
-                            libr += '.tex'
-
-                        # Se escribe desde el largo del header en adelante
-                        libdata = files[libr]  # Datos del import
-                        libstirp = filestrip[libr]  # Eliminar espacios en blanco
-                        libdelcom = filedelcoments[libr]  # Borrar comentarios
-
-                        for libdatapos in range(headersize, len(libdata)):
-                            srclin = libdata[libdatapos]
-
-                            # Se borran los comentarios
-                            if deletecoments and libdelcom:
-                                if '%' in srclin:
-                                    if libr == configfile:
-                                        if srclin.upper() == srclin:
-                                            if stconfig:
-                                                fl.write('\n')
-                                            fl.write(srclin)
-                                            stconfig = True
-                                            continue
-                                    comments = srclin.strip().split('%')
-                                    if comments[0] is '':
-                                        srclin = ''
-                                    else:
-                                        srclin = srclin.replace('%' + comments[1], '')
-                                        if libdatapos != len(libdata) - 1:
-                                            srclin = srclin.strip() + '\n'
-                                        else:
-                                            srclin = srclin.strip()
-                                elif srclin.strip() is '':
-                                    srclin = ''
-                            else:
-                                if libr == configfile:
-                                    try:
-                                        if libdata[libdatapos + 1][0] == '%' and srclin.strip() is '':
-                                            srclin = '\n'
-                                    except:
-                                        pass
-
-                            # Se ecribe la línea
-                            if srclin is not '':
-                                # Se aplica strip dependiendo del archivo
-                                if libstirp:
-                                    fl.write(srclin.strip())
-                                else:
-                                    fl.write(srclin)
-
-                        if libr != configfile:
-                            fl.write('\n')  # Se agrega espacio vacío
-                        write = False
-                except:
-                    pass
-
-                # Se agrega un espacio en blanco a la página después del comentario
-                if line >= initdocumentline and write:
-                    if d[0:2] == '% ' and d[3] != ' ' and d != '% CONFIGURACIONES\n':
-                        if d != '% FIN DEL DOCUMENTO\n' and addwhitespace:
-                            fl.write('\n')
-                            pass
-                        d = d.replace('IMPORTACIÓN', 'DECLARACIÓN')
-                        fl.write(d)
-                    elif d == '% CONFIGURACIONES\n':
-                        pass
-                    else:
-                        fl.write(d)
-
-            # Aumenta la línea
-            line += 1
-
-        fl.close()
+        # Ensambla el archivo del template
+        assemble_template_file(files['source_template.tex'], configfile, '', headersize, files)
 
     printfun(MSG_FOKTIMER.format(time.time() - t))
 
@@ -1704,16 +1597,16 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
         t = time.time()
         with open(os.devnull, 'w') as FNULL:
             printfun(MSG_DCOMPILE, end='')
-            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t1 = time.time() - t
             t = time.time()
-            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t2 = time.time() - t
             t = time.time()
-            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t3 = time.time() - t
             t = time.time()
-            call(['pdflatex', '-interaction=nonstopmode', mainsinglefile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
+            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
             t4 = time.time() - t
             # tmean = (t1 + t2) / 2
             tmean = min(t1, t2, t3, t4)
@@ -1721,7 +1614,7 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
 
             # Copia a la carpeta pdf_version
             if savepdf:
-                copyfile(mainsinglefile.replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
+                copyfile(mainfile.replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
 
         # Se agregan las estadísticas
         if addstat:
@@ -1739,13 +1632,6 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
         export_normal.add_file(czip['ADD']['FILES'])
         export_normal.add_folder(czip['ADD']['FOLDER'])
         export_normal.save()
-
-        # Se exporta el proyecto único
-        czip = release['ZIP']['COMPACT']
-        export_single = Zip(mainroot + czip['FILE'])
-        export_single.add_file(czip['ADD']['FILES'], 'lib/')
-        export_single.add_folder(czip['ADD']['FOLDER'])
-        export_single.save()
 
     # Se borra la información generada en las listas
     if doclean:
@@ -2061,7 +1947,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # files[fl] = replace_block_from_list(files[fl], nl, ra, ra - 1)
     ra, _ = find_block(files[fl], '\\renewcommand{\\appendixtocname}{\\nameappendixsection}')
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
-                                                '\t\\renewcommand{\chaptername}{\\nomchapter}  % Nombre de los capítulos\n'], ra)
+                                                '\t\\renewcommand{\chaptername}{\\nomchapter}  % Nombre de los capítulos\n'],
+                                    ra)
     ra, rb = find_block(files[fl], '% Muestra los números de línea', True)
     nl = find_extract(page_tesis, '% Añade página en blanco')
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
