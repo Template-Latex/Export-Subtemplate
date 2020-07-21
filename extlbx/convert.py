@@ -544,7 +544,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
     # Configuraciones que se borran
     cdel = ['addemptypagetwosides', 'nomlttable', 'nomltsrc', 'nomltfigure',
-            'nomltcont', 'nameportraitpage', 'nameabstract', 'indextitlecolor',
+            'nomltcont', 'nameportraitpage', 'indextitlecolor',
             'portraittitlecolor', 'fontsizetitlei', 'styletitlei',
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
             'nomchapter', 'nomnpageof', 'indexforcenewpage', 'predocpageromannumber',
@@ -557,7 +557,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = del_block_from_list(files[fl], ra, rb)
     for cdel in ['namereferences', 'nomltwsrc', 'nomltwfigure', 'nomltwtable', 'nameappendixsection',
                  'nomltappendixsection', 'namemathcol', 'namemathdefn', 'namemathej', 'namemathlem',
-                 'namemathobs', 'namemathprp', 'namemaththeorem']:
+                 'namemathobs', 'namemathprp', 'namemaththeorem', 'nameabstract']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     # ra, rb = find_block(files[fl], 'showdotaftersnum', True) Desactivado desde v3.3.4
@@ -1296,8 +1296,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # FINALCONF
     # -------------------------------------------------------------------------
     fl = release['FINALCONF']
-    flfinl = files[fl]  # type: list
-    flfinl.insert(len(flfinl) - 2, '\\renewcommand{\\abstractname}{\\nameabstract}\n')
+    # flfinl = files[fl]  # type: list
+    # flfinl.insert(len(flfinl) - 2, '\\renewcommand{\\abstractname}{\\nameabstract}\n')
     a, _ = find_block(files[fl], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
     files[fl].pop()
     files[fl].append(files[fl].pop(a).strip() + '\n')
