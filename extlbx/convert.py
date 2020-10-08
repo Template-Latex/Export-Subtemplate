@@ -1775,7 +1775,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace(' %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'indexstyle', True)
-    nconf = replace_argument(files[fl][ra], 1, 'tf').replace('%', '   %')
+    nconf = replace_argument(files[fl][ra], 1, 'tf').replace('%', ' %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'documentfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '12')
@@ -1806,9 +1806,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'natbibrefstyle', True)
-    nconf = replace_argument(files[fl][ra], 1, 'plainnat').replace('  %', '%')
-    files[fl][ra] = nconf
+    # ra, _ = find_block(files[fl], 'natbibrefstyle', True)
+    # nconf = replace_argument(files[fl][ra], 1, 'plainnat').replace('  %', '%')
+    # files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'stylecitereferences', True)
     nconf = replace_argument(files[fl][ra], 1, 'natbib')
     files[fl][ra] = nconf
