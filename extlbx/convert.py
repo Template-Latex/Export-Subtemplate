@@ -573,7 +573,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     nconf = replace_argument(files[fl][ra], 1, '1')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'showlinenumbers', True)
-    files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1,style2,style3\n')
+    files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1 a style4\n')
     # files[fl].pop()
 
     # -------------------------------------------------------------------------
