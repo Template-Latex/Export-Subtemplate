@@ -548,7 +548,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             'portraittitlecolor', 'fontsizetitlei', 'styletitlei',
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
             'nomchapter', 'nomnpageof', 'indexforcenewpage', 'predocpageromannumber',
-            'predocresetpagenumber', 'margineqnindexbottom', 'margineqnindextop', 'nomlteqn']
+            'predocresetpagenumber', 'margineqnindexbottom', 'margineqnindextop', 'nomlteqn',
+            'bibtexindexbibliography']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -631,6 +632,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
     files[fl] = find_delete_block(files[fl], '% Se añade listings a tocloft', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Se revisa si se importa tikz', white_end_block=True)
+
+    # Elimina cambio del indice en bibtex
+    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
 
     # -------------------------------------------------------------------------
     # PAGECONF
@@ -1194,7 +1198,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     cdel = ['firstpagemargintop', 'portraitstyle', 'predocpageromannumber', 'predocpageromanupper',
             'predocresetpagenumber', 'fontsizetitlei', 'styletitlei', 'nomltcont', 'nomltfigure', 'nomltsrc',
             'nomlttable', 'nameportraitpage', 'indextitlecolor', 'addindextobookmarks', 'portraittitlecolor',
-            'margineqnindexbottom', 'margineqnindextop', 'nomlteqn']
+            'margineqnindexbottom', 'margineqnindextop', 'nomlteqn', 'bibtexindexbibliography']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -1286,6 +1290,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
+
+    # Elimina cambio del indice en bibtex
+    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
 
     # -------------------------------------------------------------------------
     # PAGECONF
@@ -1815,6 +1822,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # ra, _ = find_block(files[fl], 'addindextobookmarks', True)
     # nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     # files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'addindextobookmarks', True)
     nl = ['\\def\\addabstracttobookmarks {true} % Añade el resumen a los marcadores del pdf\n',
           '\\def\\addagradectobookmarks {true}  % Añade el agradecimiento a los marcadores\n',
           files[fl][ra],
@@ -1838,7 +1846,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl] = add_block_from_list(files[fl], nl, ra, True)
 
     # Configuraciones que se borran
-    cdel = ['portraitstyle', 'firstpagemargintop', 'sectionrefenv',
+    cdel = ['portraitstyle', 'firstpagemargintop', 'bibtexenvrefsecnum',
             'predocpageromannumber', 'predocresetpagenumber', 'indexnewpagec', 'indexnewpagef',
             'indexnewpaget', 'showindexofcontents', 'fontsizetitlei', 'styletitlei', 'indexnewpagee']
     for cdel in cdel:
@@ -1914,6 +1922,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
+
+    # Cambia section por chapter en la redefinición de bibliography
+    ra, _ = find_block(files[fl], '% bibtex tesis en chapter')
+    files[fl][ra] = replace_argument(files[fl][ra], 2, 'chapter')
 
     # -------------------------------------------------------------------------
     # ÍNDICE
