@@ -1213,7 +1213,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
                                                 '\def\indexdepth{4}                 % Profundidad de los marcadores\n'],
                                     ra, addnewline=True)
     ra, rb = find_block(files[fl], 'pagemarginbottom', True)
-    nconf = replace_argument(files[fl][ra], 1, '3.81').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '2.5')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemarginleft', True)
     nconf = replace_argument(files[fl][ra], 1, '3.81')
@@ -1222,7 +1222,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     nconf = replace_argument(files[fl][ra], 1, '3.81')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemargintop', True)
-    nconf = replace_argument(files[fl][ra], 1, '3.81').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '2.5')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style7')
