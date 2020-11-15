@@ -385,8 +385,8 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
 
         # Se recorre cada versión y se genera el .zip
-        for m in release['ZIP']['OTHERS']['DATA']:
-            data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
+        for m in DEPTOS:
+            data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0] + '}\n'
             data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
 
             # Se reescriben los archivos
@@ -1176,7 +1176,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[mainfile] = find_delete_block(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
     ra, _ = find_block(files[mainfile], '\input{src/etc/example}', True)
     files[mainfile] = add_block_from_list(files[mainfile], main_reporte, ra, addnewline=True)
-    ra, _ = find_block(files[mainfile], 'imagendepartamentoescala', True)
+    ra, _ = find_block(files[mainfile], 'imagendepartamentoparams', True)
     files[mainfile].pop(ra)
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
@@ -1429,8 +1429,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
             fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
 
             # Se recorre cada versión y se genera el .zip
-            for m in release['ZIP']['OTHERS']['DATA']:
-                data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
+            for m in DEPTOS:
+                data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0] + '}\n'
                 data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
 
                 # Se reescriben los archivos
@@ -2126,8 +2126,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
             fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
 
             # Se recorre cada versión y se genera el .zip
-            for m in release['ZIP']['OTHERS']['DATA']:
-                data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0][1] + '}\n'
+            for m in DEPTOS:
+                data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0] + '}\n'
                 data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/uchile2}\n'
 
                 # Se reescriben los archivos
