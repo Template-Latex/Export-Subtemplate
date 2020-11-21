@@ -286,10 +286,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
         # Se reescribe el archivo
         if dosave and (f == mainfile or f == examplefile):  # Se desactiva la escritura de archivos
-            newfl = open(f, 'w')
-            for j in data:
-                newfl.write(j)
-            newfl.close()
+            save_list_to_file(data, f)
 
     # Se guardan archivos en DIST
     if dosave:
@@ -366,6 +363,17 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Se exporta el proyecto normal
     if dosave:
+
+        # Se exportan los distintos estilos de versiones
+        jmainfilel = 0
+        data_mainfile = file_to_list(distfolder + mainfile)
+        for j in range(len(data_mainfile)):
+            if get_file_from_input(data_mainfile[j]) == examplefile:
+                data_mainfile[j] = '\input{example} % Ejemplo, se puede borrar\n'
+                jmainfilel = j
+        save_list_to_file(data_mainfile, distfolder + mainfile)
+
+        # Se crea el archivo principal
         czip = release['ZIP']['NORMAL']
         export_normal = Zip(mainroot + czip['FILE'])
         export_normal.set_ghostpath(distfolder)
@@ -373,12 +381,6 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         export_normal.add_file(czip['ADD']['FILES'])
         export_normal.add_folder(czip['ADD']['FOLDER'])
         export_normal.save()
-
-        # Se exportan los distintos estilos de versiones
-        data_mainfile = file_to_list(distfolder + mainfile)
-        for j in range(len(data_mainfile)):
-            if get_file_from_input(data_mainfile[j]) == examplefile:
-                data_mainfile[j] = '\input{example} % Ejemplo, se puede borrar\n'
 
         # Se buscan las líneas del departamento y de la imagen
         fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
@@ -390,10 +392,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
 
             # Se reescriben los archivos
-            new_mainfile = open(distfolder + mainfile, 'w')
-            for i in data_mainfile:
-                new_mainfile.write(i)
-            new_mainfile.close()
+            save_list_to_file(data_mainfile, distfolder + mainfile)
 
             # Se genera el .zip
             czip = release['ZIP']['NORMAL']
@@ -407,21 +406,13 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                 export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
             export_normal.save()
 
+        # Rollback archivo. Necesario para subtemplates
         data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
                                                              'Departamento de la Universidad')
         data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
                                                              'departamentos/fcfm')
-
-        # Se reescriben los archivos
-        new_mainfile = open(distfolder + mainfile, 'w')
-        for i in data_mainfile:
-            new_mainfile.write(i)
-        new_mainfile.close()
-
-    # try:
-    #     pyperclip.copy('Version ' + versiondev)
-    # except:
-    #     pass
+        data_mainfile[jmainfilel] = examplefile + ' % Ejemplo, se puede borrar\n'
+        save_list_to_file(data_mainfile, distfolder + mainfile)
 
     if doclean:
         clear_dict(RELEASES[REL_INFORME], 'FILES')
@@ -429,8 +420,6 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     # Se cambia a carpeta root
     if backtoroot:
         os.chdir(mainroot)
-
-    return
 
 
 # noinspection PyUnboundLocalVariable
@@ -534,6 +523,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     for j in range(len(files[mainfile])):
         if get_file_from_input(files[mainfile][j]) == examplefile:
             files[mainfile][j] = '\input{example} % Ejemplo, se puede borrar\n'
+    ra = find_line(files[mainfile], 'imagendepartamentoparams')
+    files[mainfile][ra] = replace_argument(files[mainfile][ra], 1, 'height=1.75cm')
 
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
@@ -804,7 +795,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
     # Retorna a root
     os.chdir(mainroot)
-    return
 
 
 def export_controles(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
@@ -1078,7 +1068,6 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     clear_dict(RELEASES[REL_CONTROLES], 'FILES')
 
     os.chdir(mainroot)
-    return
 
 
 # noinspection PyUnboundLocalVariable
@@ -1434,10 +1423,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
                 data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
 
                 # Se reescriben los archivos
-                new_mainfile = open(subrlfolder + mainfile, 'w')
-                for i in data_mainfile:
-                    new_mainfile.write(i)
-                new_mainfile.close()
+                save_list_to_file(data_mainfile, subrlfolder + mainfile)
 
                 # Se genera el .zip
                 czip = release['ZIP']['NORMAL']
@@ -1452,16 +1438,12 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
                         export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
                 export_normal.save()
 
+            # Rollback archivo principal. Necesario para subtemplates
             data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
                                                                  'Departamento de la Universidad')
             data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
                                                                  'departamentos/fcfm')
-
-            # Se reescriben los archivos
-            new_mainfile = open(subrlfolder + mainfile, 'w')
-            for i in data_mainfile:
-                new_mainfile.write(i)
-            new_mainfile.close()
+            save_list_to_file(data_mainfile, subrlfolder + mainfile)
 
     # Limpia el diccionario
     if doclean:
@@ -1470,7 +1452,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Retorna a root
     os.chdir(mainroot)
-    return
 
 
 # noinspection PyBroadException
@@ -1647,8 +1628,6 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
     # Se cambia a carpeta root
     if backtoroot:
         os.chdir(mainroot)
-
-    return
 
 
 # noinspection PyUnboundLocalVariable
@@ -1964,9 +1943,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, rb = find_block(files[fl], '% Muestra los números de línea', True)
     nl = find_extract(page_tesis, '% Añade página en blanco')
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
-    ra, _ = find_block(files[fl], 'hfheaderimagesizeA', True)
-    nconf = replace_argument(files[fl][ra], 1, '0.5').replace('%', ' %')
-    files[fl][ra] = nconf
 
     files[fl] = search_append_line(files[fl], '\\sectionfont{\\color',
                                    '\t\\chaptertitlefont{\\color{\\chaptercolor} \\fontsizechapter \\stylechapter \\selectfont}\n')
@@ -2131,10 +2107,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                 data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/uchile2}\n'
 
                 # Se reescriben los archivos
-                new_mainfile = open(subrlfolder + mainfile, 'w')
-                for i in data_mainfile:
-                    new_mainfile.write(i)
-                new_mainfile.close()
+                save_list_to_file(data_mainfile, subrlfolder + mainfile)
 
                 # Se genera el .zip
                 czip = release['ZIP']['NORMAL']
@@ -2149,16 +2122,12 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                         export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
                 export_normal.save()
 
+            # Rollback archivo principal. Necesario para subtemplates
             data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
                                                                  'Departamento de la Universidad')
             data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
                                                                  'departamentos/uchile2')
-
-            # Se reescriben los archivos
-            new_mainfile = open(subrlfolder + mainfile, 'w')
-            for i in data_mainfile:
-                new_mainfile.write(i)
-            new_mainfile.close()
+            save_list_to_file(data_mainfile, subrlfolder + mainfile)
 
     # Limpia el diccionario
     if doclean:
@@ -2167,4 +2136,3 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
     # Retorna a root
     os.chdir(mainroot)
-    return

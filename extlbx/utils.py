@@ -323,6 +323,7 @@ def get_file_from_input(line):
     Retorna el archivo importado en input.
 
     :param line: Linea de codigo latex
+    :type line: str
     :return: Archivo
     """
     return line.strip().replace('\input{', '').replace('}', '').split(' ')[0] + '.tex'
@@ -333,7 +334,9 @@ def save_list_to_file(lst, filename):
     Guarda la lista a un archivo.
 
     :param lst: Lista
+    :type lst: list
     :param filename: Archivo
+    :type filename: str
     """
     o = open(filename, 'w')
     for j in lst:
