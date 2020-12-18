@@ -155,6 +155,7 @@ def assemble_template_file(templatef, configfile, distfolder, headersize, files)
     :param headersize: Tamaño del header
     :param files: Lista de archivos
     """
+    modlists = [' !DELCOM', ' !DISTNL', ' !NL', ' !STRIP', ' !PREVNL', ' !PREVDISTNL']
     new_template_file = []
     for d in range(len(templatef)):
         lined = templatef[d]
@@ -167,14 +168,20 @@ def assemble_template_file(templatef, configfile, distfolder, headersize, files)
                     dataifile = file_to_list(distfolder + ifile)
                 else:
                     dataifile = files[ifile]
+                if new_template_file[-1].strip() != '' and '% ' not in new_template_file[-1]:
+                    new_template_file.append('\n')
                 for j in range(len(dataifile)):
+                    jline = dataifile[j]
                     if j < headersize:
                         continue
-                    if dataifile[j].strip() == '' and STRIP_TEMPLATE_FILE:
+                    if jline.strip() == '' and STRIP_TEMPLATE_FILE:
                         continue
-                    if j == len(dataifile) - 1 and dataifile[j].strip() == '':
+                    if j == len(dataifile) - 1 and jline.strip() == '':
                         continue
-                    new_template_file.append(dataifile[j])
+                    if '% ' in jline:
+                        for mod in modlists:
+                            jline = jline.replace(mod, '')
+                    new_template_file.append(jline)
         else:
             new_template_file.append(lined)
     # tlen = len(new_template_file) - 1
@@ -1244,7 +1251,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
-    ra, _ = find_block(files[fl], '\showappendixsecindex', False)
+    ra, _ = find_block(files[fl], '\showappendixsecindex')
     nl = ['\\def\\showappendixsecindex{false}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
@@ -1722,7 +1729,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     cfg = '\\def\\objectchaptermargin {false}   % Activa margen de objetos entre capítulos\n'
     ra, _ = find_block(files[fl], 'objectindexindent', True)
     nl = [cfg, files[fl][ra]]
-    files[fl] = add_block_from_list(files[fl], nl, ra, False)
+    files[fl] = add_block_from_list(files[fl], nl, ra)
 
     # Modifica configuraciones
     ra, _ = find_block(files[fl], 'addemptypagetwosides', True)
@@ -1770,7 +1777,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, '3.0')
     nl = [nconf,
           '\\def\\pagemarginleftportrait {2.5}  % Margen izquierdo página portada [cm]\n']
-    files[fl] = add_block_from_list(files[fl], nl, ra, False)
+    files[fl] = add_block_from_list(files[fl], nl, ra)
     ra, _ = find_block(files[fl], 'pagemarginright', True)
     nconf = replace_argument(files[fl][ra], 1, '2.0').replace('%', ' %')
     files[fl][ra] = nconf
