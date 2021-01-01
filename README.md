@@ -52,4 +52,4 @@ Formato de línea:
 
 
 ## Autor
-<a href="https://ppizarror.com" title="ppizarror">Pablo Pizarro R.</a> | 2017 - 2020
+<a href="https://ppizarror.com" title="ppizarror">Pablo Pizarro R.</a> | 2017 - 2021
