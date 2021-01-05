@@ -6,7 +6,8 @@
 <div align="center"><a href="https://ppizarror.com"><img alt="@ppizarror" src="https://latex.ppizarror.com/res/badges/autor.svg" /></a>
 <a href="https://opensource.org/licenses/MIT/"><img alt="Licencia MIT" src="https://latex.ppizarror.com/res/badges/licenciamit.svg" /></a>
 <a href="https://www.python.org/downloads/"><img alt="Python 2.7" src="https://latex.ppizarror.com/res/badges/python27.svg" /></a>
-</div><br />
+</div>
+<br />
 
 <p align="center">
   <img src="https://latex.ppizarror.com/res/other/export-subtemplate.PNG" width="40%" />
