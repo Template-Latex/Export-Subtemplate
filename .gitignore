@@ -9,8 +9,7 @@
 *.png
 
 # Subreleases
-subreleases/
-.releases/
+.releases.zip
 dist/*.zip
 
 # Logs
