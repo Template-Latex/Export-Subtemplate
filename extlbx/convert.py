@@ -1462,9 +1462,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
 
 # noinspection PyBroadException
-def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
-             plotstats=False, doclean=True, addstat=True, savepdf=True,
-             mainroot=None, backtoroot=False, statsroot=None):
+def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
+              plotstats=False, doclean=True, addstat=True, savepdf=True,
+              mainroot=None, backtoroot=False, statsroot=None):
     """
     Exporta Professional-CV.
 
@@ -1572,11 +1572,6 @@ def exportcv(version, versiondev, versionhash, printfun=print, dosave=True, doco
     lc = 0
     for f in files.keys():
         lc += len(files[f])
-
-    # -------------------------------------------------------------------------
-    # MODIFICA EL MAIN
-    # -------------------------------------------------------------------------
-    # ra = find_line(files[mainfile], 'titulodelinforme')
 
     if dosave:
         # Mueve el archivo de configuraciones
