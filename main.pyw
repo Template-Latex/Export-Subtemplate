@@ -43,7 +43,7 @@ GITHUB_PDF_COMMIT = 'Se agrega pdf v{0} de {1}'
 GITHUB_PRINT_MSG = 'SUBIENDO v{0} DE {1} ... '
 GITHUB_REP_COMMIT = 'Version {0}'
 GITHUB_STAT_COMMIT = 'Estadisticas compilacion v{0} de {1}'
-GITHUB_UPDATE_COMMIT = 'Se actualiza upload.json'
+GITHUB_UPDATE_COMMIT = 'Update upload.json'
 HELP = {
     'ESC': 'Cierra la aplicación',
     'F1': 'Muestra esta ayuda',
