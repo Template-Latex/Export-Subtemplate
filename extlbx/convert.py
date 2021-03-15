@@ -1847,7 +1847,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl] = search_append_line(files[fl], 'showdotaftersnum',
                                    '\\def\\stylechapter {\\bfseries}      % Estilo de los capítulos\n')
     files[fl] = search_append_line(files[fl], '% ESTILO HEADER-FOOTER',
-                                   '\\def\\chapterstyle {style1}         % Estilo de los capítulos\n')
+                                   '\\def\\chapterstyle {style1}         % Estilo de los capítulos (12 estilos)\n')
 
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
