@@ -1846,6 +1846,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                                    '\\def\\fontsizechapter {\\huge}       % Tamaño fuente de los capítulos\n')
     files[fl] = search_append_line(files[fl], 'showdotaftersnum',
                                    '\\def\\stylechapter {\\bfseries}      % Estilo de los capítulos\n')
+    files[fl] = search_append_line(files[fl], '% ESTILO HEADER-FOOTER',
+                                   '\\def\\chapterstyle {style1}         % Estilo de los capítulos\n')
 
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
@@ -1907,6 +1909,12 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Cambia section por chapter en la redefinición de bibliography
     ra, _ = find_block(files[fl], '% bibtex tesis en chapter')
     files[fl][ra] = replace_argument(files[fl][ra], 2, 'chapter')
+
+    # Agrega estilos de capítulos
+    files[fl].pop()
+    nl = find_extract(init_tesis, '% Estilos de capítulos', white_end_block=True)
+    for i in nl:
+        files[fl].append(i)
 
     # -------------------------------------------------------------------------
     # ÍNDICE
