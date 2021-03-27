@@ -1299,8 +1299,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # FINALCONF
     # -------------------------------------------------------------------------
     fl = release['FINALCONF']
-    # flfinl = files[fl]  # type: list
-    # flfinl.insert(len(flfinl) - 2, '\\renewcommand{\\abstractname}{\\nameabstract}\n')
     a, _ = find_block(files[fl], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
     files[fl].pop()
     files[fl].append(files[fl].pop(a).strip() + '\n')
