@@ -354,7 +354,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
             # t4 = time.time() - t
             tmean = (t1 + t2) / 2
             # tmean = min(t1, t2, t3, t4)
-            printfun(MSG_FOKTIMER.format(tmean))
+            printfun(MSG_FOKTIMER.format(min(t1, t2)))
 
             # Copia a la carpeta pdf_version
             if savepdf:
@@ -770,7 +770,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                 # t4 = time.time() - t
                 tmean = (t1 + t2) / 2
                 # tmean = min(t1, t2, t3, t4)
-                printfun(MSG_FOKTIMER.format(tmean))
+                printfun(MSG_FOKTIMER.format(min(t1, t2)))
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
@@ -1044,7 +1044,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                 # t4 = time.time() - t
                 tmean = (t1 + t2) / 2
                 # tmean = min(t1, t2, t3, t4)
-                printfun(MSG_FOKTIMER.format(tmean))
+                printfun(MSG_FOKTIMER.format(min(t1, t2)))
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
@@ -1394,7 +1394,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
                 # t4 = time.time() - t
                 tmean = (t1 + t2) / 2
                 # tmean = min(t1, t2, t3, t4)
-                printfun(MSG_FOKTIMER.format(tmean))
+                printfun(MSG_FOKTIMER.format(min(t1, t2)))
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
@@ -1602,7 +1602,7 @@ def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, doc
             # t4 = time.time() - t
             tmean = (t1 + t2) / 2
             # tmean = min(t1, t2, t3, t4)
-            printfun(MSG_FOKTIMER.format(tmean))
+            printfun(MSG_FOKTIMER.format(min(t1, t2)))
 
             # Copia a la carpeta pdf_version
             if savepdf:
@@ -2081,7 +2081,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                 # t4 = time.time() - t
                 tmean = (t1 + t2) / 2
                 # tmean = min(t1, t2, t3, t4)
-                printfun(MSG_FOKTIMER.format(t2))
+                printfun(MSG_FOKTIMER.format(min(t1, t2)))
 
                 # Copia a la carpeta pdf_version
                 if savepdf:
