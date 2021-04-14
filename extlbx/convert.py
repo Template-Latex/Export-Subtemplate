@@ -1912,6 +1912,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], '% bibtex tesis en chapter')
     files[fl][ra] = replace_argument(files[fl][ra], 2, 'chapter')
 
+    # Corrige footnotes
+    ra, _ = find_block(files[fl], 'counterwithout*{footnote}{chapter}')
+    files[fl][ra] = files[fl][ra].replace('% ', '')
+
     # Agrega estilos de capítulos
     files[fl].pop()
     nl = find_extract(init_tesis, '% Estilos de capítulos', white_end_block=True)
@@ -1992,6 +1996,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Cambia valor de anexos sección
     ra, _ = find_block(files[fl], 'GLOBALsectionalph')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'false')
+
+    # Reemplaza nueva linea en agradecimientos
+    ra, _ = find_block(files[fl], '% EMPTYLINE')
+    files[fl][ra] = '\n'
 
     # -------------------------------------------------------------------------
     # CORE FUN

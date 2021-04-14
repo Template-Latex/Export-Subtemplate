@@ -28,7 +28,7 @@ Licencia:
 """
 
 __author__ = 'Pablo Pizarro R.'
-__version__ = '3.1.2'  # (01/01/2021)
+__version__ = '3.1.3'  # (13/04/2021)
 
 from releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, RELEASES, REL_REPORTE
 import convert
