@@ -1787,8 +1787,11 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'cfgbookmarksopenlevel', True)
     nconf = replace_argument(files[fl][ra], 1, '0')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'cfgpdfsecnumbookmarks', True)
-    nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
+    # ra, _ = find_block(files[fl], 'cfgpdfsecnumbookmarks', True)
+    # nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
+    # files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'addindexsubtobookmarks', True)
+    nconf = replace_argument(files[fl][ra], 1, 'true').replace('{', ' {')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'showappendixsecindex', True)
     nconf = replace_argument(files[fl][ra], 1, 'false')
@@ -1943,6 +1946,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     w = '% Cambia tabulación índice de objetos para alinear con contenidos'
     nl = find_extract(index_tesis, w, True)
     files[fl] = find_replace_block(files[fl], w, nl, True)
+
+    # Cambia belowpdfbookmark
+    ra, _ = find_block(files[fl], 'belowpdfbookmark', True)
+    files[fl][ra] = files[fl][ra].replace('belowpdfbookmark', 'pdfbookmark')
 
     # -------------------------------------------------------------------------
     # PAGECONF
