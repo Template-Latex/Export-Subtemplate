@@ -2005,8 +2005,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'false')
 
     # Reemplaza nueva linea en agradecimientos
-    ra, _ = find_block(files[fl], '% EMPTYLINE')
-    files[fl][ra] = '\n'
+    # ra, _ = find_block(files[fl], '% EMPTYLINE')
+    # files[fl][ra] = '\n'
 
     # -------------------------------------------------------------------------
     # CORE FUN
