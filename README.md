@@ -51,6 +51,6 @@ Formato de línea:
 | !PREVNL | Añade una nueva línea en modo compacto |
 | !PREVDISTNL | Añade una nueva línea solo en el modo distribución |
 
-
 ## Autor
+
 <a href="https://ppizarror.com" title="ppizarror">Pablo Pizarro R.</a> | 2017 - 2021
