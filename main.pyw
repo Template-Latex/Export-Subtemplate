@@ -690,6 +690,20 @@ class CreateVersion(object):
                         except:
                             logging.exception('Error al generar tesis')
                             clear_dict(RELEASES[REL_REPORTE], 'FILES')
+                    elif t == 7:
+                        try:
+                            convert.export_presentacion(ver, versiondev, versionhash, printfun=self._print,
+                                                        dosave=self._getconfig('SAVE'),
+                                                        docompile=self._getconfig('COMPILE'),
+                                                        addstat=self._getconfig('SAVE_STAT'),
+                                                        plotstats=self._getconfig('PLOT_STAT'),
+                                                        savepdf=self._getconfig('SAVE_PDF'),
+                                                        mainroot=self._getconfig('MAIN_ROOT'),
+                                                        statsroot=self._getconfig('STATS_ROOT'),
+                                                        informeroot=self._getconfig('INFORME_ROOT'))
+                        except:
+                            logging.exception('Error al generar presentacion')
+                            clear_dict(RELEASES[REL_REPORTE], 'FILES')
                     else:
                         raise Exception('ERROR: ID INCORRECTO')
                     self._lastsav = self._getconfig('SAVE')
