@@ -220,10 +220,10 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     os.chdir(informeroot)
 
     # Obtiene archivos
-    configfile = release['CONFIGFILE']
-    examplefile = release['EXAMPLEFILE']
+    configfile = 'src/config.tex'
+    examplefile = 'src/etc/example.tex'
     files = release['FILES']
-    initconffile = release['INITCONFFILE']
+    initconffile = 'src/cfg/init.tex'
     mainfile = release['MAINFILE']
     distfolder = release['DIST']
     stat = release['STATS']
@@ -489,11 +489,10 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     mainfile = release['MAINFILE']
-    subrelfile = release['SUBRELFILES']
-    examplefile = release['EXAMPLEFILE']
+    examplefile = 'src/etc/example.tex'
     subrlfolder = release['ROOT']
     stat = release['STATS']
-    configfile = release['CONFIGFILE']
+    configfile = 'src/config.tex'
 
     # Constantes
     main_data = open(mainfile)
@@ -513,7 +512,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # -------------------------------------------------------------------------
     # MODIFICA EL MAIN
     # -------------------------------------------------------------------------
-    main_auxiliar = file_to_list(subrelfile['MAIN'])
+    main_auxiliar = file_to_list('main_auxiliar.tex')
     nb = find_extract(main_auxiliar, '% EQUIPO DOCENTE')
     nb.append('\n')
     files[mainfile] = find_replace_block(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', nb)
@@ -536,9 +535,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # -------------------------------------------------------------------------
-    # MODIFICA CONFIGURACIIONES
+    # MODIFICA CONFIGURACIONES
     # -------------------------------------------------------------------------
-    fl = release['CONFIGFILE']
+    fl = 'src/config.tex'
 
     # Configuraciones que se borran
     cdel = ['addemptypagetwosides', 'nomlttable', 'nomltsrc', 'nomltfigure',
@@ -578,28 +577,28 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # -------------------------------------------------------------------------
     # CAMBIA LAS ECUACIONES
     # -------------------------------------------------------------------------
-    fl = release['EQNFILE']
+    fl = 'src/cmd/equation.tex'
     files[fl] = find_delete_block(files[fl], '% Insertar una ecuación en el índice', white_end_block=True)
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
-    fl = release['IMPORTSFILE']
+    fl = 'src/env/imports.tex'
     idel = ['usepackage{notoccite}']
     for idel in idel:
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
-    aux_imports = file_to_list(subrelfile['IMPORTS'])
+    aux_imports = file_to_list('src/env/imports_auxiliar.tex')
     nl = find_extract(aux_imports, '% Anexos/Apéndices', True)
     files[fl] = find_replace_block(files[fl], '\ifthenelse{\equal{\showappendixsecindex}', nl, jadd=-1,
                                    white_end_block=True)
-    files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True, iadd=-1)
     # files[fl] = find_delete_block(files[fl], '% Importa la librería tikz', white_end_block=True)
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
-    fl = release['INITCONFFILE']
+    fl = 'src/cfg/init.tex'
     ra, _ = find_block(files[fl], '\checkvardefined{\\titulodelinforme}')
     files[fl][ra] = '\checkvardefined{\\tituloauxiliar}\n'
     ra, _ = find_block(files[fl], '\g@addto@macro\\titulodelinforme\\xspace')
@@ -637,8 +636,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # -------------------------------------------------------------------------
     # PAGECONF
     # -------------------------------------------------------------------------
-    fl = release['PAGECONFFILE']
-    aux_pageconf = file_to_list(subrelfile['PAGECONF'])
+    fl = 'src/cfg/page.tex'
+    aux_pageconf = file_to_list('src/cfg/page_auxiliar.tex')
     nl = find_extract(aux_pageconf, '% Numeración de páginas', True)
     files[fl] = find_replace_block(files[fl], '% Numeración de páginas', nl, white_end_block=True, jadd=-1)
     nl = find_extract(aux_pageconf, '% Márgenes de páginas y tablas', True)
@@ -652,16 +651,15 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     for pcfg in pcfg:
         ra, _ = find_block(files[fl], pcfg)
     files[fl].pop(ra)
-    a, _ = find_block(files[fl], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
     files[fl].pop()
-    files[fl].append(files[fl].pop(a))
+    files[fl].append('\\titleclass{\subsubsubsection}{straight}[\subsection]\n')
 
     # -------------------------------------------------------------------------
     # AUXILIAR FUNCTIONS
     # -------------------------------------------------------------------------
-    fl = release['FUNCTIONS']
+    fl = 'src/cmd/auxiliar.tex'
     files[fl] = find_delete_block(files[fl], '% COMPILACION', white_end_block=True)
-    aux_fun = file_to_list(subrelfile['ENVFUN'])
+    aux_fun = file_to_list('src/env/environments.tex')
     nl = find_extract(aux_fun, '% Crea una sección de referencias solo para bibtex', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     nl = find_extract(aux_fun, '% Crea una sección de anexos', True)
@@ -687,7 +685,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
-    delfile = release['COREFUN']
+    delfile = 'src/cmd/core.tex'
     fl = files[delfile]
     files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
     fl = files[delfile]
@@ -864,11 +862,10 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     mainfile = release['MAINFILE']
-    subrelfile = release['SUBRELFILES']
-    examplefile = release['EXAMPLEFILE']
+    examplefile = 'src/etc/example.tex'
     subrlfolder = release['ROOT']
     stat = release['STATS']
-    configfile = release['CONFIGFILE']
+    configfile = 'src/config.tex'
 
     # Constantes
     main_data = open(mainfile)
@@ -888,7 +885,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # -------------------------------------------------------------------------
     # MODIFICA EL MAIN
     # -------------------------------------------------------------------------
-    main_auxiliar = file_to_list(subrelfile['MAIN'])
+    main_auxiliar = file_to_list('main_control.tex')
     nb = find_extract(main_auxiliar, '% EQUIPO DOCENTE')
     nb.append('\n')
     files[mainfile] = find_replace_block(files[mainfile], '% EQUIPO DOCENTE', nb)
@@ -901,7 +898,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # -------------------------------------------------------------------------
     # CONTROL
     # -------------------------------------------------------------------------
-    fl = release['FUNCTIONS']
+    fl = 'src/cmd/control.tex'
     files[fl][1] = '% Documento:    Funciones exclusivas de Template-Controles\n'
     fun_control = file_to_list(fl)
     files[fl].append('\n')
@@ -917,15 +914,15 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # -------------------------------------------------------------------------
     # PAGECONFFILE
     # -------------------------------------------------------------------------
-    fl = release['PAGECONFFILE']
-    control_pageconf = file_to_list(subrelfile['PAGECONF'])
+    fl = 'src/cfg/page.tex'
+    control_pageconf = file_to_list('src/cfg/page_control.tex')
     nl = find_extract(control_pageconf, '% Se crean los header-footer', True)
     files[fl] = find_replace_block(files[fl], '% Se crean los header-footer', nl, white_end_block=True, jadd=-1)
 
     # -------------------------------------------------------------------------
     # CONFIGS
     # -------------------------------------------------------------------------
-    fl = release['CONFIGFILE']
+    fl = 'src/config.tex'
     ra = find_line(files[fl], 'anumsecaddtocounter')
     files[fl][ra] += '\def\\bolditempto {true}            % Puntaje item en negrita\n'
     cdel = ['templatestyle']
@@ -936,7 +933,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
-    fl = release['INITCONFFILE']
+    fl = 'src/cfg/init.tex'
     ra, _ = find_block(files[fl], '\checkvardefined{\\tituloauxiliar}')
     files[fl][ra] = '\checkvardefined{\\tituloevaluacion}\n'
     ra, _ = find_block(files[fl], '\g@addto@macro\\tituloauxiliar\\xspace')
@@ -1136,11 +1133,10 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     mainfile = release['MAINFILE']
-    subrelfile = release['SUBRELFILES']
-    examplefile = release['EXAMPLEFILE']
+    examplefile = 'src/etc/example.tex'
     subrlfolder = release['ROOT']
     stat = release['STATS']
-    configfile = release['CONFIGFILE']
+    configfile = 'src/config.tex'
     distfolder = release['DIST']
 
     # Constantes
@@ -1161,7 +1157,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # -------------------------------------------------------------------------
     # MODIFICA EL MAIN
     # -------------------------------------------------------------------------
-    main_reporte = file_to_list(subrelfile['MAIN'])
+    main_reporte = file_to_list('main_reporte.tex')
     nb = find_extract(main_reporte, '% EQUIPO DOCENTE')
     nb.append('\n')
     files[mainfile] = find_delete_block(files[mainfile], '% INTEGRANTES, PROFESORES Y FECHAS', nb)
@@ -1185,16 +1181,17 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
                                          jadd=-1)
 
     # -------------------------------------------------------------------------
-    # MODIFICA CONFIGURACIIONES
+    # MODIFICA CONFIGURACIONES
     # -------------------------------------------------------------------------
-    fl = release['CONFIGFILE']
-    config_reporte = file_to_list(subrelfile['CONFIG'])
+    fl = 'src/config.tex'
+    config_reporte = file_to_list('src/config_reporte.tex')
 
     # Configuraciones que se borran
     cdel = ['firstpagemargintop', 'portraitstyle', 'predocpageromannumber', 'predocpageromanupper',
             'predocresetpagenumber', 'fontsizetitlei', 'styletitlei', 'nomltcont', 'nomltfigure', 'nomltsrc',
             'nomlttable', 'nameportraitpage', 'indextitlecolor', 'addindextobookmarks', 'portraittitlecolor',
-            'margineqnindexbottom', 'margineqnindextop', 'nomlteqn', 'bibtexindexbibliography']
+            'margineqnindexbottom', 'margineqnindextop', 'nomlteqn', 'bibtexindexbibliography',
+            'addemptypagetwosides']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -1206,7 +1203,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
-                                                '\def\indexdepth{4}                 % Profundidad de los marcadores\n'],
+                                                '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
                                     ra, addnewline=True)
     ra, rb = find_block(files[fl], 'pagemarginbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '2.5')
@@ -1239,18 +1236,18 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # -------------------------------------------------------------------------
     # CAMBIA LAS ECUACIONES
     # -------------------------------------------------------------------------
-    fl = release['EQNFILE']
+    fl = 'src/cmd/equation.tex'
     files[fl] = find_delete_block(files[fl], '% Insertar una ecuación en el índice', white_end_block=True)
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
-    fl = release['IMPORTSFILE']
+    fl = 'src/env/imports.tex'
     idel = []
     for idel in idel:
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
-    files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True, iadd=-1)
     ra, _ = find_block(files[fl], '\showappendixsecindex')
     nl = ['\\def\\showappendixsecindex{false}\n',
           files[fl][ra]]
@@ -1259,8 +1256,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
-    fl = release['INITCONFFILE']
-    init_auxiliar = file_to_list(subrelfile['INIT'])
+    fl = 'src/cfg/init.tex'
+    init_auxiliar = file_to_list('src/cfg/init_reporte.tex')
     nl = find_extract(init_auxiliar, 'Operaciones especiales Template-Reporte', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
@@ -1299,20 +1296,43 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # -------------------------------------------------------------------------
     # PAGECONF
     # -------------------------------------------------------------------------
-    # fl = release['PAGECONFFILE']
+    # fl = 'src/cfg/page.tex'
 
     # -------------------------------------------------------------------------
     # FINALCONF
     # -------------------------------------------------------------------------
-    fl = release['FINALCONF']
+    fl = 'src/cfg/final.tex'
     a, _ = find_block(files[fl], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
     files[fl].pop()
     files[fl].append(files[fl].pop(a).strip() + '\n')
 
     # -------------------------------------------------------------------------
+    # CAMBIA TÍTULOS
+    # -------------------------------------------------------------------------
+    fl = 'src/cmd/title.tex'
+    files[fl] = find_delete_block(files[fl], '% Crea una sección en el índice y en el header', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título en un índice, con número de página',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título en un índice, sin número de página',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un sub-sub-subtítulo sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un sub-subtítulo sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un subtítulo sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un subtítulo sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl],
+                                  '% Insertar un título sin número, sin indexar y sin cambiar el título del header',
+                                  white_end_block=True)
+
+    # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
-    delfile = release['COREFUN']
+    delfile = 'src/cmd/core.tex'
     fl = files[delfile]
     files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
     fl = files[delfile]
@@ -1524,11 +1544,10 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     mainfile = release['MAINFILE']
-    subrelfile = release['SUBRELFILES']
-    examplefile = release['EXAMPLEFILE']
+    examplefile = 'src/etc/example.tex'
     subrlfolder = release['ROOT']
     stat = release['STATS']
-    configfile = release['CONFIGFILE']
+    configfile = 'src/config.tex'
     distfolder = release['DIST']
 
     # Constantes
@@ -1549,7 +1568,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # -------------------------------------------------------------------------
     # MODIFICA CONFIGURACIONES
     # -------------------------------------------------------------------------
-    fl = release['CONFIGFILE']
+    fl = 'src/config.tex'
 
     # Configuraciones que se borran
     cdel = ['predocpageromannumber', 'predocpageromanupper', 'predocresetpagenumber',
@@ -1559,7 +1578,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'stylesubsubtitle', 'stylesubtitle', 'styletitle', 'styletitlei', 'ssstitlecolor',
             'subsubtitlecolor', 'subtitlecolor', 'indextitlecolor', 'portraittitlecolor',
             'titlecolor', 'ssstitlecolor', 'pdfcompileversion', 'bibtexenvrefsecnum',
-            'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers']
+            'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers', 'colorpage',
+            'nomnpageof', 'nameappendixsection']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -1571,9 +1591,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
         files[fl][ra] = files[fl][ra].replace(' %', '%')  # Reemplaza espacio en comentarios de la lista
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
-                                                '\def\indexdepth{4}                 % Profundidad de los marcadores\n'],
+                                                '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
                                     ra, addnewline=True)
-    for i in file_to_list(subrelfile['CONFIG']):
+    for i in file_to_list('src/config_presentacion.tex'):
         files[fl].append(i)
 
     # ra, rb = find_block(files[fl], 'cfgpdflayout', True)
@@ -1590,7 +1610,13 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # -------------------------------------------------------------------------
     # CAMBIA LAS ECUACIONES
     # -------------------------------------------------------------------------
-    fl = release['EQNFILE']
+    fl = 'src/cmd/equation.tex'
+    files[fl] = find_delete_block(files[fl], '% Insertar una ecuación en el índice', white_end_block=True)
+
+    # -------------------------------------------------------------------------
+    # CAMBIA LAS ECUACIONES
+    # -------------------------------------------------------------------------
+    fl = 'src/cmd/title.tex'
     files[fl] = find_delete_block(files[fl], '% Insertar una ecuación en el índice', white_end_block=True)
 
     # -------------------------------------------------------------------------
@@ -1604,13 +1630,14 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # -------------------------------------------------------------------------
     # CAMBIA OTROS
     # -------------------------------------------------------------------------
-    fl = release['OTHERFILE']
+    fl = 'src/cmd/other.tex'
     files[fl] = find_delete_block(files[fl], '% Cambia el tamaño de la página', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Ofrece diferentes formatos de pagina', white_end_block=True)
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
-    fl = release['IMPORTSFILE']
+    fl = 'src/env/imports.tex'
     idel = ['xcolor', 'hyperref', 'sectsty', 'tocloft', 'notoccite', 'titlesec',
             'graphicx']
     for idel in idel:
@@ -1635,12 +1662,12 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
-    fl = release['INITCONFFILE']
+    fl = 'src/cfg/init.tex'
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Agrega compatibilidad de subsubsubsecciones al TOC', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Actualización márgen títulos', True, iadd=-1)
-    files[fl] = find_delete_block(files[fl], 'Se añade listings (código fuente) a tocloft', True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], 'Se añade listings (código fuente) a tocloft', True, iadd=-2)
     files[fl] = find_delete_block(files[fl], '\pdfminorversion', white_end_block=True, iadd=-1)
     ra, _ = find_block(files[fl], '\checkvardefined{\\autordeldocumento}', True)
 
@@ -1671,29 +1698,34 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # Elimina cambio del indice en bibtex
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
 
+    # Índice de ecuaciones
     files[fl] = find_delete_block(files[fl], '% Crea índice de ecuaciones', white_end_block=True, iadd=-1, jadd=-1)
+
+    # Color de página
+    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\colorpage}{white}}{}{', white_end_block=True,
+                                  jadd=-1)
 
     # -------------------------------------------------------------------------
     # PAGECONF
     # -------------------------------------------------------------------------
-    fl = release['PAGECONFFILE']
-    aux_pageconf = file_to_list(subrelfile['PAGE'])
+    fl = 'src/cfg/page.tex'
+    aux_pageconf = file_to_list('src/cfg/page_presentacion.tex')
     nl = find_extract(aux_pageconf, '% Numeración de páginas', True)
     files[fl] = find_replace_block(files[fl], '% Numeración de páginas', nl, white_end_block=True, jadd=-1)
     nl = find_extract(aux_pageconf, '% Estilo de títulos', True)
     files[fl] = find_replace_block(files[fl], '% Estilo de títulos', nl, white_end_block=True, jadd=-1)
     nl = find_extract(aux_pageconf, '% Definición de nombres de objetos', True)
     files[fl] = find_replace_block(files[fl], '% Definición de nombres de objetos', nl, white_end_block=True, jadd=-1)
-    files[fl] = find_delete_block(files[fl], '% Se crean los header-footer', white_end_block=True, jadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Se crean los header-footer', white_end_block=True, jadd=-1, iadd=-2)
     ra, _ = find_block(files[fl], '\\setpagemargincm{\\pagemarginleft}')
     files[fl].pop(ra)
 
     # -------------------------------------------------------------------------
     # FINALCONF
     # -------------------------------------------------------------------------
-    fl = release['FINALCONF']
+    fl = 'src/cfg/final.tex'
     files[fl] = find_delete_block(files[fl], '% Se usa número de páginas en arábigo', white_end_block=True, jadd=-1,
-                                  iadd=-2)
+                                  iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Reinicia número de página', white_end_block=True, jadd=-1, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Estilo de títulos - reestablece estilos por el índice',
                                   white_end_block=True, jadd=-1, iadd=-2)
@@ -1703,9 +1735,47 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
                                   iadd=-1)
 
     # -------------------------------------------------------------------------
+    # CAMBIA TÍTULOS
+    # -------------------------------------------------------------------------
+    fl = 'src/cmd/title.tex'
+    files[fl] = find_delete_block(files[fl], '% Crear un capítulo como una sección', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Crea una sección en el índice y en el header', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título en un índice, con número de página',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título en un índice, sin número de página',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un sub-sub-subtítulo sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un sub-subtítulo sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un subtítulo sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un subtítulo sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl],
+                                  '% Insertar un título sin número, sin indexar y sin cambiar el título del header',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título sin número',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un subtítulo sin número',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un sub-subtítulo sin número',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un sub-sub-subtítulo sin número',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Cambia el título del encabezado (header)',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Elimina el título del encabezado (header)',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título sin número sin cambiar el título del header',
+                                  white_end_block=True)
+
+    # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
-    delfile = release['COREFUN']
+    delfile = 'src/cmd/core.tex'
     fl = files[delfile]
     files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
     fl = files[delfile]
@@ -1889,9 +1959,9 @@ def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, doc
     os.chdir(release['ROOT'])
 
     # Obtiene archivos
-    configfile = release['CONFIGFILE']
+    configfile = 'lib/config.tex'
     files = release['FILES']
-    initconffile = release['INITCONFFILE']
+    initconffile = 'lib/initconf.tex'
     mainfile = release['MAINFILE']
     stat = release['STATS']
 
@@ -2090,11 +2160,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     mainfile = release['MAINFILE']
-    subrelfile = release['SUBRELFILES']
-    examplefile = release['EXAMPLEFILE']
+    examplefile = 'src/etc/example.tex'
     subrlfolder = release['ROOT']
     stat = release['STATS']
-    configfile = release['CONFIGFILE']
+    configfile = 'src/config.tex'
     distfolder = release['DIST']
 
     # Constantes
@@ -2113,9 +2182,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     versionhead = versionhead.format(version, dia)
 
     # -------------------------------------------------------------------------
-    # MODIFICA CONFIGURACIIONES
+    # MODIFICA CONFIGURACIONES
     # -------------------------------------------------------------------------
-    fl = release['CONFIGFILE']
+    fl = 'src/config.tex'
 
     # Añade configuraciones
     cfg = '\\def\\objectchaptermargin {false}   % Activa margen de objetos entre capítulos\n'
@@ -2252,17 +2321,17 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
     # -------------------------------------------------------------------------
-    # fl = release['TITLE']
+    # fl = 'src/cmd/title.tex'
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
-    fl = release['IMPORTSFILE']
+    fl = 'src/env/imports.tex'
     idel = []
     for idel in idel:
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
-    files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True, iadd=-1)
     # _, rb = find_block(files[fl], '% PARCHES DE LIBRERÍAS', True)
     # files[fl] = add_block_from_list(files[fl], ['\\def\\showappendixsecindex{true}\n'], rb, True)
     files[fl].pop()
@@ -2272,8 +2341,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
-    fl = release['INITCONFFILE']
-    init_tesis = file_to_list(subrelfile['INIT'])
+    fl = 'src/cfg/init.tex'
+    init_tesis = file_to_list('src/cfg/init_tesis.tex')
 
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
@@ -2323,8 +2392,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # -------------------------------------------------------------------------
     # ÍNDICE
     # -------------------------------------------------------------------------
-    fl = release['INDEX']
-    index_tesis = file_to_list(subrelfile['INDEX'])
+    fl = 'src/page/index.tex'
+    index_tesis = file_to_list('src/page/index_tesis.tex')
 
     # Agrega inicial
     ra, _ = find_block(files[fl], 'Crea nueva página y establece estilo de títulos', True)
@@ -2337,9 +2406,11 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
     w = '% Configuración del punto en índice'
     nl = find_extract(index_tesis, w, True)
+    nl.append('\t% -------------------------------------------------------------------------\n')
     files[fl] = find_replace_block(files[fl], w, nl, True)
     w = '% Cambia tabulación índice de objetos para alinear con contenidos'
     nl = find_extract(index_tesis, w, True)
+    nl.append('\t% -------------------------------------------------------------------------\n')
     files[fl] = find_replace_block(files[fl], w, nl, True)
 
     # Cambia belowpdfbookmark
@@ -2349,8 +2420,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # -------------------------------------------------------------------------
     # PAGECONF
     # -------------------------------------------------------------------------
-    fl = release['PAGECONFFILE']
-    page_tesis = file_to_list(subrelfile['PAGE'])
+    fl = 'src/cfg/page.tex'
+    page_tesis = file_to_list('src/cfg/page_tesis.tex')
     # ra, _ = find_block(files[fl], '\\renewcommand{\\refname}', True)
     # nl = [files[fl][ra], '\\renewcommand{\\bibname}{\\namereferences}\n']
     # files[fl] = replace_block_from_list(files[fl], nl, ra, ra - 1)
@@ -2368,8 +2439,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # -------------------------------------------------------------------------
     # ENVIRONMENTS
     # -------------------------------------------------------------------------
-    fl = release['ENVIRONMENTS']
-    env_tesis = file_to_list(subrelfile['ENVIRONMENTS'])
+    fl = 'src/env/environments.tex'
+    env_tesis = file_to_list('src/env/environments_tesis.tex')
 
     # Reemplaza bloques
     w = '% Crea una sección de referencias solo para bibtex'
@@ -2406,7 +2477,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
-    delfile = release['COREFUN']
+    delfile = 'src/cmd/core.tex'
     fl = files[delfile]
     files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
     fl = files[delfile]

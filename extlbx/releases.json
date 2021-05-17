@@ -1,9 +1,5 @@
 {
     "AUXILIAR": {
-        "CONFIGFILE": "src/config.tex",
-        "COREFUN": "src/cmd/core.tex",
-        "EQNFILE": "src/cmd/equation.tex",
-        "EXAMPLEFILE": "src/etc/example.tex",
         "FILES": {
             "src/cfg/init.tex": [],
             "src/cfg/page.tex": [],
@@ -21,15 +17,11 @@
             "src/style/color.tex": [],
             "src/style/other.tex": []
         },
-        "FUNCTIONS": "src/cmd/auxiliar.tex",
         "GIT": "../Template-Auxiliares/",
         "ID": 2,
-        "IMPORTSFILE": "src/env/imports.tex",
-        "INITCONFFILE": "src/cfg/init.tex",
         "MAINFILE": "main.tex",
         "MESSAGE": "\nCREANDO TEMPLATE-AUXILIARES v{0}",
         "NAME": "Template-Auxiliares",
-        "PAGECONFFILE": "src/cfg/page.tex",
         "PDF_FOLDER": "../pdf-version/Auxiliares/Template-Auxiliares v{0}.pdf",
         "ROOT": "../Template-Auxiliares/",
         "STATS": {
@@ -37,12 +29,6 @@
             "FILE": "stats/data/auxiliares.txt",
             "GIT_ADD": "data/auxiliares.txt",
             "LCODE": ""
-        },
-        "SUBRELFILES": {
-            "ENVFUN": "src/env/environments.tex",
-            "IMPORTS": "src/env/imports_auxiliar.tex",
-            "MAIN": "main_auxiliar.tex",
-            "PAGECONF": "src/cfg/page_auxiliar.tex"
         },
         "VERLINE": "Template-Auxiliares v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
@@ -71,8 +57,6 @@
         }
     },
     "CONTROLES": {
-        "CONFIGFILE": "src/config.tex",
-        "EXAMPLEFILE": "src/etc/example.tex",
         "FILES": {
             "src/cfg/init.tex": [],
             "src/cfg/page.tex": [],
@@ -90,15 +74,11 @@
             "src/style/color.tex": [],
             "src/style/other.tex": []
         },
-        "FUNCTIONS": "src/cmd/control.tex",
         "GIT": "../Template-Controles/",
         "ID": 3,
-        "IMPORTSFILE": "src/env/imports.tex",
-        "INITCONFFILE": "src/cfg/init.tex",
         "MAINFILE": "main.tex",
         "MESSAGE": "\nCREANDO TEMPLATE-CONTROLES v{0}",
         "NAME": "Template-Controles",
-        "PAGECONFFILE": "src/cfg/page.tex",
         "PDF_FOLDER": "../pdf-version/Controles/Template-Controles v{0}.pdf",
         "ROOT": "../Template-Controles/",
         "STATS": {
@@ -106,10 +86,6 @@
             "FILE": "stats/data/controles.txt",
             "GIT_ADD": "data/controles.txt",
             "LCODE": ""
-        },
-        "SUBRELFILES": {
-            "MAIN": "main_control.tex",
-            "PAGECONF": "src/cfg/page_control.tex"
         },
         "VERLINE": "Template-Controles v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
@@ -138,9 +114,7 @@
         }
     },
     "INFORME": {
-        "CONFIGFILE": "src/config.tex",
         "DIST": "dist/",
-        "EXAMPLEFILE": "src/etc/example.tex",
         "FILES": {
             "src/cfg/final.tex": [],
             "src/cfg/init.tex": [],
@@ -166,7 +140,6 @@
         },
         "GIT": "../Template-Informe/",
         "ID": 1,
-        "INITCONFFILE": "src/cfg/init.tex",
         "MAINFILE": "main.tex",
         "MESSAGE": "\nCREANDO TEMPLATE-INFORME v{0}",
         "NAME": "Template-Informe",
@@ -221,12 +194,7 @@
         }
     },
     "PRESENTACION": {
-        "CONFIGFILE": "src/config.tex",
-        "COREFUN": "src/cmd/core.tex",
         "DIST": "dist/",
-        "EQNFILE": "src/cmd/equation.tex",
-        "EXAMPLEFILE": "src/etc/example.tex",
-        "FINALCONF": "src/cfg/final.tex",
         "FILES": {
             "src/cfg/final.tex": [],
             "src/cfg/init.tex": [],
@@ -248,13 +216,9 @@
         },
         "GIT": "../Template-Presentacion/",
         "ID": 7,
-        "IMPORTSFILE": "src/env/imports.tex",
-        "INITCONFFILE": "src/cfg/init.tex",
         "MAINFILE": "main.tex",
         "MESSAGE": "\nCREANDO TEMPLATE-PRESENTACION v{0}",
         "NAME": "Template-Presentacion",
-        "OTHERFILE": "src/cmd/other.tex",
-        "PAGECONFFILE": "src/cfg/page.tex",
         "PDF_FOLDER": "../pdf-version/Presentacion/Template-Presentacion v{0}.pdf",
         "ROOT": "../Template-Presentacion/",
         "STATS": {
@@ -262,12 +226,6 @@
             "FILE": "stats/data/presentacion.txt",
             "GIT_ADD": "data/presentacion.txt",
             "LCODE": ""
-        },
-        "SUBRELFILES": {
-            "CONFIG": "src/config_presentacion.tex",
-            "INIT": "src/cfg/init_presentacion.tex",
-            "MAIN": "main_presentacion.tex",
-            "PAGE": "src/cfg/page_presentacion.tex"
         },
         "VERLINE": "Template-Presentacion v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
@@ -312,7 +270,6 @@
         }
     },
     "PROFESSIONAL-CV": {
-        "CONFIGFILE": "lib/config.tex",
         "FILES": {
             "cv.tex": [],
             "source_template.tex": [],
@@ -324,10 +281,8 @@
             "lib/pageconf.tex": [],
             "lib/styles.tex": []
         },
-        "FUNCTIONFILE": "lib/function.tex",
         "GIT": "../Professional-CV/",
         "ID": 4,
-        "INITCONFFILE": "lib/initconf.tex",
         "MAINFILE": "cv.tex",
         "MESSAGE": "\nCREANDO PROFESSIONAL-CV v{0}",
         "NAME": "Professional-CV",
@@ -365,12 +320,7 @@
         }
     },
     "REPORTE": {
-        "CONFIGFILE": "src/config.tex",
-        "COREFUN": "src/cmd/core.tex",
         "DIST": "dist/",
-        "EQNFILE": "src/cmd/equation.tex",
-        "EXAMPLEFILE": "src/etc/example.tex",
-        "FINALCONF": "src/cfg/final.tex",
         "FILES": {
             "src/cfg/final.tex": [],
             "src/cfg/init.tex": [],
@@ -392,12 +342,9 @@
         },
         "GIT": "../Template-Reporte/",
         "ID": 5,
-        "IMPORTSFILE": "src/env/imports.tex",
-        "INITCONFFILE": "src/cfg/init.tex",
         "MAINFILE": "main.tex",
         "MESSAGE": "\nCREANDO TEMPLATE-REPORTE v{0}",
         "NAME": "Template-Reporte",
-        "PAGECONFFILE": "src/cfg/page.tex",
         "PDF_FOLDER": "../pdf-version/Reporte/Template-Reporte v{0}.pdf",
         "ROOT": "../Template-Reporte/",
         "STATS": {
@@ -405,11 +352,6 @@
             "FILE": "stats/data/reporte.txt",
             "GIT_ADD": "data/reporte.txt",
             "LCODE": ""
-        },
-        "SUBRELFILES": {
-            "CONFIG": "src/config_reporte.tex",
-            "INIT": "src/cfg/init_reporte.tex",
-            "MAIN": "main_reporte.tex"
         },
         "VERLINE": "Template-Reporte v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
@@ -454,11 +396,7 @@
         }
     },
     "TESIS": {
-        "CONFIGFILE": "src/config.tex",
-        "COREFUN": "src/cmd/core.tex",
         "DIST": "dist/",
-        "ENVIRONMENTS": "src/env/environments.tex",
-        "EXAMPLEFILE": "src/etc/example.tex",
         "FILES": {
             "src/cfg/final.tex": [],
             "src/cfg/init.tex": [],
@@ -482,13 +420,9 @@
         },
         "GIT": "../Template-Tesis/",
         "ID": 6,
-        "IMPORTSFILE": "src/env/imports.tex",
-        "INDEX": "src/page/index.tex",
-        "INITCONFFILE": "src/cfg/init.tex",
         "MAINFILE": "main.tex",
         "MESSAGE": "\nCREANDO TEMPLATE-TESIS v{0}",
         "NAME": "Template-Tesis",
-        "PAGECONFFILE": "src/cfg/page.tex",
         "PDF_FOLDER": "../pdf-version/Tesis/Template-Tesis v{0}.pdf",
         "ROOT": "../Template-Tesis/",
         "STATS": {
@@ -497,13 +431,6 @@
             "GIT_ADD": "data/tesis.txt",
             "LCODE": ""
         },
-        "SUBRELFILES": {
-            "ENVIRONMENTS": "src/env/environments_tesis.tex",
-            "INDEX": "src/page/index_tesis.tex",
-            "INIT": "src/cfg/init_tesis.tex",
-            "PAGE": "src/cfg/page_tesis.tex"
-        },
-        "TITLE": "src/cmd/title.tex",
         "VERLINE": "Template-Tesis v{0} | (Pablo Pizarro R.) ppizarror.com",
         "WEB": {
             "MANUAL": "https://latex.ppizarror.com/tesis",
