@@ -253,6 +253,7 @@
         "MAINFILE": "main.tex",
         "MESSAGE": "\nCREANDO TEMPLATE-PRESENTACION v{0}",
         "NAME": "Template-Presentacion",
+        "OTHERFILE": "src/cmd/other.tex",
         "PAGECONFFILE": "src/cfg/page.tex",
         "PDF_FOLDER": "../pdf-version/Presentacion/Template-Presentacion v{0}.pdf",
         "ROOT": "../Template-Presentacion/",
@@ -263,6 +264,7 @@
             "LCODE": ""
         },
         "SUBRELFILES": {
+            "CONFIG": "src/config_presentacion.tex",
             "INIT": "src/cfg/init_presentacion.tex",
             "MAIN": "main_presentacion.tex",
             "PAGE": "src/cfg/page_presentacion.tex"

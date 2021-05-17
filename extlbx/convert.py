@@ -1546,30 +1546,45 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # Se crea el header
     versionhead = versionhead.format(version, dia)
 
-    # Cambia las variables del documento principales
-    nl = ['% INFORMACIÓN DEL DOCUMENTO\n',
-          '\def\\titulodelreporte {Título del reporte}\n',
-          '\def\\temaatratar {Tema a tratar}\n',
-          '\def\\fechadelreporte {\\today}\n\n']
-    files[mainfile] = find_replace_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', nl, white_end_block=True,
-                                         jadd=-1)
-
     # -------------------------------------------------------------------------
-    # MODIFICA CONFIGURACIIONES
+    # MODIFICA CONFIGURACIONES
     # -------------------------------------------------------------------------
     fl = release['CONFIGFILE']
 
     # Configuraciones que se borran
     cdel = ['predocpageromannumber', 'predocpageromanupper', 'predocresetpagenumber',
-            'addemptypagetwosides', 'nomltfigure', 'nomltsrc', 'nomlttable', 'nomltcont', 'nomlteqn']
+            'addemptypagetwosides', 'nomltfigure', 'nomltsrc', 'nomlttable', 'nomltcont', 'nomlteqn',
+            'firstpagemargintop', 'nameportraitpage', 'fontsizessstitle', 'fontsizesubsubtitle',
+            'fontsizesubtitle', 'fontsizetitle', 'fontsizetitlei', 'stylessstitle',
+            'stylesubsubtitle', 'stylesubtitle', 'styletitle', 'styletitlei', 'ssstitlecolor',
+            'subsubtitlecolor', 'subtitlecolor', 'indextitlecolor', 'portraittitlecolor',
+            'titlecolor', 'ssstitlecolor', 'pdfcompileversion', 'bibtexenvrefsecnum',
+            'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', white_end_block=True)
-    for cdel in []:
+    files[fl] = find_delete_block(files[fl], '% MÁRGENES DE PÁGINA', white_end_block=True)
+    for cdel in ['cfgpdfpageview']:
         ra, rb = find_block(files[fl], cdel, True)
-        files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
+        files[fl][ra] = files[fl][ra].replace(' %', '%')  # Reemplaza espacio en comentarios de la lista
+    ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
+    files[fl] = add_block_from_list(files[fl], [files[fl][ra],
+                                                '\def\indexdepth{4}                 % Profundidad de los marcadores\n'],
+                                    ra, addnewline=True)
+    for i in file_to_list(subrelfile['CONFIG']):
+        files[fl].append(i)
+
+    # ra, rb = find_block(files[fl], 'cfgpdflayout', True)
+    # nconf = replace_argument(files[fl][ra], 1, 'SinglePage')
+    # files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'cfgpdfpageview', True)
+    nconf = replace_argument(files[fl][ra], 1, 'FitBV')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'documentfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '10')
+    files[fl][ra] = nconf
     # files[fl].pop()
 
     # -------------------------------------------------------------------------
@@ -1579,31 +1594,58 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Insertar una ecuación en el índice', white_end_block=True)
 
     # -------------------------------------------------------------------------
+    # CAMBIA OTROS
+    # -------------------------------------------------------------------------
+    fl = 'src/env/environments.tex'
+    files[fl] = find_delete_block(files[fl], '% Crea una sección de resumen', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Crea una sección de referencias solo para bibtex', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Crea una sección de anexos', white_end_block=True)
+
+    # -------------------------------------------------------------------------
+    # CAMBIA OTROS
+    # -------------------------------------------------------------------------
+    fl = release['OTHERFILE']
+    files[fl] = find_delete_block(files[fl], '% Cambia el tamaño de la página', white_end_block=True)
+
+    # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
     fl = release['IMPORTSFILE']
-    idel = []
+    idel = ['xcolor', 'hyperref', 'sectsty', 'tocloft', 'notoccite', 'titlesec',
+            'graphicx']
     for idel in idel:
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
-    files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Dimensiones y geometría del documento', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Cambia el estilo de los títulos', white_end_block=True)
     ra, _ = find_block(files[fl], '\showappendixsecindex')
     nl = ['\\def\\showappendixsecindex{false}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
+    ra, _ = find_block(files[fl], '% Muestra los números de línea')
+    nl = ['}\n\\def\\showlinenumbers {true}\n',
+          '\\ifthenelse{\\equal{\\showlinenumbers}{true}}{ % Muestra los números de línea\n']
+    files[fl] = replace_block_from_list(files[fl], nl, ra - 1, ra - 1)
+
+    files[fl].pop()
+    files[fl].append('\\usefonttheme{professionalfonts}\n')
+
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
     fl = release['INITCONFFILE']
-    # nl = find_extract(init_auxiliar, 'Operaciones especiales Template-Reporte', True)
-    # files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], 'Agrega compatibilidad de subsubsubsecciones al TOC', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], 'Actualización márgen títulos', True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], 'Se añade listings (código fuente) a tocloft', True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], '\pdfminorversion', white_end_block=True, iadd=-1)
     ra, _ = find_block(files[fl], '\checkvardefined{\\autordeldocumento}', True)
 
-    # Agrega definición de titulodelreporte
-    nl = ['\def\\titulodelinforme{\\titulodelreporte}\n',
+    nl = ['\def\\titulodelinforme{\\titulopresentacion}\n',
+          '\def\\temaatratar{}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
@@ -1612,11 +1654,11 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl].pop(ra)
 
     ra, _ = find_block(files[fl], '\pdfmetainfotitulo')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulodelreporte')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulopresentacion')
     ra, _ = find_block(files[fl], 'Template.Nombre')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-REPT')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-PRES')
     ra, _ = find_block(files[fl], 'Template.Tipo')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
@@ -1629,7 +1671,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # Elimina cambio del indice en bibtex
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
 
-    files[fl] = find_delete_block(files[fl], '% Crea índice de ecuaciones', white_end_block=True, jadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Crea índice de ecuaciones', white_end_block=True, iadd=-1, jadd=-1)
 
     # -------------------------------------------------------------------------
     # PAGECONF
@@ -1638,17 +1680,27 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     aux_pageconf = file_to_list(subrelfile['PAGE'])
     nl = find_extract(aux_pageconf, '% Numeración de páginas', True)
     files[fl] = find_replace_block(files[fl], '% Numeración de páginas', nl, white_end_block=True, jadd=-1)
+    nl = find_extract(aux_pageconf, '% Estilo de títulos', True)
+    files[fl] = find_replace_block(files[fl], '% Estilo de títulos', nl, white_end_block=True, jadd=-1)
+    nl = find_extract(aux_pageconf, '% Definición de nombres de objetos', True)
     files[fl] = find_replace_block(files[fl], '% Definición de nombres de objetos', nl, white_end_block=True, jadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Se crean los header-footer', white_end_block=True, jadd=-1)
+    ra, _ = find_block(files[fl], '\\setpagemargincm{\\pagemarginleft}')
+    files[fl].pop(ra)
 
     # -------------------------------------------------------------------------
     # FINALCONF
     # -------------------------------------------------------------------------
     fl = release['FINALCONF']
-    a, _ = find_block(files[fl], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
-    files[fl].pop()
-    files[fl].append(files[fl].pop(a).strip() + '\n')
-    files[fl] = find_delete_block(files[fl], '% Se usa número de páginas en arábigo', white_end_block=True, jadd=-1)
-    files[fl] = find_delete_block(files[fl], '% Reinicia número de página', white_end_block=True, jadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Se usa número de páginas en arábigo', white_end_block=True, jadd=-1,
+                                  iadd=-2)
+    files[fl] = find_delete_block(files[fl], '% Reinicia número de página', white_end_block=True, jadd=-1, iadd=-1)
+    files[fl] = find_delete_block(files[fl], 'Estilo de títulos - reestablece estilos por el índice',
+                                  white_end_block=True, jadd=-1, iadd=-2)
+    files[fl] = find_delete_block(files[fl], 'Establece el estilo de las subsubsubsecciones', white_end_block=True,
+                                  jadd=-1, iadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Se reestablecen headers y footers', white_end_block=True, jadd=-1,
+                                  iadd=-1)
 
     # -------------------------------------------------------------------------
     # CORE FUN
