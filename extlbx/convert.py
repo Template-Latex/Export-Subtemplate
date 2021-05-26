@@ -1694,7 +1694,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
     for i in ['pdfmetainfotema {\\temaatratar}', 'Documento.Tema', '\\def\\pdfmetainfotema {}',
-              '\\checkvardefined{\\temaatratar}', '\g@addto@macro\\temaatratar\\xspace']:
+              '\\checkvardefined{\\temaatratar}', '\g@addto@macro\\temaatratar\\xspace',
+              'pdfmetainfotema']:
         ra, _ = find_block(files[fl], i)
         files[fl].pop(ra)
 
