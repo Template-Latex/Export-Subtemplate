@@ -1672,7 +1672,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, _ = find_block(files[fl], '\checkvardefined{\\autordeldocumento}', True)
 
     nl = ['\def\\titulodelinforme{\\titulopresentacion}\n',
-          '\def\\temaatratar{}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
@@ -1694,6 +1693,10 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
+    for i in ['pdfmetainfotema {\\temaatratar}', 'Documento.Tema', '\\def\\pdfmetainfotema {}',
+              '\\checkvardefined{\\temaatratar}', '\g@addto@macro\\temaatratar\\xspace']:
+        ra, _ = find_block(files[fl], i)
+        files[fl].pop(ra)
 
     # Elimina cambio del indice en bibtex
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
