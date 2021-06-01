@@ -584,7 +584,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
     fl = 'src/env/imports.tex'
-    idel = ['usepackage{notoccite}']
+    idel = ['usepackage{notoccite}', 'ragged2e']
     for idel in idel:
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
@@ -594,6 +594,10 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                                    white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True, iadd=-1)
     # files[fl] = find_delete_block(files[fl], '% Importa la librería tikz', white_end_block=True)
+
+    ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
+    rb, _ = find_block(files[fl], '% \usepackage{subfigure}', True)
+    files[fl] = del_block_from_list(files[fl], ra, rb + 1)
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
@@ -632,6 +636,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
     # Elimina cambio del indice en bibtex
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
+
+    ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
+    files[fl].pop(ra)
 
     # -------------------------------------------------------------------------
     # PAGECONF
@@ -685,11 +692,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
-    delfile = 'src/cmd/core.tex'
-    fl = files[delfile]
-    files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
-    fl = files[delfile]
-    files[delfile] = find_delete_block(fl, '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
+    fl = 'src/cmd/core.tex'
+    files[fl] = find_delete_block(files[fl], '% Imagen de prueba tikz', white_end_block=True)
 
     # Cambia encabezado archivos
     for fl in files.keys():
@@ -1243,7 +1247,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
     fl = 'src/env/imports.tex'
-    idel = []
+    idel = ['ragged2e']
     for idel in idel:
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
@@ -1252,6 +1256,14 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     nl = ['\\def\\showappendixsecindex{false}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
+
+    ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
+    rb, _ = find_block(files[fl], '% \usepackage{subfigure}', True)
+    files[fl] = del_block_from_list(files[fl], ra, rb + 1)
+
+    ra, _ = find_block(files[fl], '% Desde v6.2.8 se debe cargar al final para evitar errores:', True)
+    rb, _ = find_block(files[fl], '% Desde v6.5.6 se carga después de las referencias ', True)
+    files[fl] = del_block_from_list(files[fl], ra, rb)
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
@@ -1293,6 +1305,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     files[fl] = find_delete_block(files[fl], '% Crea índice de ecuaciones', white_end_block=True, jadd=-1, iadd=-2)
 
+    ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
+    files[fl].pop(ra)
+
     # -------------------------------------------------------------------------
     # PAGECONF
     # -------------------------------------------------------------------------
@@ -1305,6 +1320,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     a, _ = find_block(files[fl], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
     files[fl].pop()
     files[fl].append(files[fl].pop(a).strip() + '\n')
+    files[fl] = find_delete_block(files[fl], '% Establece el estilo de las subsubsubsecciones',
+                                  white_end_block=True, iadd=-1)
 
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
@@ -1579,16 +1596,32 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'subsubtitlecolor', 'subtitlecolor', 'indextitlecolor', 'portraittitlecolor',
             'titlecolor', 'ssstitlecolor', 'pdfcompileversion', 'bibtexenvrefsecnum',
             'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers', 'colorpage',
-            'nomnpageof', 'nameappendixsection']
+            'nomnpageof', 'nameappendixsection', 'apacitebothers', 'apaciterefnumber',
+            'apaciterefnumberfinal', 'apaciterefnumberinit', 'apaciterefsep',
+            'apaciteshowurl', 'apacitestyle', 'appendixindepobjnum', 'natbibnumbers',
+            'natbibrefsep', 'natbibrefstyle', 'natbibsquare', 'sectionappendixlastchar',
+            'twocolumnreferences', 'nomchapter', 'anumsecaddtocounter', 'fontsizerefbibl',
+            'pdfcompilecompression', 'pdfcompileobjcompression', 'hfpdashcharstyle',
+            'nameabstract'
+            ]
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% MÁRGENES DE PÁGINA', white_end_block=True)
-    for cdel in ['cfgpdfpageview']:
+    for cdel in ['namemathcol', 'namemathdefn', 'namemathej',
+                 'namemathlem', 'namemathobs', 'namemathprp', 'namemaththeorem',
+                 'namereferences', 'nomltappendixsection', 'nomltwfigure',
+                 'nomltwsrc', 'nomltwtable']:
+        ra, rb = find_block(files[fl], cdel, True)
+        files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
+    for cdel in ['cfgpdfpageview', 'bibtexstyle']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace(' %', '%')  # Reemplaza espacio en comentarios de la lista
+    for cdel in ['captiontextbold', 'captiontextsubnumbold']:
+        ra, rb = find_block(files[fl], cdel, True)
+        files[fl][ra] = files[fl][ra].replace('%', ' %')  # Reemplaza espacio en comentarios de la lista
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
                                                 '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
@@ -1605,6 +1638,26 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, rb = find_block(files[fl], 'documentfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '10')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'bibtexstyle', True)
+    nconf = replace_argument(files[fl][ra], 1, 'apalike')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'captionlrmarginmc', True)
+    nconf = replace_argument(files[fl][ra], 1, '0.5')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'captionlrmargin', True)
+    nconf = replace_argument(files[fl][ra], 1, '0.5')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'captiontextbold', True)
+    nconf = replace_argument(files[fl][ra], 1, 'true')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'captiontextsubnumbold', True)
+    nconf = replace_argument(files[fl][ra], 1, 'true')
+    files[fl][ra] = nconf
+
+    ra, _ = find_block(files[fl], 'stylecitereferences', True)
+    files[fl][ra] = '\\def\\stylecitereferences {bibtex}  % Estilo cita/ref {bibtex,custom}\n'
+    ra, _ = find_block(files[fl], 'captionfontsize', True)
+    files[fl][ra] = '\\def\\captionfontsize{footnotesize} % Tamaño de fuente de los caption\n'
     # files[fl].pop()
 
     # -------------------------------------------------------------------------
@@ -1639,7 +1692,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # -------------------------------------------------------------------------
     fl = 'src/env/imports.tex'
     idel = ['xcolor', 'hyperref', 'sectsty', 'tocloft', 'notoccite', 'titlesec',
-            'graphicx']
+            'graphicx', 'ragged2e']
     for idel in idel:
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
@@ -1659,10 +1712,21 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl].pop()
     files[fl].append('\\usefonttheme{professionalfonts}\n')
 
+    ra, _ = find_block(files[fl], '% Desde v6.2.8 se debe cargar al final para evitar errores:')
+    rb, _ = find_block(files[fl], '% Anexos/Apéndices')
+    nl = ['\\usepackage[pdfencoding=auto,psdextra]{hyperref}\n']
+    files[fl] = replace_block_from_list(files[fl], nl, ra, rb - 3)
+
+    ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
+    rb, _ = find_block(files[fl], '% \usepackage{subfigure}', True)
+    files[fl] = del_block_from_list(files[fl], ra, rb + 1)
+
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
     fl = 'src/cfg/init.tex'
+    init_presentacion = file_to_list('src/cfg/init_presentacion.tex')
+
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Agrega compatibilidad de subsubsubsecciones al TOC', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
@@ -1709,6 +1773,12 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\colorpage}{white}}{}{', white_end_block=True,
                                   jadd=-1)
 
+    # Cambia las bibliografias
+    nl = find_extract(init_presentacion, '% Configuración de referencias y citas', white_end_block=True)
+    ra, _ = find_block(files[fl], '% Configuración de referencias y citas')
+    _, rb = find_block(files[fl], '% Referencias en 2 columnas')
+    files[fl] = replace_block_from_list(files[fl], nl, ra, rb)
+
     # -------------------------------------------------------------------------
     # PAGECONF
     # -------------------------------------------------------------------------
@@ -1723,6 +1793,10 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Se crean los header-footer', white_end_block=True, jadd=-1, iadd=-2)
     ra, _ = find_block(files[fl], '\\setpagemargincm{\\pagemarginleft}')
     files[fl].pop(ra)
+    files[fl] = find_delete_block(files[fl], '% Muestra los números de línea', white_end_block=True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Estilo citas', white_end_block=True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Estilo de títulos', white_end_block=True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Configura el nombre del abstract', white_end_block=True, iadd=-1)
 
     # -------------------------------------------------------------------------
     # FINALCONF
@@ -1736,6 +1810,12 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], 'Establece el estilo de las subsubsubsecciones', white_end_block=True,
                                   jadd=-1, iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Se reestablecen headers y footers', white_end_block=True, jadd=-1,
+                                  iadd=-1)
+    ra, _ = find_block(files[fl], '% Crea funciones para numerar objetos')
+    files[fl].pop(ra - 2)
+    ra, _ = find_block(files[fl], '% Se reestablecen números de página y secciones')
+    files[fl][ra + 1] = '\t% -------------------------------------------------------------------------\n'
+    files[fl] = find_delete_block(files[fl], '% Muestra los números de línea', white_end_block=True, jadd=1,
                                   iadd=-1)
 
     # -------------------------------------------------------------------------
@@ -2331,7 +2411,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
     fl = 'src/env/imports.tex'
-    idel = []
+    idel = ['ragged2e']
     for idel in idel:
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
@@ -2341,6 +2421,14 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl].pop()
     a, _ = find_block(files[fl], '\\usepackage{apacite}', True)
     files[fl][a] = files[fl][a].replace('{apacite}', '[nosectionbib]{apacite}')
+
+    ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
+    rb, _ = find_block(files[fl], '% \usepackage{subfigure}', True)
+    files[fl] = del_block_from_list(files[fl], ra, rb + 1)
+
+    ra, _ = find_block(files[fl], '% Desde v6.2.8 se debe cargar al final para evitar errores:', True)
+    rb, _ = find_block(files[fl], '% Desde v6.5.6 se carga después de las referencias ', True)
+    files[fl] = del_block_from_list(files[fl], ra, rb)
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
@@ -2481,13 +2569,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
-    delfile = 'src/cmd/core.tex'
-    fl = files[delfile]
-    files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
-    fl = files[delfile]
-    files[delfile] = find_delete_block(fl, '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
-    files[delfile] = find_delete_block(fl, '% Para la compatibilidad con template-tesis se define el capítulo',
-                                       white_end_block=True)
+    fl = 'src/cmd/core.tex'
+    files[fl] = find_delete_block(files[fl], '% Imagen de prueba tikz', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Para la compatibilidad con template-tesis se define el capítulo',
+                                  white_end_block=True)
 
     # Cambia encabezado archivos
     for fl in files.keys():
