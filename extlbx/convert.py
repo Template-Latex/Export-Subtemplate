@@ -1601,8 +1601,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'apaciteshowurl', 'apacitestyle', 'appendixindepobjnum', 'natbibnumbers',
             'natbibrefsep', 'natbibrefstyle', 'natbibsquare', 'sectionappendixlastchar',
             'twocolumnreferences', 'nomchapter', 'anumsecaddtocounter', 'fontsizerefbibl',
-            'pdfcompilecompression', 'pdfcompileobjcompression', 'hfpdashcharstyle',
-            'nameabstract'
+            'hfpdashcharstyle', 'nameabstract'
             ]
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
@@ -1776,8 +1775,11 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # Cambia las bibliografias
     nl = find_extract(init_presentacion, '% Configuración de referencias y citas', white_end_block=True)
     ra, _ = find_block(files[fl], '% Configuración de referencias y citas')
-    _, rb = find_block(files[fl], '% Referencias en 2 columnas')
-    files[fl] = replace_block_from_list(files[fl], nl, ra, rb)
+    _, rb = find_block(files[fl], '% Referencias en 2 columnas', blankend=True)
+    files[fl] = replace_block_from_list(files[fl], nl, ra, rb - 1)
+
+    ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
+    files[fl].pop(ra)
 
     # -------------------------------------------------------------------------
     # PAGECONF
