@@ -540,12 +540,11 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     fl = 'src/config.tex'
 
     # Configuraciones que se borran
-    cdel = ['addemptypagetwosides', 'nomlttable', 'nomltsrc', 'nomltfigure',
-            'nomltcont', 'nameportraitpage', 'indextitlecolor',
+    cdel = ['addemptypagetwosides', 'nameportraitpage', 'indextitlecolor',
             'portraittitlecolor', 'fontsizetitlei', 'styletitlei',
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
             'nomchapter', 'nomnpageof', 'indexforcenewpage', 'predocpageromannumber',
-            'predocresetpagenumber', 'margineqnindexbottom', 'margineqnindextop', 'nomlteqn',
+            'predocresetpagenumber', 'margineqnindexbottom', 'margineqnindextop',
             'bibtexindexbibliography']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
@@ -553,9 +552,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     ra, rb = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
     files[fl] = del_block_from_list(files[fl], ra, rb)
-    for cdel in ['namereferences', 'nomltwsrc', 'nomltwfigure', 'nomltwtable', 'nameappendixsection',
-                 'nomltappendixsection', 'namemathcol', 'namemathdefn', 'namemathej', 'namemathlem',
-                 'namemathobs', 'namemathprp', 'namemaththeorem', 'nameabstract']:
+    for cdel in []:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     # ra, rb = find_block(files[fl], 'showdotaftersnum', True) Desactivado desde v3.3.4
@@ -1192,17 +1189,14 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Configuraciones que se borran
     cdel = ['firstpagemargintop', 'portraitstyle', 'predocpageromannumber', 'predocpageromanupper',
-            'predocresetpagenumber', 'fontsizetitlei', 'styletitlei', 'nomltcont', 'nomltfigure', 'nomltsrc',
-            'nomlttable', 'nameportraitpage', 'indextitlecolor', 'addindextobookmarks', 'portraittitlecolor',
-            'margineqnindexbottom', 'margineqnindextop', 'nomlteqn', 'bibtexindexbibliography',
-            'addemptypagetwosides']
+            'predocresetpagenumber', 'fontsizetitlei', 'styletitlei', 'nameportraitpage', 'indextitlecolor',
+            'addindextobookmarks', 'portraittitlecolor', 'margineqnindexbottom', 'margineqnindextop',
+            'bibtexindexbibliography', 'addemptypagetwosides']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
-    for cdel in ['nameabstract', 'nameappendixsection', 'namereferences', 'nomchapter', 'nomltappendixsection',
-                 'nomltwfigure', 'nomltwsrc', 'nomltwtable', 'nomnpageof', 'namemathcol', 'namemathdefn', 'namemathej',
-                 'namemathlem', 'namemathobs', 'namemathprp', 'namemaththeorem']:
+    for cdel in []:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
@@ -1609,6 +1603,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% MÁRGENES DE PÁGINA', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DE LOS TÍTULOS', white_end_block=True)
     for cdel in ['namemathcol', 'namemathdefn', 'namemathej',
                  'namemathlem', 'namemathobs', 'namemathprp', 'namemaththeorem',
                  'namereferences', 'nomltappendixsection', 'nomltwfigure',
@@ -1666,13 +1661,13 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Insertar una ecuación en el índice', white_end_block=True)
 
     # -------------------------------------------------------------------------
-    # CAMBIA LAS ECUACIONES
+    # CAMBIA LOS TÍTULOS
     # -------------------------------------------------------------------------
     fl = 'src/cmd/title.tex'
     files[fl] = find_delete_block(files[fl], '% Insertar una ecuación en el índice', white_end_block=True)
 
     # -------------------------------------------------------------------------
-    # CAMBIA OTROS
+    # CAMBIA ENVIRONMENTS
     # -------------------------------------------------------------------------
     fl = 'src/env/environments.tex'
     files[fl] = find_delete_block(files[fl], '% Crea una sección de resumen', white_end_block=True)
@@ -1698,6 +1693,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True, iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Dimensiones y geometría del documento', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Cambia el estilo de los títulos', white_end_block=True)
+    ra, _ = find_block(files[fl], '% Agrega punto a títulos/subtítulos', True)
+    files[fl][ra] = '% Agrega punto a títulos/subtítulos\n\\def\\showdotaftersnum{true}\n'
     ra, _ = find_block(files[fl], '\showappendixsecindex')
     nl = ['\\def\\showappendixsecindex{false}\n',
           files[fl][ra]]
