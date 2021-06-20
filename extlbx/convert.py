@@ -1538,7 +1538,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     for cdel in ['cfgpdfpageview', 'bibtexstyle']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace(' %', '%')  # Reemplaza espacio en comentarios de la lista
-    for cdel in ['captiontextbold', 'captiontextsubnumbold']:
+    for cdel in ['captiontextbold', 'captiontextsubnumbold', 'cfgpdffitwindow']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('%', ' %')  # Reemplaza espacio en comentarios de la lista
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
@@ -1570,6 +1570,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     nconf = replace_argument(files[fl][ra], 1, 'true')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'captiontextsubnumbold', True)
+    nconf = replace_argument(files[fl][ra], 1, 'true')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'cfgpdffitwindow', True)
     nconf = replace_argument(files[fl][ra], 1, 'true')
     files[fl][ra] = nconf
 
