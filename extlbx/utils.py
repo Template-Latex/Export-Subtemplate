@@ -39,13 +39,19 @@ POS_DER = 2
 
 class Cd(object):
     def __init__(self, new_path):
-        self.newPath = os.path.expanduser(new_path)
+        self.apply = new_path is not None
+        if self.apply:
+            self.newPath = os.path.expanduser(new_path)
 
     def __enter__(self):
+        if not self.apply:
+            return
         self.savedPath = os.getcwd()
         os.chdir(self.newPath)
 
     def __exit__(self, etype, value, traceback):
+        if not self.apply:
+            return
         os.chdir(self.savedPath)
 
 
