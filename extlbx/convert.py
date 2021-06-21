@@ -2235,6 +2235,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'nomltcont', True)
     nconf = replace_argument(files[fl][ra], 1, 'Tabla de Contenidos').replace('%', ' %')
     files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'footnotepagetoprule', True)
+    nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
+    files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'nomltfigure', True)
     nconf = replace_argument(files[fl][ra], 1, 'Índice de Ilustraciones').replace(' %', '%')
     files[fl][ra] = nconf
@@ -2248,7 +2251,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Configuraciones que se borran
     cdel = ['portraitstyle', 'firstpagemargintop', 'bibtexenvrefsecnum',
             'predocpageromannumber', 'predocresetpagenumber', 'indexnewpagec', 'indexnewpagef',
-            'indexnewpaget', 'showindexofcontents', 'fontsizetitlei', 'styletitlei', 'indexnewpagee']
+            'indexnewpaget', 'showindexofcontents', 'fontsizetitlei', 'styletitlei', 'indexnewpagee',
+            'hfpdashcharstyle']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
