@@ -1582,6 +1582,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl][ra] = '\\def\\captionfontsize{footnotesize} % Tamaño de fuente de los caption\n'
     # files[fl].pop()
 
+    ra, _ = find_block(files[fl], 'fonturl', True)
+    files[fl][ra] += '\\def\\frametextjustified {false}    % Justifica todos los párrafos de los frames\n'
+
     # -------------------------------------------------------------------------
     # CAMBIA LAS ECUACIONES
     # -------------------------------------------------------------------------
@@ -1705,6 +1708,13 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
 
     ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
     files[fl].pop(ra)
+
+    # Justificación de textos
+    nl = find_extract(init_presentacion, '% Justificación de textos', white_end_block=True)
+    files[fl].pop()
+    nl.insert(0, '% -----------------------------------------------------------------------------\n')
+    for j in nl:
+        files[fl].append(j)
 
     # -------------------------------------------------------------------------
     # PAGECONF
