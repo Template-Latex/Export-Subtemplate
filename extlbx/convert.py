@@ -1470,6 +1470,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files['src/cmd/image.tex'] = copy.copy(mainf['src/cmd/image.tex'])
     files['src/cmd/title.tex'] = copy.copy(mainf['src/cmd/title.tex'])
     files['src/cmd/other.tex'] = copy.copy(mainf['src/cmd/other.tex'])
+    files['src/cmd/presentacion.tex'] = file_to_list('src/cmd/presentacion.tex')
     files['src/etc/example.tex'] = file_to_list('src/etc/example_presentacion.tex')
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
@@ -1537,10 +1538,16 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     for cdel in ['cfgpdfpageview', 'bibtexstyle']:
         ra, rb = find_block(files[fl], cdel, True)
-        files[fl][ra] = files[fl][ra].replace(' %', '%')  # Reemplaza espacio en comentarios de la lista
+        files[fl][ra] = files[fl][ra].replace(' %', '%')
     for cdel in ['captiontextbold', 'captiontextsubnumbold', 'cfgpdffitwindow']:
         ra, rb = find_block(files[fl], cdel, True)
-        files[fl][ra] = files[fl][ra].replace('%', ' %')  # Reemplaza espacio en comentarios de la lista
+        files[fl][ra] = files[fl][ra].replace('%', ' %')
+    for cdel in ['captionlrmarginmc', 'captionlrmargin']:
+        ra, rb = find_block(files[fl], cdel, True)
+        files[fl][ra] = files[fl][ra].replace('%', '  %')
+    for cdel in ['documentinterline']:
+        ra, rb = find_block(files[fl], cdel, True)
+        files[fl][ra] = files[fl][ra].replace('%', '    %')
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
                                                 '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
@@ -1561,10 +1568,13 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     nconf = replace_argument(files[fl][ra], 1, 'apalike')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'captionlrmarginmc', True)
-    nconf = replace_argument(files[fl][ra], 1, '0.5')
+    nconf = replace_argument(files[fl][ra], 1, '0')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'captionlrmargin', True)
-    nconf = replace_argument(files[fl][ra], 1, '0.5')
+    nconf = replace_argument(files[fl][ra], 1, '0')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'documentinterline', True)
+    nconf = replace_argument(files[fl][ra], 1, '1')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'captiontextbold', True)
     nconf = replace_argument(files[fl][ra], 1, 'true')
@@ -1637,7 +1647,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = replace_block_from_list(files[fl], nl, ra - 1, ra - 1)
 
     files[fl].pop()
-    files[fl].append('\\usefonttheme{professionalfonts}\n')
+    files[fl].append('\\usefonttheme{professionalfonts}\n\\usepackage{transparent}\n')
 
     ra, _ = find_block(files[fl], '% Desde v6.2.8 se debe cargar al final para evitar errores:')
     rb, _ = find_block(files[fl], '% Anexos/Apéndices')
