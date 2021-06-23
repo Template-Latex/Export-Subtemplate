@@ -1301,11 +1301,11 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
-    delfile = 'src/cmd/core.tex'
-    fl = files[delfile]
-    files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
-    fl = files[delfile]
-    files[delfile] = find_delete_block(fl, '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
+    fl = 'src/cmd/core.tex'
+    files[fl] = find_delete_block(files[fl], '\\newcommand{\\bgtemplatetestimg}{')
+    files[fl] = find_delete_block(files[fl], '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
+    ra, _ = find_block(files[fl], '% Imagen de prueba tikz')
+    files[fl].pop(ra)
 
     # Cambia encabezado archivos
     for fl in files.keys():
@@ -1812,11 +1812,11 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
-    delfile = 'src/cmd/core.tex'
-    fl = files[delfile]
-    files[delfile] = find_delete_block(fl, '\\newcommand{\\bgtemplatetestimg}{')
-    fl = files[delfile]
-    files[delfile] = find_delete_block(fl, '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
+    fl = 'src/cmd/core.tex'
+    files[fl] = find_delete_block(files[fl], '\\newcommand{\\bgtemplatetestimg}{')
+    files[fl] = find_delete_block(files[fl], '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Cambia los márgenes del documento', white_end_block=True, jadd=1)
+    files[fl] = find_delete_block(files[fl], '% Cambia márgenes de las páginas [cm]', white_end_block=True)
 
     # Cambia encabezado archivos
     for fl in files.keys():
@@ -2436,7 +2436,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl] = find_replace_block(files[fl], w, nl, True)
     w = '% Crea una sección de resumen'
     nl = find_extract(env_tesis, w, True)
-    files[fl] = find_replace_block(files[fl], w, nl, True)
+    files[fl] = find_replace_block(files[fl], w, nl, True, jadd=-1)
     _, rb = find_block(files[fl], w, True)
     nl = find_extract(env_tesis, '% Crea una sección de dedicatoria', True)
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
@@ -2444,15 +2444,21 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nl = find_extract(env_tesis, '% Crea una sección de agradecimientos', True)
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
 
+    # Agrega saltos de línea
+    for w in ['% Llama al entorno de resumen', '% Crea una sección de dedicatoria',
+              '% Crea una sección de agradecimientos']:
+        ra, _ = find_block(files[fl], w, True)
+        files[fl][ra] = '\n' + files[fl][ra]
+
     # Reemplaza líneas
     ra, _ = find_block(files[fl], 'counterwithin{equation}')
-    files[fl][ra] = '\\counterwithin{equation}{chapter}\n'
+    files[fl][ra] = '\t\t\t\\counterwithin{equation}{chapter}\n'
     ra, _ = find_block(files[fl], 'counterwithin{figure}')
-    files[fl][ra] = '\\counterwithin{figure}{chapter}\n'
+    files[fl][ra] = '\t\t\t\\counterwithin{figure}{chapter}\n'
     ra, _ = find_block(files[fl], 'counterwithin{lstlisting}')
-    files[fl][ra] = '\\counterwithin{lstlisting}{chapter}\n'
+    files[fl][ra] = '\t\t\t\\counterwithin{lstlisting}{chapter}\n'
     ra, _ = find_block(files[fl], 'counterwithin{table}')
-    files[fl][ra] = '\\counterwithin{table}{chapter}\n'
+    files[fl][ra] = '\t\t\t\\counterwithin{table}{chapter}\n'
 
     # Cambia valor de anexos sección
     ra, _ = find_block(files[fl], 'GLOBALsectionalph')
