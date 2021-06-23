@@ -1720,8 +1720,14 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl].pop(ra)
 
     # Justificación de textos
-    nl = find_extract(init_presentacion, '% Justificación de textos', white_end_block=True)
     files[fl].pop()
+    nl = find_extract(init_presentacion, '% Justificación de textos', white_end_block=True)
+    nl.insert(0, '% -----------------------------------------------------------------------------\n')
+    for j in nl:
+        files[fl].append(j)
+
+    # Word-break en citas
+    nl = find_extract(init_presentacion, '% Word-break en citas', white_end_block=True)
     nl.insert(0, '% -----------------------------------------------------------------------------\n')
     for j in nl:
         files[fl].append(j)
