@@ -364,7 +364,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                 kline += 1
 
             # Strip
-            dostrip = True
+            dostrip = False
             if f == configfile or f == mainfile or f == examplefile or '-config' in f:
                 dostrip = False
 
@@ -750,7 +750,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                 kline += 1
 
             # Strip
-            dostrip = True
+            dostrip = False
             if f == configfile or f == mainfile or f == examplefile or '-config' in f:
                 dostrip = False
 
@@ -990,7 +990,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                 kline += 1
 
             # Strip
-            dostrip = True
+            dostrip = False
             if f == configfile or f == mainfile or f == examplefile or '-config' in f:
                 dostrip = False
 
@@ -1205,7 +1205,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Estilo portada', white_end_block=True, iadd=-1)
     ra, _ = find_block(files[fl], '\showappendixsecindex')
-    nl = ['\\def\\showappendixsecindex{false}\n',
+    nl = ['\\def\\showappendixsecindex {false}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
@@ -1229,7 +1229,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     ra, _ = find_block(files[fl], '\checkvardefined{\\autordeldocumento}', True)
 
     # Agrega definición de titulodelreporte
-    nl = ['\def\\titulodelinforme{\\titulodelreporte}\n',
+    nl = ['\def\\titulodelinforme {\\titulodelreporte}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
@@ -1342,7 +1342,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
                 kline += 1
 
             # Strip
-            dostrip = True
+            dostrip = False
             if f == configfile or f == mainfile or f == examplefile or '-config' in f:
                 dostrip = False
 
@@ -1635,9 +1635,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Dimensiones y geometría del documento', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Cambia el estilo de los títulos', white_end_block=True)
     ra, _ = find_block(files[fl], '% Agrega punto a títulos/subtítulos', True)
-    files[fl][ra] = '% Agrega punto a títulos/subtítulos\n\\def\\showdotaftersnum{true}\n'
+    files[fl][ra] = '% Agrega punto a títulos/subtítulos\n\\def\\showdotaftersnum {true}\n'
     ra, _ = find_block(files[fl], '\showappendixsecindex')
-    nl = ['\\def\\showappendixsecindex{false}\n',
+    nl = ['\\def\\showappendixsecindex {false}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
@@ -1672,7 +1672,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '\pdfminorversion', white_end_block=True, iadd=-1)
     ra, _ = find_block(files[fl], '\checkvardefined{\\autordeldocumento}', True)
 
-    nl = ['\def\\titulodelinforme{\\titulopresentacion}\n',
+    nl = ['\def\\titulodelinforme {\\titulopresentacion}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
@@ -1853,7 +1853,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
                 kline += 1
 
             # Strip
-            dostrip = True
+            dostrip = False
             if f == configfile or f == mainfile or f == examplefile or '-config' in f:
                 dostrip = False
 
@@ -2510,7 +2510,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                 kline += 1
 
             # Strip
-            dostrip = True
+            dostrip = False
             if f == configfile or f == mainfile or f == examplefile or '-config' in f:
                 dostrip = False
 
