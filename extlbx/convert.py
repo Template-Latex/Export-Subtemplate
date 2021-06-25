@@ -1585,6 +1585,12 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, rb = find_block(files[fl], 'cfgpdffitwindow', True)
     nconf = replace_argument(files[fl][ra], 1, 'true')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'marginimagebottom', True)
+    nconf = replace_argument(files[fl][ra], 1, '-0.50')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'marginimagemultright', True)
+    nconf = replace_argument(files[fl][ra], 1, '0.35')
+    files[fl][ra] = nconf
 
     ra, _ = find_block(files[fl], 'stylecitereferences', True)
     files[fl][ra] = '\\def\\stylecitereferences {bibtex}  % Estilo cita/ref {bibtex,custom}\n'
@@ -1627,7 +1633,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # -------------------------------------------------------------------------
     fl = 'src/env/imports.tex'
     idel = ['xcolor', 'hyperref', 'sectsty', 'tocloft', 'notoccite', 'titlesec',
-            'graphicx', 'ragged2e']
+            'graphicx']
     for idel in idel:
         ra, rb = find_block(files[fl], idel, True)
         files[fl].pop(ra)
@@ -1719,18 +1725,15 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
     files[fl].pop(ra)
 
-    # Justificación de textos
     files[fl].pop()
-    nl = find_extract(init_presentacion, '% Justificación de textos', white_end_block=True)
-    nl.insert(0, '% -----------------------------------------------------------------------------\n')
-    for j in nl:
-        files[fl].append(j)
 
-    # Word-break en citas
-    nl = find_extract(init_presentacion, '% Word-break en citas', white_end_block=True)
-    nl.insert(0, '% -----------------------------------------------------------------------------\n')
-    for j in nl:
-        files[fl].append(j)
+    # Inserta bloques
+    for i in ['% Justificación de textos', '% Word-break en citas',
+              '% Corrige espaciamiento de itemize']:
+        nl = find_extract(init_presentacion, i, white_end_block=True)
+        nl.insert(0, '% -----------------------------------------------------------------------------\n')
+        for j in nl:
+            files[fl].append(j)
 
     # -------------------------------------------------------------------------
     # PAGECONF
@@ -1815,8 +1818,10 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     fl = 'src/cmd/core.tex'
     files[fl] = find_delete_block(files[fl], '\\newcommand{\\bgtemplatetestimg}{')
     files[fl] = find_delete_block(files[fl], '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
-    files[fl] = find_delete_block(files[fl], '% Cambia los márgenes del documento', white_end_block=True, jadd=1)
+    # files[fl] = find_delete_block(files[fl], '% Cambia los márgenes del documento', white_end_block=True, jadd=1)
     files[fl] = find_delete_block(files[fl], '% Cambia márgenes de las páginas [cm]', white_end_block=True)
+    ra, _ = find_block(files[fl], '% Imagen de prueba tikz')
+    files[fl].pop(ra)
 
     # Cambia encabezado archivos
     for fl in files.keys():
@@ -2289,7 +2294,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl][ra] = '% ESTILO HEADER-FOOTER\n'
 
     # Añade nuevas entradas
-    files[fl] = search_append_line(files[fl], 'captiontextcolor',
+    files[fl] = search_append_line(files[fl], '% CONFIGURACIÓN DE LOS COLORES DEL DOCUMENTO',
                                    '\\def\\chaptercolor {black}          % Color de los capítulos\n')
     files[fl] = search_append_line(files[fl], 'anumsecaddtocounter',
                                    '\\def\\fontsizechapter {\\huge}       % Tamaño fuente de los capítulos\n')

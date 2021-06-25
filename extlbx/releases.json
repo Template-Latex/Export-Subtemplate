@@ -239,7 +239,8 @@
                         "example.tex",
                         "main.tex",
                         "template.tex",
-                        "template_config.tex"
+                        "template_config.tex",
+                        "library.bib"
                     ],
                     "FOLDER": [
                         "img"
