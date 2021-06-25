@@ -1676,11 +1676,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], 'Actualización márgen títulos', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se añade listings (código fuente) a tocloft', True, iadd=-2)
     files[fl] = find_delete_block(files[fl], '\pdfminorversion', white_end_block=True, iadd=-1)
-    ra, _ = find_block(files[fl], '\checkvardefined{\\autordeldocumento}', True)
-
-    nl = ['\def\\titulodelinforme {\\titulopresentacion}\n',
-          files[fl][ra]]
-    files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
     # Borra línea definiciones
     ra, _ = find_block(files[fl], '\checkvardefined{\\imagendepartamentoparams}')
@@ -1700,9 +1695,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
-    for i in ['pdfmetainfotema {\\temaatratar}', 'Documento.Tema', '\\def\\pdfmetainfotema {}',
-              '\\checkvardefined{\\temaatratar}', '\g@addto@macro\\temaatratar\\xspace',
-              'pdfmetainfotema', '\\author{\\pdfmetainfoautor}', '\\title{\\pdfmetainfotitulo}']:
+    for i in ['\\author{\\pdfmetainfoautor}', '\\title{\\pdfmetainfotitulo}',
+              '\\checkvardefined{\\titulodelinforme}', '\g@addto@macro\\titulodelinforme']:
         ra, _ = find_block(files[fl], i)
         files[fl].pop(ra)
 
