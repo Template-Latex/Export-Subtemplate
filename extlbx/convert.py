@@ -1722,8 +1722,10 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl].pop()
 
     # Inserta bloques
-    for i in ['% Justificación de textos', '% Word-break en citas',
-              '% Corrige espaciamiento de itemize']:
+    for i in ['% Justificación de textos',
+              '% Word-break en citas',
+              '% Corrige espaciamiento de itemize',
+              '% Cambios generales en presentación']:
         nl = find_extract(init_presentacion, i, white_end_block=True)
         nl.insert(0, '% -----------------------------------------------------------------------------\n')
         for j in nl:
