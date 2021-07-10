@@ -2260,7 +2260,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, 'Bibliografía').replace(' %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'nomltcont', True)
-    nconf = replace_argument(files[fl][ra], 1, 'Tabla de Contenidos').replace('%', ' %')
+    nconf = replace_argument(files[fl][ra], 1, 'Tabla de Contenido').replace('%', '  %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'footnotepagetoprule', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
@@ -2298,11 +2298,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                                    '\\def\\stylechapter {\\bfseries}      % Estilo de los capítulos\n')
     files[fl] = search_append_line(files[fl], '% ESTILO HEADER-FOOTER',
                                    '\\def\\chapterstyle {style1}         % Estilo de los capítulos (12 estilos)\n')
-
-    # -------------------------------------------------------------------------
-    # CAMBIA TÍTULOS
-    # -------------------------------------------------------------------------
-    # fl = 'src/cmd/title.tex'
+    files[fl] = search_append_line(files[fl], '\\numberedequation',
+                                   '\\def\\showtableresumenenv {false}   % Muestra tabla superior derecha de resumen\n')
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
@@ -2339,6 +2336,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
     # Añade bloque de variables definidas
     nl = find_extract(init_tesis, '% Inicialización de variables', white_end_block=True)
+    nl.pop(0)
     nl.append(files[fl][ra])
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
     # ra, _ = find_block(files[fl], 'pdfkeywords', True)
