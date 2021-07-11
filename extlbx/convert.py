@@ -507,6 +507,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files['src/etc/example.tex'] = file_to_list('src/etc/example_auxiliar.tex')
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
+    files['src/defs.tex'] = copy.copy(mainf['src/defs.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
     files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
@@ -569,7 +570,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
             'nomchapter', 'nomnpageof', 'indexforcenewpage', 'predocpageromannumber',
             'predocresetpagenumber', 'margineqnindexbottom', 'margineqnindextop',
-            'bibtexindexbibliography']
+            'bibtexindexbibliography', 'anumsecaddtocounter', 'predocpageromanupper']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -675,9 +676,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     i1, f1 = find_block(aux_pageconf, '% Numeración de objetos', True)
     nl = extract_block_from_list(aux_pageconf, i1, f1)
     files[fl] = add_block_from_list(files[fl], nl, len(files[fl]) + 1)
-    pcfg = ['listfigurename', 'listtablename', 'contentsname', 'lstlistlistingname']
-    for pcfg in pcfg:
-        ra, _ = find_block(files[fl], pcfg)
     files[fl].pop(ra)
     files[fl].pop()
     files[fl].append('\\titleclass{\subsubsubsection}{straight}[\subsection]\n')
@@ -848,6 +846,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files['src/etc/example.tex'] = file_to_list('src/etc/example_control.tex')
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
+    files['src/defs.tex'] = copy.copy(mainf['src/defs.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
     files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
@@ -915,7 +914,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # CONFIGS
     # -------------------------------------------------------------------------
     fl = 'src/config.tex'
-    ra = find_line(files[fl], 'anumsecaddtocounter')
+    ra = find_line(files[fl], '% CONFIGURACIONES DE OBJETOS')
     files[fl][ra] += '\def\\bolditempto {true}            % Puntaje item en negrita\n'
     cdel = ['templatestyle']
     for cdel in cdel:
@@ -1086,6 +1085,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
     files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
+    files['src/defs.tex'] = copy.copy(mainf['src/defs.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
     files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
@@ -1190,12 +1190,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # files[fl].pop()
 
     # -------------------------------------------------------------------------
-    # CAMBIA LAS ECUACIONES
-    # -------------------------------------------------------------------------
-    fl = 'src/cmd/equation.tex'
-    files[fl] = find_delete_block(files[fl], '% Insertar una ecuación en el índice', white_end_block=True)
-
-    # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
     fl = 'src/env/imports.tex'
@@ -1223,6 +1217,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     fl = 'src/cfg/init.tex'
     init_auxiliar = file_to_list('src/cfg/init_reporte.tex')
     nl = find_extract(init_auxiliar, 'Operaciones especiales Template-Reporte', True)
+    nl.insert(0, '% -----------------------------------------------------------------------------\n')
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
@@ -1255,25 +1250,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # Elimina cambio del indice en bibtex
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
 
-    files[fl] = find_delete_block(files[fl], '% Crea índice de ecuaciones', white_end_block=True, jadd=-1, iadd=-2)
-
     ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
     files[fl].pop(ra)
-
-    # -------------------------------------------------------------------------
-    # PAGECONF
-    # -------------------------------------------------------------------------
-    # fl = 'src/cfg/page.tex'
-
-    # -------------------------------------------------------------------------
-    # FINALCONF
-    # -------------------------------------------------------------------------
-    fl = 'src/cfg/final.tex'
-    a, _ = find_block(files[fl], '\\titleclass{\subsubsubsection}{straight}[\subsection]')
-    files[fl].pop()
-    files[fl].append(files[fl].pop(a).strip() + '\n')
-    files[fl] = find_delete_block(files[fl], '% Establece el estilo de las subsubsubsecciones',
-                                  white_end_block=True, iadd=-1)
 
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
@@ -1475,6 +1453,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
     files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
+    files['src/defs.tex'] = copy.copy(mainf['src/defs.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
     files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
@@ -1521,7 +1500,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'apaciteshowurl', 'apacitestyle', 'appendixindepobjnum', 'natbibnumbers',
             'natbibrefsep', 'natbibrefstyle', 'natbibsquare', 'sectionappendixlastchar',
             'twocolumnreferences', 'nomchapter', 'anumsecaddtocounter', 'fontsizerefbibl',
-            'hfpdashcharstyle', 'nameabstract'
+            'hfpdashcharstyle', 'nameabstract', 'margineqnindexbottom', 'margineqnindextop'
             ]
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
@@ -1671,9 +1650,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     init_presentacion = file_to_list('src/cfg/init_presentacion.tex')
 
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
-    files[fl] = find_delete_block(files[fl], 'Agrega compatibilidad de subsubsubsecciones al TOC', True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], 'Agrega compatibilidad de sub-sub-sub-secciones al TOC', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
-    files[fl] = find_delete_block(files[fl], 'Actualización márgen títulos', True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], 'Actualización margen títulos', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se añade listings (código fuente) a tocloft', True, iadd=-2)
     files[fl] = find_delete_block(files[fl], '\pdfminorversion', white_end_block=True, iadd=-1)
 
@@ -1719,6 +1698,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
     files[fl].pop(ra)
 
+    ra, _ = find_block(files[fl], '\\setcounter{secnumdepth}{4}', True)
+    files[fl][ra] += '\n'
+
     files[fl].pop()
 
     # Inserta bloques
@@ -1757,15 +1739,15 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Se usa número de páginas en arábigo', white_end_block=True, jadd=-1,
                                   iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Reinicia número de página', white_end_block=True, jadd=-1, iadd=-1)
-    files[fl] = find_delete_block(files[fl], 'Estilo de títulos - reestablece estilos por el índice',
+    files[fl] = find_delete_block(files[fl], 'Estilo de títulos - restablece estilos por el índice',
                                   white_end_block=True, jadd=-1, iadd=-2)
-    files[fl] = find_delete_block(files[fl], 'Establece el estilo de las subsubsubsecciones', white_end_block=True,
+    files[fl] = find_delete_block(files[fl], 'Establece el estilo de las sub-sub-sub-secciones', white_end_block=True,
                                   jadd=-1, iadd=-1)
-    files[fl] = find_delete_block(files[fl], '% Se reestablecen headers y footers', white_end_block=True, jadd=-1,
+    files[fl] = find_delete_block(files[fl], '% Se restablecen headers y footers', white_end_block=True, jadd=-1,
                                   iadd=-1)
     ra, _ = find_block(files[fl], '% Crea funciones para numerar objetos')
     files[fl].pop(ra - 2)
-    ra, _ = find_block(files[fl], '% Se reestablecen números de página y secciones')
+    ra, _ = find_block(files[fl], '% Se restablecen números de página y secciones')
     files[fl][ra + 1] = '\t% -------------------------------------------------------------------------\n'
     files[fl] = find_delete_block(files[fl], '% Muestra los números de línea', white_end_block=True, jadd=1,
                                   iadd=-1)
@@ -2131,6 +2113,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
     files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
+    files['src/defs.tex'] = copy.copy(mainf['src/defs.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
     files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
@@ -2249,7 +2232,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # ra, _ = find_block(files[fl], 'addindextobookmarks', True)
     # nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     # files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'addindextobookmarks', True)
+    ra, _ = find_block(files[fl], 'addindexsubtobookmarks', True)
     nl = ['\\def\\addabstracttobookmarks {true} % Añade el resumen a los marcadores del pdf\n',
           '\\def\\addagradectobookmarks {true}  % Añade el agradecimiento a los marcadores\n',
           files[fl][ra],
@@ -2279,7 +2262,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     cdel = ['portraitstyle', 'firstpagemargintop', 'bibtexenvrefsecnum',
             'predocpageromannumber', 'predocresetpagenumber', 'indexnewpagec', 'indexnewpagef',
             'indexnewpaget', 'showindexofcontents', 'fontsizetitlei', 'styletitlei', 'indexnewpagee',
-            'hfpdashcharstyle']
+            'hfpdashcharstyle', 'portraittitlecolor']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -2298,7 +2281,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                                    '\\def\\stylechapter {\\bfseries}      % Estilo de los capítulos\n')
     files[fl] = search_append_line(files[fl], '% ESTILO HEADER-FOOTER',
                                    '\\def\\chapterstyle {style1}         % Estilo de los capítulos (12 estilos)\n')
-    files[fl] = search_append_line(files[fl], '\\numberedequation',
+    files[fl] = search_append_line(files[fl], '\\senumertiv',
                                    '\\def\\showtableresumenenv {false}   % Muestra tabla superior derecha de resumen\n')
 
     # -------------------------------------------------------------------------
@@ -2373,6 +2356,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Agrega estilos de capítulos
     files[fl].pop()
     nl = find_extract(init_tesis, '% Estilos de capítulos', white_end_block=True)
+    nl.insert(0, '% -----------------------------------------------------------------------------\n')
     for i in nl:
         files[fl].append(i)
 
@@ -2385,11 +2369,15 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Agrega inicial
     ra, _ = find_block(files[fl], 'Crea nueva página y establece estilo de títulos', True)
     nl = find_extract(index_tesis, '% Inicio índice, desactiva espacio entre objetos', True)
-    files[fl] = add_block_from_list(files[fl], nl, ra)
+    files[fl] = add_block_from_list(files[fl], nl, ra - 2)
 
     ra, _ = find_block(files[fl], 'Se añade una página en blanco', True)
-    nl = find_extract(index_tesis, '% Final del índice, reestablece el espacio', True)
-    files[fl] = add_block_from_list(files[fl], nl, ra)
+    nl = find_extract(index_tesis, '% Final del índice, restablece el espacio', True)
+    files[fl] = add_block_from_list(files[fl], nl, ra - 2)
+
+    for j in ['% Inicio índice, desactiva espacio entre objetos', '% Final del índice, restablece el espacio']:
+        ra, _ = find_block(files[fl], j, True)
+        files[fl].insert(ra, '\n\t% -------------------------------------------------------------------------\n')
 
     w = '% Configuración del punto en índice'
     nl = find_extract(index_tesis, w, True)
@@ -2422,6 +2410,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
     files[fl] = search_append_line(files[fl], '\\sectionfont{\\color',
                                    '\t\\chaptertitlefont{\\color{\\chaptercolor} \\fontsizechapter \\stylechapter \\selectfont}\n')
+
+    ra, _ = find_block(files[fl], '% Configura el nombre del abstract', True)
+    files[fl].insert(ra - 1, '\n')
 
     # -------------------------------------------------------------------------
     # ENVIRONMENTS
