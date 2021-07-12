@@ -1507,11 +1507,11 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'titlecolor', 'ssstitlecolor', 'pdfcompileversion', 'bibtexenvrefsecnum',
             'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers', 'colorpage',
             'nomnpageof', 'nameappendixsection', 'apacitebothers', 'apaciterefnumber',
-            'apaciterefsep', 'apaciterefciteclose', 'apaciterefciteopen',
+            'apaciterefsep', 'apaciterefcitecharclose', 'apaciterefcitecharopen',
             'apaciteshowurl', 'apacitestyle', 'appendixindepobjnum', 'sectionappendixlastchar',
             'twocolumnreferences', 'nomchapter', 'anumsecaddtocounter', 'fontsizerefbibl',
             'hfpdashcharstyle', 'nameabstract', 'margineqnindexbottom', 'margineqnindextop',
-            'natbibrefcharclose', 'natbibrefcharopen', 'natbibrefcitecompress',
+            'natbibrefcitecharclose', 'natbibrefcitecharopen', 'natbibrefcitecompress',
             'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle'
             ]
     for cdel in cdel:
