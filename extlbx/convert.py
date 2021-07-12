@@ -662,6 +662,12 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
     files[fl].pop(ra)
 
+    # Agrega saltos de líneas
+    for i in ['% Crea referencias enumeradas en apacite', '% Desactiva la URL de apacite',
+              '% Referencias en 2 columnas']:
+        ra, _ = find_block(files[fl], i)
+        files[fl][ra] = '\n' + files[fl][ra]
+
     # -------------------------------------------------------------------------
     # PAGECONF
     # -------------------------------------------------------------------------
@@ -676,7 +682,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     i1, f1 = find_block(aux_pageconf, '% Numeración de objetos', True)
     nl = extract_block_from_list(aux_pageconf, i1, f1)
     files[fl] = add_block_from_list(files[fl], nl, len(files[fl]) + 1)
-    files[fl].pop(ra)
     files[fl].pop()
     files[fl].append('\\titleclass{\subsubsubsection}{straight}[\subsection]\n')
 
@@ -1253,6 +1258,12 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
     files[fl].pop(ra)
 
+    # Agrega saltos de líneas
+    for i in ['% Crea referencias enumeradas en apacite', '% Desactiva la URL de apacite',
+              '% Referencias en 2 columnas']:
+        ra, _ = find_block(files[fl], i)
+        files[fl][ra] = '\n' + files[fl][ra]
+
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
     # -------------------------------------------------------------------------
@@ -1496,11 +1507,12 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'titlecolor', 'ssstitlecolor', 'pdfcompileversion', 'bibtexenvrefsecnum',
             'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers', 'colorpage',
             'nomnpageof', 'nameappendixsection', 'apacitebothers', 'apaciterefnumber',
-            'apaciterefnumberfinal', 'apaciterefnumberinit', 'apaciterefsep',
-            'apaciteshowurl', 'apacitestyle', 'appendixindepobjnum', 'natbibnumbers',
-            'natbibrefsep', 'natbibrefstyle', 'natbibsquare', 'sectionappendixlastchar',
+            'apaciterefsep', 'apaciterefciteclose', 'apaciterefciteopen',
+            'apaciteshowurl', 'apacitestyle', 'appendixindepobjnum', 'sectionappendixlastchar',
             'twocolumnreferences', 'nomchapter', 'anumsecaddtocounter', 'fontsizerefbibl',
-            'hfpdashcharstyle', 'nameabstract', 'margineqnindexbottom', 'margineqnindextop'
+            'hfpdashcharstyle', 'nameabstract', 'margineqnindexbottom', 'margineqnindextop',
+            'natbibrefcharclose', 'natbibrefcharopen', 'natbibrefcitecompress',
+            'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle'
             ]
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
@@ -1731,6 +1743,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Estilo citas', white_end_block=True, iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Estilo de títulos', white_end_block=True, iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Configura el nombre del abstract', white_end_block=True, iadd=-1)
+    ra, _ = find_block(files[fl], '% Márgenes de páginas y tablas')
+    files[fl][ra] = files[fl][ra].replace('páginas y ', '')
 
     # -------------------------------------------------------------------------
     # FINALCONF
@@ -2359,6 +2373,12 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nl.insert(0, '% -----------------------------------------------------------------------------\n')
     for i in nl:
         files[fl].append(i)
+
+    # Agrega saltos de líneas
+    for i in ['% Crea referencias enumeradas en apacite', '% Desactiva la URL de apacite',
+              '% Referencias en 2 columnas']:
+        ra, _ = find_block(files[fl], i)
+        files[fl][ra] = '\n' + files[fl][ra]
 
     # -------------------------------------------------------------------------
     # ÍNDICE
