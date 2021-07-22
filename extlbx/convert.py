@@ -1592,7 +1592,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # files[fl].pop()
 
     ra, _ = find_block(files[fl], 'fonturl', True)
-    files[fl][ra] += '\\def\\frametextjustified {false}    % Justifica todos los párrafos de los frames\n'
+    files[fl][ra] += '\\def\\frametextjustified {true}     % Justifica todos los párrafos de los frames\n'
 
     # -------------------------------------------------------------------------
     # CAMBIA LAS ECUACIONES
