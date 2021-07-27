@@ -587,7 +587,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     nconf = replace_argument(files[fl][ra], 1, 'none')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemargintop', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.30').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '2.3').replace('  %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'cfgbookmarksopenlevel', True)
     nconf = replace_argument(files[fl][ra], 1, '1')
@@ -1160,9 +1160,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
-    for cdel in []:
+    for cdel in ['pagemargintop']:
         ra, rb = find_block(files[fl], cdel, True)
-        files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
+        files[fl][ra] = files[fl][ra].replace('  %', '%')  # Reemplaza espacio en comentarios de la lista
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
                                                 '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
@@ -1534,13 +1534,13 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
                  'nomltwsrc', 'nomltwtable']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')
-    for cdel in ['cfgpdfpageview', 'bibtexstyle']:
+    for cdel in ['cfgpdfpageview', 'bibtexstyle', 'marginimagemultright']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace(' %', '%')
     for cdel in ['captiontextbold', 'captiontextsubnumbold', 'cfgpdffitwindow']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('%', ' %')
-    for cdel in ['captionlrmarginmc', 'captionlrmargin']:
+    for cdel in []:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('%', '  %')
     for cdel in ['documentinterline']:
@@ -2204,10 +2204,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, '1.0').replace('%', '  %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginbottom', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.0')
-    files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'pagemarginleft', True)
-    nconf = replace_argument(files[fl][ra], 1, '3.0').replace('%', ' %')
+    nconf = replace_argument(files[fl][ra], 1, '2').replace('%', '  %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'fontsizetitle', True)
     nconf = replace_argument(files[fl][ra], 1, '\\Large')
@@ -2225,15 +2222,15 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, '12')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'pagemarginleft', True)
-    nconf = replace_argument(files[fl][ra], 1, '3.0')
+    nconf = replace_argument(files[fl][ra], 1, '3').replace('%', '   %')
     nl = [nconf,
           '\\def\\pagemarginleftportrait {2.5}  % Margen izquierdo página portada [cm]\n']
     files[fl] = add_block_from_list(files[fl], nl, ra)
     ra, _ = find_block(files[fl], 'pagemarginright', True)
-    nconf = replace_argument(files[fl][ra], 1, '2.0').replace('%', ' %')
+    nconf = replace_argument(files[fl][ra], 1, '2').replace('%', '   %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], '\\pagemargintop', True)  # Por alguna extraña razón requiere el \\
-    nconf = replace_argument(files[fl][ra], 1, '2.0')
+    nconf = replace_argument(files[fl][ra], 1, '2')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style7')
