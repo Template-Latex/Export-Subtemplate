@@ -1193,7 +1193,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'hfwidthwrap', True)
     files[fl] = replace_block_from_list(files[fl], config_reporte, ra, ra)
-    # files[fl].pop()
+
+    ra, _ = find_block(files[fl], '% CONFIGURACIÓN DE LAS LEYENDAS - CAPTION', True)
+    files[fl][ra] = '\n' + files[fl][ra]
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
@@ -1523,12 +1525,15 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% MÁRGENES DE PÁGINA', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DE LOS TÍTULOS', white_end_block=True)
+    for cdel in ['captionmarginimagesmc', 'captionmarginimages']:
+        ra, rb = find_block(files[fl], cdel, True)
+        files[fl][ra] = files[fl][ra].replace('    %', '%')  # Reemplaza espacio en comentarios de la lista
     for cdel in ['namemathcol', 'namemathdefn', 'namemathej',
                  'namemathlem', 'namemathobs', 'namemathprp', 'namemaththeorem',
                  'namereferences', 'nomltappendixsection', 'nomltwfigure',
                  'nomltwsrc', 'nomltwtable']:
         ra, rb = find_block(files[fl], cdel, True)
-        files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
+        files[fl][ra] = files[fl][ra].replace('   %', '%')
     for cdel in ['cfgpdfpageview', 'bibtexstyle']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace(' %', '%')
@@ -1583,6 +1588,12 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'marginimagemultright', True)
     nconf = replace_argument(files[fl][ra], 1, '0.35')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'captionmarginimagesmc', True)
+    nconf = replace_argument(files[fl][ra], 1, '-0.04')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'captionmarginimages', True)
+    nconf = replace_argument(files[fl][ra], 1, '-0.04')
     files[fl][ra] = nconf
 
     ra, _ = find_block(files[fl], 'stylecitereferences', True)
@@ -1721,7 +1732,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     for i in ['% Justificación de textos',
               '% Word-break en citas',
               '% Corrige espaciamiento de itemize',
-              '% Cambios generales en presentación']:
+              '% Cambios generales en presentación',
+              '% Configura los bloques',
+              '% Definición de entornos beamer']:
         nl = find_extract(init_presentacion, i, white_end_block=True)
         nl.insert(0, '% -----------------------------------------------------------------------------\n')
         for j in nl:
