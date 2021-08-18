@@ -549,6 +549,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[mainfile] = find_delete_block(files[mainfile], '% CONFIGURACIONES FINALES', white_end_block=True)
     ra = find_line(files[mainfile], 'titulodelinforme')
     files[mainfile][ra] = '\def\\tituloauxiliar {Título de la auxiliar}\n'
+    ra = find_line(files[mainfile], 'subtituloinforme')
+    files[mainfile].pop(ra)
     ra = find_line(files[mainfile], 'temaatratar')
     files[mainfile][ra] = '\def\\temaatratar {Tema de la auxiliar}\n'
     for j in range(len(files[mainfile])):
@@ -658,6 +660,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
     # Elimina cambio del indice en bibtex
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
+
+    # Elimina subtitulo
+    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\subtituloinforme}{}}{', jadd=1)
 
     ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
     files[fl].pop(ra)
@@ -1140,6 +1145,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # Cambia las variables del documento principales
     nl = ['% INFORMACIÓN DEL DOCUMENTO\n',
           '\def\\titulodelreporte {Título del reporte}\n',
+          '\def\\subtituloreporte {}\n',
           '\def\\temaatratar {Tema a tratar}\n',
           '\def\\fechadelreporte {\\today}\n\n']
     files[mainfile] = find_replace_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', nl, white_end_block=True,
@@ -1233,6 +1239,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Agrega definición de titulodelreporte
     nl = ['\def\\titulodelinforme {\\titulodelreporte}\n',
+          '\def\\subtituloinforme {\\subtituloreporte}\n',
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
@@ -1707,6 +1714,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # Elimina cambio del indice en bibtex
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
 
+    # Elimina subtitulo
+    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\subtituloinforme}{}}{', jadd=1)
+
     # Índice de ecuaciones
     files[fl] = find_delete_block(files[fl], '% Crea índice de ecuaciones', white_end_block=True, iadd=-1, jadd=-1)
 
@@ -1734,7 +1744,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
               '% Corrige espaciamiento de itemize',
               '% Cambios generales en presentación',
               '% Configura los bloques',
-              '% Definición de entornos beamer']:
+              '% Definición de entornos beamer',
+              '% Configura footnotes']:
         nl = find_extract(init_presentacion, i, white_end_block=True)
         nl.insert(0, '% -----------------------------------------------------------------------------\n')
         for j in nl:
