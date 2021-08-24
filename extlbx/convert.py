@@ -893,7 +893,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     ra = find_line(files[mainfile], 'tituloauxiliar')
     files[mainfile][ra] = '\def\\tituloevaluacion {Título del Control}\n'
     ra = find_line(files[mainfile], 'temaatratar')
-    files[mainfile][ra] = '\def\indicacionevaluacion {\\textbf{INDICACIÓN DEL CONTROL}} % Opcional\n'
+    files[mainfile][ra] = '\def\indicacionevaluacion {\\textbf{INDICACIÓN DEL CONTROL}}\n'
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # -------------------------------------------------------------------------
