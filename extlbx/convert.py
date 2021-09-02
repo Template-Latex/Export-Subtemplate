@@ -729,9 +729,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         data = files[fl]
         # noinspection PyCompatibility,PyBroadException
         try:
-            data[0] = '% Template:     Template Auxiliar LaTeX\n'
-            data[10] = '% Sitio web:    [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[11] = '% Licencia MIT: [https://opensource.org/licenses/MIT]\n'
+            data[0] = '% Template:     Auxiliar LaTeX\n'
+            data[headersize-3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
+            data[headersize-2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
             data[headerversionpos] = versionhead
         except:
             print('Error en archivo ' + fl)
@@ -970,9 +970,9 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
         # noinspection PyBroadException
         try:
             data = files[fl]
-            data[0] = '% Template:     Template Controles LaTeX\n'
-            data[10] = '% Sitio web:    [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[11] = '% Licencia MIT: [https://opensource.org/licenses/MIT]\n'
+            data[0] = '% Template:     Controles LaTeX\n'
+            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
+            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
             data[headerversionpos] = versionhead
         except:
             print('Fallo carga de archivo ' + fl)
@@ -1311,9 +1311,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         data = files[fl]
         # noinspection PyCompatibility,PyBroadException
         try:
-            data[0] = '% Template:     Template Reporte LaTeX\n'
-            data[10] = '% Sitio web:    [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[11] = '% Licencia MIT: [https://opensource.org/licenses/MIT]\n'
+            data[0] = '% Template:     Reporte LaTeX\n'
+            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
+            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
             data[headerversionpos] = versionhead
         except:
             print('Error en archivo ' + fl)
@@ -1849,9 +1849,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
         data = files[fl]
         # noinspection PyCompatibility,PyBroadException
         try:
-            data[0] = '% Template:     Template Presentación LaTeX\n'
-            data[10] = '% Sitio web:    [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[11] = '% Licencia MIT: [https://opensource.org/licenses/MIT]\n'
+            data[0] = '% Template:     Presentación LaTeX\n'
+            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
+            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
             data[headerversionpos] = versionhead
         except:
             print('Error en archivo ' + fl)
@@ -2518,9 +2518,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         data = files[fl]
         # noinspection PyCompatibility,PyBroadException
         try:
-            data[0] = '% Template:     Template Tesis LaTeX\n'
-            data[10] = '% Sitio web:    [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[11] = '% Licencia MIT: [https://opensource.org/licenses/MIT]\n'
+            data[0] = '% Template:     Tesis LaTeX\n'
+            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
+            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
             data[headerversionpos] = versionhead
         except:
             print('Error en archivo ' + fl)
