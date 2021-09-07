@@ -30,7 +30,8 @@ Licencia:
 __author__ = 'Pablo Pizarro R.'
 __version__ = '3.1.3'  # (13/04/2021)
 
-from releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, RELEASES, REL_REPORTE
+from releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, RELEASES, REL_REPORTE, REL_TESIS, \
+    REL_ARTICULO, REL_PRESENTACION
 import convert
 from convert import call, CREATE_NO_WINDOW, MSG_FOKTIMER
 from version import *

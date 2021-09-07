@@ -39,6 +39,7 @@ with open(__actualpath + 'deptos.json') as json_data:
     DEPTOS = json.load(json_data)['DEPTOS']
 
 # Constantes
+REL_ARTICULO = 'ARTICULO'
 REL_AUXILIAR = 'AUXILIAR'
 REL_CONTROLES = 'CONTROLES'
 REL_INFORME = 'INFORME'
