@@ -50,7 +50,7 @@
             "template.tex",
             "template_config.tex",
             "library.bib",
-            "natsimple.bst"
+            "natsimpleurl.bst"
           ],
           "FOLDER": [
             "img"

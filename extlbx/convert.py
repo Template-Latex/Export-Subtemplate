@@ -299,9 +299,9 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     # Se buscan números de lineas de hyperref
     initconf_data = open(initconffile)
     initconf_data.read()
-    l_tdate, d_tdate = find_line(initconf_data, 'Template.Fecha', True)
+    l_tdate, d_tdate = find_line(initconf_data, 'Template.Date', True)
     l_thash, d_thash = find_line(initconf_data, 'Template.Version.Hash', True)
-    l_ttype, d_ttype = find_line(initconf_data, 'Template.Tipo', True)
+    l_ttype, d_ttype = find_line(initconf_data, 'Template.Type', True)
     l_tvdev, d_tvdev = find_line(initconf_data, 'Template.Version.Dev', True)
     l_tvrel, d_tvrel = find_line(initconf_data, 'Template.Version.Release', True)
     l_vcmtd, d_vcmtd = find_line(initconf_data, 'pdfproducer', True)
@@ -415,13 +415,13 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         export_normal.save()
 
         # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
+        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\universitydepartment')
+        fl_pos_im_mainfile = find_line(data_mainfile, '\def\universitydepartmentimage')
 
         # Se recorre cada versión y se genera el .zip
         for m in DEPTOS:
-            data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0] + '}\n'
-            data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
+            data_mainfile[fl_pos_dp_mainfile] = '\\def\\universitydepartment {' + m[0] + '}\n'
+            data_mainfile[fl_pos_im_mainfile] = '\\def\\universitydepartmentimage {departamentos/' + m[1] + '}\n'
 
             # Se reescriben los archivos
             save_list_to_file(data_mainfile, distfolder + mainfile)
@@ -547,16 +547,16 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[mainfile] = find_delete_block(files[mainfile], '% TABLA DE CONTENIDOS - ÍNDICE', white_end_block=True)
     files[mainfile] = find_delete_block(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
     files[mainfile] = find_delete_block(files[mainfile], '% CONFIGURACIONES FINALES', white_end_block=True)
-    ra = find_line(files[mainfile], 'titulodeldocumento')
-    files[mainfile][ra] = '\def\\titulodeldocumento {Título de la auxiliar}\n'
-    ra = find_line(files[mainfile], 'subtitulodocumento')
+    ra = find_line(files[mainfile], 'documenttitle')
+    files[mainfile][ra] = '\def\\documenttitle {Título de la auxiliar}\n'
+    ra = find_line(files[mainfile], 'documentsubtitle')
     files[mainfile].pop(ra)
-    ra = find_line(files[mainfile], 'temaatratar')
-    files[mainfile][ra] = '\def\\temaatratar {Tema de la auxiliar}\n'
+    ra = find_line(files[mainfile], 'documentsubject')
+    files[mainfile][ra] = '\def\\documentsubject {Tema de la auxiliar}\n'
     for j in range(len(files[mainfile])):
         if get_file_from_input(files[mainfile][j]) == examplefile:
             files[mainfile][j] = '\input{example} % Ejemplo, se puede borrar\n'
-    ra = find_line(files[mainfile], 'imagendepartamentoparams')
+    ra = find_line(files[mainfile], 'universitydepartmentimagecfg')
     files[mainfile][ra] = replace_argument(files[mainfile][ra], 1, 'height=1.75cm')
 
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
@@ -625,18 +625,18 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
     fl = 'src/cfg/init.tex'
-    ra, _ = find_block(files[fl], '\ifthenelse{\isundefined{\\tablaintegrantes}}{')
-    files[fl][ra] = '\ifthenelse{\isundefined{\\equipodocente}}{\n'
-    ra, _ = find_block(files[fl], '\errmessage{LaTeX Warning: Se borro la variable \\noexpand\\tablain')
-    files[fl][ra] = '\t\errmessage{LaTeX Warning: Se borro la variable \\noexpand\\equipodocente, creando una vacia}\n'
-    ra, _ = find_block(files[fl], '\def\\tablaintegrantes {}')
-    files[fl][ra] = '\t\def\\equipodocente {}}{\n'
+    ra, _ = find_block(files[fl], '\ifthenelse{\isundefined{\\authortable}}{')
+    files[fl][ra] = '\ifthenelse{\isundefined{\\teachingstaff}}{\n'
+    ra, _ = find_block(files[fl], '\errmessage{LaTeX Warning: Se borro la variable \\noexpand\\authortable')
+    files[fl][ra] = '\t\errmessage{LaTeX Warning: Se borro la variable \\noexpand\\teachingstaff, creando una vacia}\n'
+    ra, _ = find_block(files[fl], '\def\\authortable {}')
+    files[fl][ra] = '\t\def\\teachingstaff {}}{\n'
 
-    ra, _ = find_block(files[fl], 'Template.Nombre')
+    ra, _ = find_block(files[fl], 'Template.Name')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-AUX')
-    ra, _ = find_block(files[fl], 'Template.Tipo')
+    ra, _ = find_block(files[fl], 'Template.Type')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['SOURCE'])
@@ -654,7 +654,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
 
     # Elimina subtitulo
-    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\subtitulodocumento}{}}{', jadd=1)
+    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\documentsubtitle}{}}{', jadd=1)
 
     ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
     files[fl].pop(ra)
@@ -882,10 +882,10 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     nb = find_extract(main_auxiliar, '% EQUIPO DOCENTE')
     nb.append('\n')
     files[mainfile] = find_replace_block(files[mainfile], '% EQUIPO DOCENTE', nb)
-    ra = find_line(files[mainfile], 'titulodeldocumento')
-    files[mainfile][ra] = '\def\\titulodeldocumento {Título del Control}\n'
-    ra = find_line(files[mainfile], 'temaatratar')
-    files[mainfile][ra] = '\def\indicacionevaluacion {\\textbf{INDICACIÓN DEL CONTROL}}\n'
+    ra = find_line(files[mainfile], 'documenttitle')
+    files[mainfile][ra] = '\def\\documenttitle {Título del Control}\n'
+    ra = find_line(files[mainfile], 'documentsubject')
+    files[mainfile][ra] = '\def\evaluationindication {\\textbf{INDICACIÓN DEL CONTROL}}\n'
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # -------------------------------------------------------------------------
@@ -927,20 +927,20 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
     fl = 'src/cfg/init.tex'
-    ra, _ = find_block(files[fl], '\checkvardefined{\\temaatratar}')
+    ra, _ = find_block(files[fl], '\checkvardefined{\\documentsubject}')
     files[fl].pop(ra)
-    ra, _ = find_block(files[fl], '\g@addto@macro\\temaatratar\\xspace')
+    ra, _ = find_block(files[fl], '\g@addto@macro\\documentsubject\\xspace')
     files[fl].pop(ra)
-    _, rb = find_block(files[fl], '\ifthenelse{\isundefined{\equipodocente}}', blankend=True)
-    files[fl][rb] = '\ifthenelse{\isundefined{\indicacionevaluacion}}{\n\t\def\indicacionevaluacion {}\n}{}\n\n'
+    _, rb = find_block(files[fl], '\ifthenelse{\isundefined{\\teachingstaff}}', blankend=True)
+    files[fl][rb] = '\ifthenelse{\isundefined{\\evaluationindication}}{\n\t\def\\evaluationindication {}\n}{}\n\n'
 
-    ra, _ = find_block(files[fl], '\pdfmetainfotema')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\titulodeldocumento')
-    ra, _ = find_block(files[fl], 'Template.Nombre')
+    ra, _ = find_block(files[fl], '\pdfmetainfosubject')
+    files[fl][ra] = replace_argument(files[fl][ra], 1, '\\documenttitle')
+    ra, _ = find_block(files[fl], 'Template.Name')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-CTR/EXM')
-    ra, _ = find_block(files[fl], 'Template.Tipo')
+    ra, _ = find_block(files[fl], 'Template.Type')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['SOURCE'])
@@ -948,7 +948,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
-    ra, _ = find_block(files[fl], 'Documento.Tema')
+    ra, _ = find_block(files[fl], 'Document.Subject')
     files[fl].pop(ra)
 
     # Cambia encabezado archivos
@@ -1122,16 +1122,16 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[mainfile] = find_delete_block(files[mainfile], '% IMPORTACIÓN DE ENTORNOS', white_end_block=True)
     ra, _ = find_block(files[mainfile], '\input{src/etc/example}', True)
     files[mainfile] = add_block_from_list(files[mainfile], main_reporte, ra, addnewline=True)
-    ra, _ = find_block(files[mainfile], 'imagendepartamentoparams', True)
+    ra, _ = find_block(files[mainfile], 'universitydepartmentimagecfg', True)
     files[mainfile].pop(ra)
     # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # Cambia las variables del documento principales
     nl = ['% INFORMACIÓN DEL DOCUMENTO\n',
-          '\def\\titulodeldocumento {Título del reporte}\n',
-          '\def\\subtitulodocumento {}\n',
-          '\def\\temaatratar {Tema a tratar}\n',
-          '\def\\fechadocumento {\\today}\n\n']
+          '\def\\documenttitle {Título del reporte}\n',
+          '\def\\documentsubtitle {}\n',
+          '\def\\documentsubject {Tema a tratar}\n',
+          '\def\\documentdate {\\today}\n\n']
     files[mainfile] = find_replace_block(files[mainfile], '% INFORMACIÓN DEL DOCUMENTO', nl, white_end_block=True,
                                          jadd=-1)
 
@@ -1219,20 +1219,20 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
 
-    cdel = ['\\author{\\pdfmetainfoautor}', '\\title{\\pdfmetainfotitulo}']
+    cdel = ['\\author{\\pdfmetainfoauthor}', '\\title{\\pdfmetainfotitle}']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
 
     # Borra línea definiciones
-    ra, _ = find_block(files[fl], '\checkvardefined{\\imagendepartamentoparams}')
+    ra, _ = find_block(files[fl], '\checkvardefined{\\universitydepartmentimagecfg}')
     files[fl].pop(ra)
 
-    ra, _ = find_block(files[fl], 'Template.Nombre')
+    ra, _ = find_block(files[fl], 'Template.Name')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-REPT')
-    ra, _ = find_block(files[fl], 'Template.Tipo')
+    ra, _ = find_block(files[fl], 'Template.Type')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['SOURCE'])
@@ -1360,13 +1360,13 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         data_mainfile = file_to_list(subrlfolder + mainfile)
 
         # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
+        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\universitydepartment')
+        fl_pos_im_mainfile = find_line(data_mainfile, '\def\universitydepartmentimage')
 
         # Se recorre cada versión y se genera el .zip
         for m in DEPTOS:
-            data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0] + '}\n'
-            data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
+            data_mainfile[fl_pos_dp_mainfile] = '\\def\\universitydepartment {' + m[0] + '}\n'
+            data_mainfile[fl_pos_im_mainfile] = '\\def\\universitydepartmentimage {departamentos/' + m[1] + '}\n'
 
             # Se reescriben los archivos
             save_list_to_file(data_mainfile, subrlfolder + mainfile)
@@ -1491,7 +1491,7 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     # Configuraciones que se borran
     cdel = ['hfpdashcharstyle', 'titlefontsize', 'titlefontstyle', 'titlelinemargin',
             'titleshowauthor', 'titleshowcourse', 'titleshowdate', 'titlesupmargin',
-            'hfwidthcourse', 'hfwidthtitle', 'hfwidthwrap']
+            'hfwidthcourse', 'hfwidthtitle', 'hfwidthwrap', 'disablehfrightmark']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -1508,38 +1508,61 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     nconf = replace_argument(files[fl][ra], 1, '1.91').replace(' %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'documentfontsize', True)
-    nconf = replace_argument(files[fl][ra], 1, '10')
+    nconf = replace_argument(files[fl][ra], 1, '9.5').replace(' %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'fontdocument', True)
     nconf = replace_argument(files[fl][ra], 1, 'libertine').replace('  %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'natbibrefstyle', True)
-    nconf = replace_argument(files[fl][ra], 1, 'natsimple').replace('   %', '%')
+    nconf = replace_argument(files[fl][ra], 1, 'natsimpleurl').replace('      %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'stylecitereferences', True)
     nconf = replace_argument(files[fl][ra], 1, 'natbib')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'fontsizesubsubtitle', True)
+    files[fl][ra] = files[fl][ra].replace(' {\\', '{\\')
+    ra, rb = find_block(files[fl], 'documentinterline', True)
+    nconf = replace_argument(files[fl][ra], 1, '1').replace('%', '    %')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'fontsizerefbibl', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\small').replace('%', '     %')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'natbibrefsep', True)
+    nconf = replace_argument(files[fl][ra], 1, '3')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'captiontextbold', True)
+    nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'captionlrmarginmc', True)
+    nconf = replace_argument(files[fl][ra], 1, '0.5').replace('  %', '%')
+    files[fl][ra] = nconf
+
     ra, rb = find_block(files[fl], 'hfstyle', True)
-    nconf = replace_argument(files[fl][ra], 1, 'style1').replace('16 estilos', '7 estilos')
-    files[fl][ra] = nconf + '\\def\\titlebold {true}              % Título en negrita\n' \
+    nconf = replace_argument(files[fl][ra], 1, 'style1').replace('16 estilos', '17 estilos')
+    files[fl][ra] = nconf + '\\def\\titleauthorspacing {0.35}     % Distancia entre autores [cm]\n' \
+                            '\\def\\titleauthormaxwidth {0.85}    % Tamaño máximo datos autores [linewidth]\n' \
+                            '\\def\\titlebold {true}              % Título en negrita\n' \
                             '\\def\\titlestyle {style1}           % Estilo título (5 estilos)\n'
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
     fl = 'src/cfg/init.tex'
-    cdel = ['Universidad.Ubicacion', 'pdfsubject=',
-            '\\def\\pdfmetainfoautor {\\autordeldocumento}', '\\def\\pdfmetainfoautor {}',
-            '\\def\\pdfmetainfonombredelcurso {\\nombredelcurso}',
-            '\\def\\pdfmetainfocodigodelcurso {\\codigodelcurso}',
-            '\\def\\pdfmetainfotema {\\temaatratar}', '\\def\\pdfmetainfounidepto {\\departamentouniversidad}',
-            '\\def\\pdfmetainfounifacultad {\\nombrefacultad}', '\\def\\pdfmetainfouninombre {\\nombreuniversidad}',
-            '\\def\\pdfmetainfouniubicacion {\\localizacionuniversidad}',
-            '\\def\\pdfmetainfocodigodelcurso {}', '\\def\\pdfmetainfonombredelcurso {}',
-            '\\def\\pdfmetainfotema {}', '\\def\\pdfmetainfounidepto {}', '\\def\\pdfmetainfounifacultad {}',
-            '\\def\\pdfmetainfouninombre {}', '\\def\\pdfmetainfouniubicacion {}',
-            'pdfauthor={\\pdfmetainfoautor},', 'Curso.Codigo', 'Curso.Nombre', 'Documento.Autor',
-            'Documento.Tema', 'Universidad.Departamento', 'Universidad.Facultad', 'Universidad.Nombre']
+    cdel = ['University.Location', 'pdfsubject=',
+            '\\def\\pdfmetainfoauthor {\\documentauthor}', '\\def\\pdfmetainfoauthor {}',
+            '\\def\\pdfmetainfocoursename {\\coursename}',
+            '\\def\\pdfmetainfocoursecode {\\coursecode}',
+            '\\def\\pdfmetainfosubject {\\documentsubject}',
+            '\\def\\pdfmetainfouniversitydepartment {\\universitydepartment}',
+            '\\def\\pdfmetainfouniversityfaculty {\\universityfaculty}',
+            '\\def\\pdfmetainfouniversity {\\universityname}',
+            '\\def\\pdfmetainfouniversitylocation {\\universitylocation}',
+            '\\def\\pdfmetainfocoursecode {}', '\\def\\pdfmetainfocoursename {}',
+            '\\def\\pdfmetainfosubject {}', '\\def\\pdfmetainfouniversitydepartment {}',
+            '\\def\\pdfmetainfouniversityfaculty {}',
+            '\\def\\pdfmetainfouniversity {}', '\\def\\pdfmetainfouniversitylocation {}',
+            'pdfauthor={\\pdfmetainfoauthor},', 'Course.Code', 'Course.Name', 'Document.Author',
+            'Document.Subject', 'University.Department', 'University.Faculty', 'University.Name']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -1549,23 +1572,23 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     files[fl] = del_block_from_list(files[fl], ra - 1, rb + 1)
 
     new_defined = ['% Se revisa si las variables no han sido borradas\n',
-                   '\\checkvardefined{\\titulodeldocumento}\n']
+                   '\\checkvardefined{\\documenttitle}\n']
     files[fl] = find_replace_block(files[fl], '% Se revisa si las variables no han sido borradas', new_defined,
                                    white_end_block=True, jadd=-2)
 
     new_defined = ['% Se añade \\xspace a las variables\n',
                    '% -----------------------------------------------------------------------------\n'
                    '\\makeatletter\n'
-                   '\t\\g@addto@macro\\titulodeldocumento\\xspace\n'
+                   '\t\\g@addto@macro\\documenttitle\\xspace\n'
                    '\\makeatother\n']
     files[fl] = find_replace_block(files[fl], '% Se añade \\xspace a las variables', new_defined,
                                    white_end_block=True, jadd=-2)
 
-    ra, _ = find_block(files[fl], 'Template.Nombre')
+    ra, _ = find_block(files[fl], 'Template.Name')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-ARTC')
-    ra, _ = find_block(files[fl], 'Template.Tipo')
+    ra, _ = find_block(files[fl], 'Template.Type')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['SOURCE'])
@@ -1587,13 +1610,14 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     # CAMBIO FINALCONF
     # -------------------------------------------------------------------------
     fl = 'src/cfg/final.tex'
-    final_articulo = file_to_list('src/cfg/final_articulo.tex')
-    nl = find_extract(final_articulo, '% Define funciones generales', white_end_block=True)
-    nl[0] = '\t\t' + nl[0]
+    # final_articulo = file_to_list('src/cfg/final_articulo.tex')
+    # nl = find_extract(final_articulo, '% Define funciones generales', white_end_block=True)
+    # nl[0] = '\t\t' + nl[0]
     ra, _ = find_block(files[fl], '% Define funciones generales')
     rb, _ = find_block(files[fl], '% No se encontró el header-footer, no hace nada')
     nl.pop()
-    files[fl] = replace_block_from_list(files[fl], nl, ra, rb)
+    files[fl] = replace_block_from_list(files[fl], [], ra, rb)
+    files[fl] = find_delete_block(files[fl], '% Actualiza headers', white_end_block=True, jadd=-1)
 
     # Cambia encabezado archivos
     for fl in files.keys():
@@ -1945,14 +1969,14 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '\pdfminorversion', white_end_block=True, iadd=-1)
 
     # Borra línea definiciones
-    ra, _ = find_block(files[fl], '\checkvardefined{\\imagendepartamentoparams}')
+    ra, _ = find_block(files[fl], '\checkvardefined{\\universitydepartmentimagecfg}')
     files[fl].pop(ra)
 
-    ra, _ = find_block(files[fl], 'Template.Nombre')
+    ra, _ = find_block(files[fl], 'Template.Name')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-PRES')
-    ra, _ = find_block(files[fl], 'Template.Tipo')
+    ra, _ = find_block(files[fl], 'Template.Type')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['SOURCE'])
@@ -1960,8 +1984,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['MANUAL'])
     ra, _ = find_block(files[fl], 'pdfproducer')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['VERLINE'].format(version))
-    for i in ['\\author{\\pdfmetainfoautor}', '\\title{\\pdfmetainfotitulo}',
-              '\\checkvardefined{\\titulodeldocumento}', '\g@addto@macro\\titulodeldocumento']:
+    for i in ['\\author{\\pdfmetainfoauthor}', '\\title{\\pdfmetainfotitle}',
+              '\\checkvardefined{\\documenttitle}', '\g@addto@macro\\documenttitle']:
         ra, _ = find_block(files[fl], i)
         files[fl].pop(ra)
 
@@ -1969,7 +1993,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
 
     # Elimina subtitulo
-    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\subtitulodocumento}{}}{', jadd=1)
+    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\documentsubtitle}{}}{', jadd=1)
 
     # Índice de ecuaciones
     files[fl] = find_delete_block(files[fl], '% Crea índice de ecuaciones', white_end_block=True, iadd=-1, jadd=-1)
@@ -2170,13 +2194,13 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
         data_mainfile = file_to_list(subrlfolder + mainfile)
 
         # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
+        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\universitydepartment')
+        fl_pos_im_mainfile = find_line(data_mainfile, '\def\universitydepartmentimage')
 
         # Se recorre cada versión y se genera el .zip
         for m in DEPTOS:
-            data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0] + '}\n'
-            data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/' + m[1] + '}\n'
+            data_mainfile[fl_pos_dp_mainfile] = '\\def\\universitydepartment {' + m[0] + '}\n'
+            data_mainfile[fl_pos_im_mainfile] = '\\def\\universitydepartmentimage {departamentos/' + m[1] + '}\n'
 
             # Se reescriben los archivos
             save_list_to_file(data_mainfile, subrlfolder + mainfile)
@@ -2263,9 +2287,9 @@ def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, doc
     # Se buscan números de lineas de hyperref
     initconf_data = open(initconffile)
     initconf_data.read()
-    l_tdate, d_tdate = find_line(initconf_data, 'Template.Fecha', True)
+    l_tdate, d_tdate = find_line(initconf_data, 'Template.Date', True)
     l_thash, d_thash = find_line(initconf_data, 'Template.Version.Hash', True)
-    l_ttype, d_ttype = find_line(initconf_data, 'Template.Tipo', True)
+    l_ttype, d_ttype = find_line(initconf_data, 'Template.Type', True)
     l_tvdev, d_tvdev = find_line(initconf_data, 'Template.Version.Dev', True)
     l_tvrel, d_tvrel = find_line(initconf_data, 'Template.Version.Release', True)
     l_vcmtd, d_vcmtd = find_line(initconf_data, 'pdfproducer', True)
@@ -2573,7 +2597,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl] = search_append_line(files[fl], '% ESTILO HEADER-FOOTER',
                                    '\\def\\chapterstyle {style1}         % Estilo de los capítulos (12 estilos)\n')
     files[fl] = search_append_line(files[fl], '\\senumertiv',
-                                   '\\def\\showtableresumenenv {false}   % Muestra tabla superior derecha de resumen\n')
+                                   '\\def\\showabstracttable {false}     % Muestra tabla superior derecha de resumen\n')
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
@@ -2603,7 +2627,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
-    ra, _ = find_block(files[fl], '\checkvardefined{\\autordeldocumento}', True)
+    ra, _ = find_block(files[fl], '\checkvardefined{\coursecode}', True)
 
     # Añade bloque de variables definidas
     nl = find_extract(init_tesis, '% Inicialización de variables', white_end_block=True)
@@ -2611,18 +2635,18 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nl.append(files[fl][ra])
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
     # ra, _ = find_block(files[fl], 'pdfkeywords', True)
-    # files[fl][ra] = '\tpdfkeywords={pdf, \\nombreuniversidad, \\localizacionuniversidad},\n'
+    # files[fl][ra] = '\tpdfkeywords={pdf, \\universityname, \\universitylocation},\n'
 
     # Elimina referencias en dos columnas
     # files[fl] = find_delete_block(files[fl], '% Referencias en 2 columnas', True)
     ra, _ = find_block(files[fl], '{\\begin{multicols}{2}[\section*{\\refname}', True)
     files[fl][ra] = '\t{\\begin{multicols}{2}[\\chapter*{\\refname}]\n'
 
-    ra, _ = find_block(files[fl], 'Template.Nombre')
+    ra, _ = find_block(files[fl], 'Template.Name')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['NAME'])
     ra, _ = find_block(files[fl], 'Template.Version.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, versiondev + '-THS')
-    ra, _ = find_block(files[fl], 'Template.Tipo')
+    ra, _ = find_block(files[fl], 'Template.Type')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'Normal')
     ra, _ = find_block(files[fl], 'Template.Web.Dev')
     files[fl][ra] = replace_argument(files[fl][ra], 1, release['WEB']['SOURCE'])
@@ -2832,13 +2856,13 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         data_mainfile = file_to_list(subrlfolder + mainfile)
 
         # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\departamentouniversidad')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\imagendepartamento')
+        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\universitydepartment')
+        fl_pos_im_mainfile = find_line(data_mainfile, '\def\universitydepartmentimage')
 
         # Se recorre cada versión y se genera el .zip
         for m in DEPTOS:
-            data_mainfile[fl_pos_dp_mainfile] = '\\def\\departamentouniversidad {' + m[0] + '}\n'
-            data_mainfile[fl_pos_im_mainfile] = '\\def\\imagendepartamento {departamentos/uchile2}\n'
+            data_mainfile[fl_pos_dp_mainfile] = '\\def\\universitydepartment {' + m[0] + '}\n'
+            data_mainfile[fl_pos_im_mainfile] = '\\def\\universitydepartmentimage {departamentos/uchile2}\n'
 
             # Se reescriben los archivos
             save_list_to_file(data_mainfile, subrlfolder + mainfile)
