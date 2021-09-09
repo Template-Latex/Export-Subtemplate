@@ -680,7 +680,12 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     nl = extract_block_from_list(aux_pageconf, i1, f1)
     files[fl] = add_block_from_list(files[fl], nl, len(files[fl]) + 1)
     files[fl].pop()
-    files[fl].append('\\titleclass{\subsubsubsection}{straight}[\subsection]\n')
+    _, rb = find_block(files[fl], '% Configura el nombre del abstract', blankend=True)
+    i1, f1 = find_block(aux_pageconf, '% Establece el estilo de las sub-sub-sub-secciones', True)
+    nl = extract_block_from_list(aux_pageconf, i1 - 1, f1)
+    nl.insert(0, '\n')
+    files[fl] = add_block_from_list(files[fl], nl, rb)
+    # files[fl].append('\\titleclass{\subsubsubsection}{straight}[\subsection]\n')
 
     # -------------------------------------------------------------------------
     # AUXILIAR FUNCTIONS
@@ -1253,6 +1258,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         ra, _ = find_block(files[fl], i)
         files[fl][ra] = '\n' + files[fl][ra]
 
+    # Borra último salto de línea
+    files[fl].pop()
+
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
     # -------------------------------------------------------------------------
@@ -1567,6 +1575,10 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
 
+    # Cambia autor
+    # ra, _ = find_block(files[fl], 'pdfauthor={\\pdfmetainfoauthor},', True)
+    # files[fl][ra] = files[fl][ra].replace('pdfmetainfoauthor', 'authorshf')
+
     ra, _ = find_block(files[fl], '% Operaciones especiales Template-Reporte')
     rb, _ = find_block(files[fl], '\\vskip \\titlelinemargin}')
     files[fl] = del_block_from_list(files[fl], ra - 1, rb + 1)
@@ -1605,6 +1617,8 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     nl = find_extract(page_articulo, '% Se crean los header-footer', white_end_block=True)
     files[fl] = find_replace_block(files[fl], '% Se crean los header-footer', nl, white_end_block=True,
                                    jadd=-1)
+    ra, _ = find_block(files[fl], '% Se crean los header-footer')
+    files[fl][ra] = files[fl][ra].replace('%', '\t%')
 
     # -------------------------------------------------------------------------
     # CAMBIO FINALCONF
@@ -1852,6 +1866,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'sourcecodenumbersep', True)
     nconf = replace_argument(files[fl][ra], 1, '3')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'documentparindent', True)
+    nconf = replace_argument(files[fl][ra], 1, '0').replace('%', ' %')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'captionlrmarginmc', True)
     nconf = replace_argument(files[fl][ra], 1, '0')
