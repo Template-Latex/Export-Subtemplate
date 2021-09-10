@@ -1900,6 +1900,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, rb = find_block(files[fl], 'captionmarginimages', True)
     nconf = replace_argument(files[fl][ra], 1, '-0.04')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sourcecodefonts', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\footnotesize').replace(' {', '{').replace('      %', '%')
+    files[fl][ra] = nconf
 
     ra, _ = find_block(files[fl], 'stylecitereferences', True)
     files[fl][ra] = '\\def\\stylecitereferences {bibtex}  % Estilo cita/ref {bibtex,custom}\n'
@@ -2040,6 +2043,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
               '% Cambios generales en presentación',
               '% Configura los bloques',
               '% Definición de entornos beamer',
+              '% Reinicia número de subfiguras y subtablas',
               '% Configura footnotes']:
         nl = find_extract(init_presentacion, i, white_end_block=True)
         nl.insert(0, '% -----------------------------------------------------------------------------\n')
