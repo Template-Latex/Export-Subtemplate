@@ -1544,6 +1544,9 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     ra, rb = find_block(files[fl], 'captionlrmarginmc', True)
     nconf = replace_argument(files[fl][ra], 1, '0.5').replace('  %', '%')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'tablenotesfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\footnotesize').replace('  %', '%').replace(' {', '{')
+    files[fl][ra] = nconf
 
     ra, rb = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style1').replace('16 estilos', '17 estilos')
@@ -2581,7 +2584,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'nomltcont', True)
     nconf = replace_argument(files[fl][ra], 1, 'Tabla de Contenido').replace('%', '  %')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'footnotepagetoprule', True)
+    ra, _ = find_block(files[fl], 'footnoterulepage', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'nomltfigure', True)
