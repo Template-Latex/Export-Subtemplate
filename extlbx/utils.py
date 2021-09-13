@@ -173,16 +173,18 @@ def replace_block_from_list(data, new, ra, rb):
     return add_block_from_list(del_block_from_list(data, ra, rb), new, ra)
 
 
-def search_append_line(data, search_line, append_line):
+def search_append_line(data, search_line, append_line, iadd=0):
     """
     Busca y añade una nueva línea.
 
     :param data: Lista
     :param search_line: Línea a buscar
     :param append_line: Línea a añadir
+    :param iadd: Numero linea a a{ador
     :return:
     """
     ra, _ = find_line(data, search_line, True)
+    ra += iadd
     nl = [data[ra], append_line]
     return replace_block_from_list(data, nl, ra, ra - 1)
 

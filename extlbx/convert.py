@@ -568,7 +568,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
     # Configuraciones que se borran
     cdel = ['addemptypagetwosides', 'nameportraitpage', 'indextitlecolor',
-            'portraittitlecolor', 'fontsizetitlei', 'styletitlei',
+            'portraittitlecolor', 'indexsectionfontsize', 'indexsectionstyle',
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
             'nomchapter', 'nomnpageof', 'indexforcenewpage', 'predocpageromannumber',
             'predocresetpagenumber', 'margineqnindexbottom', 'margineqnindextop',
@@ -582,7 +582,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     for cdel in []:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
-    # ra, rb = find_block(files[fl], 'showdotaftersnum', True) Desactivado desde v3.3.4
+    # ra, rb = find_block(files[fl], 'dotaftersnum', True) Desactivado desde v3.3.4
     # nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     # files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'equationrestart', True)
@@ -1148,7 +1148,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Configuraciones que se borran
     cdel = ['firstpagemargintop', 'portraitstyle', 'predocpageromannumber', 'predocpageromanupper',
-            'predocresetpagenumber', 'fontsizetitlei', 'styletitlei', 'nameportraitpage', 'indextitlecolor',
+            'predocresetpagenumber', 'indexsectionfontsize', 'indexsectionstyle', 'nameportraitpage', 'indextitlecolor',
             'addindextobookmarks', 'portraittitlecolor', 'margineqnindexbottom', 'margineqnindextop',
             'bibtexindexbibliography', 'addemptypagetwosides']
     for cdel in cdel:
@@ -1177,14 +1177,14 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     ra, rb = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style7')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'fontsizetitle', True)
+    ra, rb = find_block(files[fl], '\\sectionfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\Large')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'fontsizesubtitle', True)
-    nconf = replace_argument(files[fl][ra], 1, '\\large')
+    ra, rb = find_block(files[fl], '\\sssectionfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace('    %', '%').replace(' {', '{')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'fontsizesubsubtitle', True)
-    nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace(' %', '%')
+    ra, rb = find_block(files[fl], '\\ssectionfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\large')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'hfwidthwrap', True)
     files[fl] = replace_block_from_list(files[fl], config_reporte, ra, ra)
@@ -1527,8 +1527,6 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     ra, rb = find_block(files[fl], 'stylecitereferences', True)
     nconf = replace_argument(files[fl][ra], 1, 'natbib')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'fontsizesubsubtitle', True)
-    files[fl][ra] = files[fl][ra].replace(' {\\', '{\\')
     ra, rb = find_block(files[fl], 'documentinterline', True)
     nconf = replace_argument(files[fl][ra], 1, '1').replace('%', '    %')
     files[fl][ra] = nconf
@@ -1546,6 +1544,18 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'tablenotesfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\footnotesize').replace('  %', '%').replace(' {', '{')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], '\\sectionspacingtop', True)
+    nconf = replace_argument(files[fl][ra], 1, '15')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], '\\ssectionspacingbottom', True)
+    nconf = replace_argument(files[fl][ra], 1, '8').replace('%', ' %')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], '\\sssectionspacingbottom', True)
+    nconf = replace_argument(files[fl][ra], 1, '6')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], '\\ssssectionspacingbottom', True)
+    nconf = replace_argument(files[fl][ra], 1, '4')
     files[fl][ra] = nconf
 
     ra, rb = find_block(files[fl], 'hfstyle', True)
@@ -1806,19 +1816,18 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # Configuraciones que se borran
     cdel = ['predocpageromannumber', 'predocpageromanupper', 'predocresetpagenumber',
             'addemptypagetwosides', 'nomltfigure', 'nomltsrc', 'nomlttable', 'nomltcont', 'nomlteqn',
-            'firstpagemargintop', 'nameportraitpage', 'fontsizessstitle', 'fontsizesubsubtitle',
-            'fontsizesubtitle', 'fontsizetitle', 'fontsizetitlei', 'stylessstitle',
-            'stylesubsubtitle', 'stylesubtitle', 'styletitle', 'styletitlei', 'ssstitlecolor',
-            'subsubtitlecolor', 'subtitlecolor', 'indextitlecolor', 'portraittitlecolor',
-            'titlecolor', 'ssstitlecolor', 'pdfcompileversion', 'bibtexenvrefsecnum',
-            'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers', 'colorpage',
+            'firstpagemargintop', 'nameportraitpage', 'indextitlecolor', 'portraittitlecolor',
+            'pdfcompileversion', 'bibtexenvrefsecnum',
+            'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers', 'pagescolor',
             'nomnpageof', 'nameappendixsection', 'apacitebothers', 'apaciterefnumber',
             'apaciterefsep', 'apaciterefcitecharclose', 'apaciterefcitecharopen',
-            'apaciteshowurl', 'apacitestyle', 'appendixindepobjnum', 'sectionappendixlastchar',
+            'apaciteshowurl', 'apacitestyle', 'appendixindepobjnum', 'appendixsectionlastchar',
             'twocolumnreferences', 'nomchapter', 'anumsecaddtocounter', 'fontsizerefbibl',
             'hfpdashcharstyle', 'nameabstract', 'margineqnindexbottom', 'margineqnindextop',
             'natbibrefcitecharclose', 'natbibrefcitecharopen', 'natbibrefcitecompress',
-            'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle'
+            'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle',
+            'paragcolor', 'paragsubcolor', 'sectioncolor', 'ssectioncolor', 'sssectioncolor',
+            'ssssectioncolor'
             ]
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
@@ -1852,6 +1861,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
                                                 '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
                                     ra, addnewline=True)
+
+    files[fl].pop()
     for i in file_to_list('src/config_presentacion.tex'):
         files[fl].append(i)
 
@@ -1911,8 +1922,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl][ra] = '\\def\\stylecitereferences {bibtex}  % Estilo cita/ref {bibtex,custom}\n'
     ra, _ = find_block(files[fl], 'captionfontsize', True)
     files[fl][ra] = '\\def\\captionfontsize{footnotesize} % Tamaño de fuente de los caption\n'
-    # files[fl].pop()
-
     ra, _ = find_block(files[fl], 'fonturl', True)
     files[fl][ra] += '\\def\\frametextjustified {true}     % Justifica todos los párrafos de los frames\n'
 
@@ -1955,7 +1964,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Dimensiones y geometría del documento', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Cambia el estilo de los títulos', white_end_block=True)
     ra, _ = find_block(files[fl], '% Agrega punto a títulos/subtítulos', True)
-    files[fl][ra] = '% Agrega punto a títulos/subtítulos\n\\def\\showdotaftersnum {true}\n'
+    files[fl][ra] = '% Agrega punto a títulos/subtítulos\n\\def\\dotaftersnum {false}\n'
+    for j in range(5):
+        files[fl].pop(ra + 1)
     ra, _ = find_block(files[fl], '\showappendixsecindex')
     nl = ['\\def\\showappendixsecindex {false}\n',
           files[fl][ra]]
@@ -1990,6 +2001,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], 'Actualización margen títulos', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se añade listings (código fuente) a tocloft', True, iadd=-2)
     files[fl] = find_delete_block(files[fl], '\pdfminorversion', white_end_block=True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], 'Configuración anexo', white_end_block=True, iadd=-1)
 
     # Borra línea definiciones
     ra, _ = find_block(files[fl], '\checkvardefined{\\universitydepartmentimagecfg}')
@@ -2022,7 +2034,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Crea índice de ecuaciones', white_end_block=True, iadd=-1, jadd=-1)
 
     # Color de página
-    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\colorpage}{white}}{}{', white_end_block=True,
+    files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\pagescolor}{white}}{}{', white_end_block=True,
                                   jadd=-1)
 
     # Cambia las bibliografias
@@ -2518,14 +2530,14 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'pagemarginbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '2').replace('%', '  %')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'fontsizetitle', True)
-    nconf = replace_argument(files[fl][ra], 1, '\\Large')
+    ra, _ = find_block(files[fl], '\\sssectionfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace('    %', '%').replace(' {', '{')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'fontsizesubtitle', True)
+    ra, _ = find_block(files[fl], '\\ssectionfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\large')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'fontsizesubsubtitle', True)
-    nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace(' %', '%')
+    ra, _ = find_block(files[fl], '\\sectionfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\Large')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'indexstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'tf').replace('%', ' %')
@@ -2600,7 +2612,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Configuraciones que se borran
     cdel = ['portraitstyle', 'firstpagemargintop', 'bibtexenvrefsecnum',
             'predocpageromannumber', 'predocresetpagenumber', 'indexnewpagec', 'indexnewpagef',
-            'indexnewpaget', 'showindexofcontents', 'fontsizetitlei', 'styletitlei', 'indexnewpagee',
+            'indexnewpaget', 'showindexofcontents', 'indexsectionfontsize', 'indexsectionstyle', 'indexnewpagee',
             'hfpdashcharstyle', 'portraittitlecolor']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
@@ -2614,10 +2626,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Añade nuevas entradas
     files[fl] = search_append_line(files[fl], '% CONFIGURACIÓN DE LOS COLORES DEL DOCUMENTO',
                                    '\\def\\chaptercolor {black}          % Color de los capítulos\n')
-    files[fl] = search_append_line(files[fl], 'anumsecaddtocounter',
-                                   '\\def\\fontsizechapter {\\huge}       % Tamaño fuente de los capítulos\n')
-    files[fl] = search_append_line(files[fl], 'showdotaftersnum',
-                                   '\\def\\stylechapter {\\bfseries}      % Estilo de los capítulos\n')
+    files[fl] = search_append_line(files[fl], 'appendixsectionlastchar',
+                                   '\\def\\chapterfontsize {\\huge}       % Tamaño fuente de los capítulos\n')
+    files[fl] = search_append_line(files[fl], 'chapterfontsize',
+                                   '\\def\\chapterfontstyle {\\bfseries}  % Estilo fuente de los capítulos\n')
     files[fl] = search_append_line(files[fl], '% ESTILO HEADER-FOOTER',
                                    '\\def\\chapterstyle {style1}         % Estilo de los capítulos (12 estilos)\n')
     files[fl] = search_append_line(files[fl], '\\senumertiv',
@@ -2700,6 +2712,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         ra, _ = find_block(files[fl], i)
         files[fl][ra] = '\n' + files[fl][ra]
 
+    # Configura estilo capítulos
+    files[fl] = search_append_line(files[fl], '\\titlespacing*{\\subsubsubsection}',
+                                   '\\chaptertitlefont{\\color{\\chaptercolor} \\chapterfontsize \\chapterfontstyle \\selectfont}\n')
+
     # -------------------------------------------------------------------------
     # ÍNDICE
     # -------------------------------------------------------------------------
@@ -2747,9 +2763,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, rb = find_block(files[fl], '% Muestra los números de línea', True)
     nl = find_extract(page_tesis, '% Añade página en blanco')
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
-
-    files[fl] = search_append_line(files[fl], '\\sectionfont{\\color',
-                                   '\t\\chaptertitlefont{\\color{\\chaptercolor} \\fontsizechapter \\stylechapter \\selectfont}\n')
 
     ra, _ = find_block(files[fl], '% Configura el nombre del abstract', True)
     files[fl].insert(ra - 1, '\n')
