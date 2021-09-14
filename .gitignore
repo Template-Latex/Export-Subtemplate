@@ -1,5 +1,6 @@
 # Archivos compilados python
 *.pyc
+*._**
 
 # Pycharm
 .idea/

@@ -32,6 +32,7 @@ __all__ = [
     'EXTLBX_BTN_UPLOAD_DISABLED',
     'EXTLBX_CONFIGS',
     'EXTLBX_ICON',
+    'EXTLBX_ICON_MAC',
     'EXTLBX_LICENSE',
     'EXTLBX_UPLOAD'
 ]
@@ -48,5 +49,6 @@ EXTLBX_BTN_UPLOAD = __respath + 'upload2.png'
 EXTLBX_BTN_UPLOAD_DISABLED = __respath + 'upload2_disabled.png'
 EXTLBX_CONFIGS = __respath + 'config.json'
 EXTLBX_ICON = __respath + 'icon.ico'
+EXTLBX_ICON_MAC = __respath + 'icon.gif'
 EXTLBX_LICENSE = __respath + 'license'
 EXTLBX_UPLOAD = __respath + 'upload.json'

@@ -265,6 +265,113 @@ def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroo
         plot_stats(statsroot + stat['FILE'], statsroot + stat['CTIME'], statsroot + stat['LCODE'])
 
 
+def copy_assemble_template(files, distfolder, headersize, configfile, mainfile, examplefile):
+    """
+    Copia y ensambla el template.
+
+    :param files: Lista de archivos
+    :param distfolder: Carpeta de distribución
+    :param headersize: Tamaño del header
+    :param configfile: Archivo de configs
+    :param mainfile: Archivo principal
+    :param examplefile: Archivo de ejemplo
+    :return: None
+    """
+    for f in files.keys():
+        fl = open(distfolder + f, 'w')
+
+        # Se escribe el header
+        if '.tex' in f:
+            data = files[f]
+            kline = 0
+            for d in data:
+                if kline < headersize:
+                    fl.write(d)
+                else:
+                    break
+                kline += 1
+
+        # Strip
+        dostrip = False
+        if f == configfile or f == mainfile or f == examplefile or '-config' in f:
+            dostrip = False
+
+        # Se escribe el documento
+        paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
+                                     True, configfile, False, dist=True, add_ending_line=False and dostrip)
+
+        # Se elimina la última linea en blanco si hay doble
+        fl.close()
+
+    # Mueve el archivo de configuraciones
+    copyfile(distfolder + configfile, distfolder + 'template_config.tex')
+    copyfile(distfolder + examplefile, distfolder + 'example.tex')
+
+    # Ensambla el archivo del template
+    assemble_template_file(files['template.tex'], configfile, distfolder, headersize, files)
+
+
+def export_subdeptos_subtemplate(release, subrlfolder, mainfile, distfolder,
+                                 deptimg=None, finalimg='fcfm'):
+    """
+    Exporta los departamentos.
+
+    :param release: Datos del release
+    :param subrlfolder: Carpeta de los releases
+    :param mainfile: Archivo principal
+    :param distfolder: Carpeta de salida
+    :param deptimg: Imagen del departamento fija
+    :param finalimg: Imagen final
+    :return: None
+    """
+    czip = release['ZIP']['NORMAL']
+    export_normal = Zip(czip['FILE'])
+    with Cd(subrlfolder):
+        export_normal.set_ghostpath(czip['GHOST'])
+        export_normal.add_excepted_file(czip['EXCEPTED'])
+        export_normal.add_file(czip['ADD']['FILES'])
+        export_normal.add_folder(czip['ADD']['FOLDER'])
+    export_normal.save()
+
+    # Se exportan los distintos estilos de versiones
+    data_mainfile = file_to_list(subrlfolder + mainfile)
+
+    # Se buscan las líneas del departamento y de la imagen
+    fl_pos_dp_mainfile = find_line(data_mainfile, '\def\\universitydepartment')
+    fl_pos_im_mainfile = find_line(data_mainfile, '\def\\universitydepartmentimage')
+
+    # Se recorre cada versión y se genera el .zip
+    for m in DEPTOS:
+        data_mainfile[fl_pos_dp_mainfile] = '\\def\\universitydepartment {' + m[0] + '}\n'
+        if deptimg:
+            data_mainfile[fl_pos_im_mainfile] = '\\def\\universitydepartmentimage {departamentos/' + deptimg + '}\n'
+        else:
+            data_mainfile[fl_pos_im_mainfile] = '\\def\\universitydepartmentimage {departamentos/' + m[1] + '}\n'
+
+        # Se reescriben los archivos
+        save_list_to_file(data_mainfile, subrlfolder + mainfile)
+
+        # Se genera el .zip
+        czip = release['ZIP']['NORMAL']
+        export_normal = Zip(release['ZIP']['OTHERS']['NORMAL'].format(m[1]))
+        with Cd(subrlfolder):
+            export_normal.set_ghostpath(distfolder)
+            export_normal.add_excepted_file(czip['EXCEPTED'])
+            export_normal.add_file(czip['ADD']['FILES'])
+            export_normal.add_folder(release['ZIP']['OTHERS']['EXPATH'])
+            export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
+            for k in m[2]:
+                export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
+        export_normal.save()
+
+    # Rollback archivo principal. Necesario para subtemplates
+    data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
+                                                         'Departamento de la Universidad')
+    data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
+                                                         'departamentos/' + finalimg)
+    save_list_to_file(data_mainfile, subrlfolder + mainfile)
+
+
 # noinspection PyBroadException
 def export_informe(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
                    plotstats=True, doclean=False, addstat=True, savepdf=True,
@@ -367,37 +474,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Se guardan archivos en DIST
     if dosave:
-        for f in files.keys():
-            fl = open(distfolder + f, 'w')
-
-            # Se escribe el header
-            data = files[f]
-            kline = 0
-            for d in data:
-                if kline < headersize:
-                    fl.write(d)
-                else:
-                    break
-                kline += 1
-
-            # Strip
-            dostrip = False
-            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
-                dostrip = False
-
-            # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
-                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
-
-            # Se elimina la última linea en blanco si hay doble
-            fl.close()
-
-        # Mueve el archivo de configuraciones
-        copyfile(distfolder + configfile, distfolder + 'template_config.tex')
-        copyfile(distfolder + examplefile, distfolder + 'example.tex')
-
-        # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, distfolder, headersize, files)
+        copy_assemble_template(files, distfolder, headersize, configfile, mainfile, examplefile)
 
     # Se obtiene la cantidad de líneas de código
     lc = 0
@@ -752,37 +829,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # Guarda los archivos
     os.chdir(mainroot)
     if dosave:
-        for f in files.keys():
-            fl = open(subrlfolder + f, 'w')
-
-            # Se escribe el header
-            data = files[f]
-            kline = 0
-            for d in data:
-                if kline < headersize:
-                    fl.write(d)
-                else:
-                    break
-                kline += 1
-
-            # Strip
-            dostrip = False
-            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
-                dostrip = False
-
-            # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
-                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
-
-            # Se elimina la última linea en blanco si hay doble
-            fl.close()
-
-        # Mueve el archivo de configuraciones
-        copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
-        copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
-
-        # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize, files)
+        copy_assemble_template(files, subrlfolder, headersize, configfile, mainfile, examplefile)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -975,37 +1022,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # Guarda los archivos
     os.chdir(mainroot)
     if dosave:
-        for f in files.keys():
-            fl = open(subrlfolder + f, 'w')
-
-            # Se escribe el header
-            data = files[f]
-            kline = 0
-            for d in data:
-                if kline < headersize:
-                    fl.write(d)
-                else:
-                    break
-                kline += 1
-
-            # Strip
-            dostrip = False
-            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
-                dostrip = False
-
-            # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
-                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
-
-            # Se elimina la última linea en blanco si hay doble
-            fl.close()
-
-        # Mueve el archivo de configuraciones
-        copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
-        copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
-
-        # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize, files)
+        copy_assemble_template(files, subrlfolder, headersize, configfile, mainfile, examplefile)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -1301,40 +1318,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Guarda los archivos
     os.chdir(mainroot)
-
     if dosave:
-        for f in files.keys():
-            fl = open(subrlfolder + f, 'w')
-
-            # Se escribe el header
-            if '.tex' in f:
-                data = files[f]
-                kline = 0
-                for d in data:
-                    if kline < headersize:
-                        fl.write(d)
-                    else:
-                        break
-                    kline += 1
-
-            # Strip
-            dostrip = False
-            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
-                dostrip = False
-
-            # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
-                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
-
-            # Se elimina la última linea en blanco si hay doble
-            fl.close()
-
-        # Mueve el archivo de configuraciones
-        copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
-        copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
-
-        # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize, files)
+        copy_assemble_template(files, subrlfolder, headersize, configfile, mainfile, examplefile)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -1345,49 +1330,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Se exporta el proyecto normal
     if dosave:
-        czip = release['ZIP']['NORMAL']
-        export_normal = Zip(czip['FILE'])
-        with Cd(subrlfolder):
-            export_normal.set_ghostpath(czip['GHOST'])
-            export_normal.add_excepted_file(czip['EXCEPTED'])
-            export_normal.add_file(czip['ADD']['FILES'])
-            export_normal.add_folder(czip['ADD']['FOLDER'])
-        export_normal.save()
-
-        # Se exportan los distintos estilos de versiones
-        data_mainfile = file_to_list(subrlfolder + mainfile)
-
-        # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\\universitydepartment')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\\universitydepartmentimage')
-
-        # Se recorre cada versión y se genera el .zip
-        for m in DEPTOS:
-            data_mainfile[fl_pos_dp_mainfile] = '\\def\\universitydepartment {' + m[0] + '}\n'
-            data_mainfile[fl_pos_im_mainfile] = '\\def\\universitydepartmentimage {departamentos/' + m[1] + '}\n'
-
-            # Se reescriben los archivos
-            save_list_to_file(data_mainfile, subrlfolder + mainfile)
-
-            # Se genera el .zip
-            czip = release['ZIP']['NORMAL']
-            export_normal = Zip(release['ZIP']['OTHERS']['NORMAL'].format(m[1]))
-            with Cd(subrlfolder):
-                export_normal.set_ghostpath(distfolder)
-                export_normal.add_excepted_file(czip['EXCEPTED'])
-                export_normal.add_file(czip['ADD']['FILES'])
-                export_normal.add_folder(release['ZIP']['OTHERS']['EXPATH'])
-                export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
-                for k in m[2]:
-                    export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
-            export_normal.save()
-
-        # Rollback archivo principal. Necesario para subtemplates
-        data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
-                                                             'Departamento de la Universidad')
-        data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
-                                                             'departamentos/fcfm')
-        save_list_to_file(data_mainfile, subrlfolder + mainfile)
+        export_subdeptos_subtemplate(release, subrlfolder, mainfile, distfolder)
 
     # Limpia el diccionario
     if doclean:
@@ -1639,40 +1582,8 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
 
     # Guarda los archivos
     os.chdir(mainroot)
-
     if dosave:
-        for f in files.keys():
-            fl = open(subrlfolder + f, 'w')
-
-            # Se escribe el header
-            if '.tex' in f:
-                data = files[f]
-                kline = 0
-                for d in data:
-                    if kline < headersize:
-                        fl.write(d)
-                    else:
-                        break
-                    kline += 1
-
-            # Strip
-            dostrip = False
-            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
-                dostrip = False
-
-            # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
-                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
-
-            # Se elimina la última linea en blanco si hay doble
-            fl.close()
-
-        # Mueve el archivo de configuraciones
-        copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
-        copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
-
-        # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize, files)
+        copy_assemble_template(files, subrlfolder, headersize, configfile, mainfile, examplefile)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -2141,40 +2052,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
 
     # Guarda los archivos
     os.chdir(mainroot)
-
     if dosave:
-        for f in files.keys():
-            fl = open(subrlfolder + f, 'w')
-
-            # Se escribe el header
-            if '.tex' in f:
-                data = files[f]
-                kline = 0
-                for d in data:
-                    if kline < headersize:
-                        fl.write(d)
-                    else:
-                        break
-                    kline += 1
-
-            # Strip
-            dostrip = False
-            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
-                dostrip = False
-
-            # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
-                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
-
-            # Se elimina la última linea en blanco si hay doble
-            fl.close()
-
-        # Mueve el archivo de configuraciones
-        copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
-        copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
-
-        # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize, files)
+        copy_assemble_template(files, subrlfolder, headersize, configfile, mainfile, examplefile)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -2185,49 +2064,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
 
     # Se exporta el proyecto normal
     if dosave:
-        czip = release['ZIP']['NORMAL']
-        export_normal = Zip(czip['FILE'])
-        with Cd(subrlfolder):
-            export_normal.set_ghostpath(czip['GHOST'])
-            export_normal.add_excepted_file(czip['EXCEPTED'])
-            export_normal.add_file(czip['ADD']['FILES'])
-            export_normal.add_folder(czip['ADD']['FOLDER'])
-        export_normal.save()
-
-        # Se exportan los distintos estilos de versiones
-        data_mainfile = file_to_list(subrlfolder + mainfile)
-
-        # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\\universitydepartment')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\\universitydepartmentimage')
-
-        # Se recorre cada versión y se genera el .zip
-        for m in DEPTOS:
-            data_mainfile[fl_pos_dp_mainfile] = '\\def\\universitydepartment {' + m[0] + '}\n'
-            data_mainfile[fl_pos_im_mainfile] = '\\def\\universitydepartmentimage {departamentos/' + m[1] + '}\n'
-
-            # Se reescriben los archivos
-            save_list_to_file(data_mainfile, subrlfolder + mainfile)
-
-            # Se genera el .zip
-            czip = release['ZIP']['NORMAL']
-            export_normal = Zip(release['ZIP']['OTHERS']['NORMAL'].format(m[1]))
-            with Cd(subrlfolder):
-                export_normal.set_ghostpath(distfolder)
-                export_normal.add_excepted_file(czip['EXCEPTED'])
-                export_normal.add_file(czip['ADD']['FILES'])
-                export_normal.add_folder(release['ZIP']['OTHERS']['EXPATH'])
-                export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
-                for k in m[2]:
-                    export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
-            export_normal.save()
-
-        # Rollback archivo principal. Necesario para subtemplates
-        data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
-                                                             'Departamento de la Universidad')
-        data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
-                                                             'departamentos/fcfm')
-        save_list_to_file(data_mainfile, subrlfolder + mainfile)
+        export_subdeptos_subtemplate(release, subrlfolder, mainfile, distfolder)
 
     # Limpia el diccionario
     if doclean:
@@ -2648,38 +2485,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Guarda los archivos
     os.chdir(mainroot)
     if dosave:
-        for f in files.keys():
-            fl = open(subrlfolder + f, 'w')
-
-            # Se escribe el header
-            if '.tex' in f:
-                data = files[f]
-                kline = 0
-                for d in data:
-                    if kline < headersize:
-                        fl.write(d)
-                    else:
-                        break
-                    kline += 1
-
-            # Strip
-            dostrip = False
-            if f == configfile or f == mainfile or f == examplefile or '-config' in f:
-                dostrip = False
-
-            # Se escribe el documento
-            paste_external_tex_into_file(fl, f, files, headersize, STRIP_ALL_GENERATED_FILES and dostrip, dostrip,
-                                         True, configfile, False, dist=True, add_ending_line=False and dostrip)
-
-            # Se elimina la última linea en blanco si hay doble
-            fl.close()
-
-        # Mueve el archivo de configuraciones
-        copyfile(subrlfolder + configfile, subrlfolder + 'template_config.tex')
-        copyfile(subrlfolder + examplefile, subrlfolder + 'example.tex')
-
-        # Ensambla el archivo del template
-        assemble_template_file(files['template.tex'], configfile, subrlfolder, headersize, files)
+        copy_assemble_template(files, subrlfolder, headersize, configfile, mainfile, examplefile)
 
     printfun(MSG_FOKTIMER.format((time.time() - t)))
 
@@ -2690,49 +2496,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
     # Se exporta el proyecto normal
     if dosave:
-        czip = release['ZIP']['NORMAL']
-        export_normal = Zip(czip['FILE'])
-        with Cd(subrlfolder):
-            export_normal.set_ghostpath(czip['GHOST'])
-            export_normal.add_excepted_file(czip['EXCEPTED'])
-            export_normal.add_file(czip['ADD']['FILES'])
-            export_normal.add_folder(czip['ADD']['FOLDER'])
-        export_normal.save()
-
-        # Se exportan los distintos estilos de versiones
-        data_mainfile = file_to_list(subrlfolder + mainfile)
-
-        # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\\universitydepartment')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\\universitydepartmentimage')
-
-        # Se recorre cada versión y se genera el .zip
-        for m in DEPTOS:
-            data_mainfile[fl_pos_dp_mainfile] = '\\def\\universitydepartment {' + m[0] + '}\n'
-            data_mainfile[fl_pos_im_mainfile] = '\\def\\universitydepartmentimage {departamentos/uchile2}\n'
-
-            # Se reescriben los archivos
-            save_list_to_file(data_mainfile, subrlfolder + mainfile)
-
-            # Se genera el .zip
-            czip = release['ZIP']['NORMAL']
-            export_normal = Zip(release['ZIP']['OTHERS']['NORMAL'].format(m[1]))
-            with Cd(subrlfolder):
-                export_normal.set_ghostpath(distfolder)
-                export_normal.add_excepted_file(czip['EXCEPTED'])
-                export_normal.add_file(czip['ADD']['FILES'])
-                export_normal.add_folder(release['ZIP']['OTHERS']['EXPATH'])
-                export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(m[1]))
-                for k in m[2]:
-                    export_normal.add_file(release['ZIP']['OTHERS']['IMGPATH'].format(k))
-            export_normal.save()
-
-        # Rollback archivo principal. Necesario para subtemplates
-        data_mainfile[fl_pos_dp_mainfile] = replace_argument(data_mainfile[fl_pos_dp_mainfile], 1,
-                                                             'Departamento de la Universidad')
-        data_mainfile[fl_pos_im_mainfile] = replace_argument(data_mainfile[fl_pos_im_mainfile], 1,
-                                                             'departamentos/uchile2')
-        save_list_to_file(data_mainfile, subrlfolder + mainfile)
+        export_subdeptos_subtemplate(release, subrlfolder, mainfile, distfolder,
+                                     deptimg='uchile2', finalimg='uchile2')
 
     # Limpia el diccionario
     if doclean:

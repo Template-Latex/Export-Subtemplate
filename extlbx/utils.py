@@ -52,6 +52,7 @@ import os
 import re
 import time
 from subprocess import call as _call
+from platform import system
 
 # Constantes
 CREATE_NO_WINDOW = 0x08000000
@@ -257,7 +258,7 @@ def is_windows():
 
     :return: Boolean
     """
-    if os.name == 'nt':
+    if system() == 'Windows':
         return True
     return False
 
@@ -279,7 +280,7 @@ def is_osx():
 
     :return: Boolean
     """
-    if os.name == 'darwin':
+    if system() == 'Darwin':
         return True
     return False
 

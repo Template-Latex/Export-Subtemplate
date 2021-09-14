@@ -361,7 +361,13 @@ class CreateVersion(object):
 
         # Estilo ventana
         self._root.title(TITLE)
-        self._root.iconbitmap(EXTLBX_ICON)
+        if is_osx():
+            self._root.iconbitmap(EXTLBX_ICON_MAC)
+            img = tk.Image('photo', file=EXTLBX_ICON_MAC)
+            # noinspection PyProtectedMember
+            self._root.tk.call('wm', 'iconphoto', self._root._w, img)
+        else:
+            self._root.iconbitmap(EXTLBX_ICON)
         fonts = [font.Font(family='Courier', size=13),
                  font.Font(family='Verdana', size=6),
                  font.Font(family='Times', size=10),
