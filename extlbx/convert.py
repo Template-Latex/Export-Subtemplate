@@ -27,21 +27,30 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
-# Importación de librerías
-from __future__ import print_function
+__all__ = [
+    'export_articulo',
+    'export_auxiliares',
+    'export_controles',
+    'export_cv',
+    'export_informe',
+    'export_presentacion',
+    'export_reporte',
+    'export_tesis',
+    'MSG_FOKTIMER'
+]
 
-from latex import *
-from releases import *
+# Importación de librerías
+from extlbx.latex import *
+from extlbx.releases import *
+from extlbx.utils import *
 from shutil import copyfile
-from stats import *
-from subprocess import call
-from version import *
-from ziputils import *
+from extlbx.stats import *
+from extlbx.ziputils import *
 import copy
 import time
+import os
 
 # Constantes
-CREATE_NO_WINDOW = 0x08000000
 MSG_DCOMPILE = 'COMPILANDO ... '
 MSG_FOKTIMER = 'OK [t {0:.3g}]'
 MSG_GEN_FILE = 'GENERANDO ARCHIVOS ... '
@@ -190,6 +199,31 @@ def assemble_template_file(templatef, configfile, distfolder, headersize, files)
     save_list_to_file(new_template_file, distfolder + 'template.tex')
 
 
+def change_header_tex_files(files, release, headersize, headerversionpos, versionhead):
+    """
+    Cambia el encabezado de los archivos tex.
+
+    :param files: Lista de archivos
+    :param release: Datos release
+    :param headersize: Tamaño del header
+    :param headerversionpos: Posición de la versión
+    :param versionhead: String de la versión
+    :return: None
+    """
+    for fl in files.keys():
+        if '.tex' not in fl:
+            continue
+        data = files[fl]
+        # noinspection PyCompatibility,PyBroadException
+        try:
+            data[0] = '% Template:     {0}\n'.format(release['NAME_HEADER'])
+            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
+            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
+            data[headerversionpos] = versionhead
+        except:
+            print('Error en archivo ' + fl)
+
+
 def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroot,
                      release, version, stat, versiondev, dia, lc, versionhash, plotstats):
     """
@@ -210,24 +244,12 @@ def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroo
     :param versionhash: Hash de la versión
     :param plotstats: Imprime estadísticas
     """
-    t = time.time()
     with open(os.devnull, 'w') as FNULL:
         printfun(MSG_DCOMPILE, end='')
         with Cd(subrlfolder):
-            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
-            t1 = time.time() - t
-            t = time.time()
-            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
-            t2 = time.time() - t
-            # t = time.time()
-            # call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
-            # t3 = time.time() - t
-            # t = time.time()
-            # call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
-            # t4 = time.time() - t
-            # tmean = (t1 + t2) / 2
+            t1 = call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL)
+            t2 = call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL)
             tmean = min(t1, t2)
-            # tmean = min(t1, t2, t3, t4)
             printfun(MSG_FOKTIMER.format(tmean))
 
             # Copia a la carpeta pdf_version
@@ -282,13 +304,10 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     stat = release['STATS']
 
     # Constantes
-    main_data = open(mainfile)
-    main_data.read()
-    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    main_data = file_to_list(mainfile)
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionheader = '% Versión:      {0} ({1})\n'
-    main_data.close()
 
     # Se obtiene el día
     dia = time.strftime('%d/%m/%Y')
@@ -297,15 +316,13 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     versionhead = versionheader.format(version, dia)
 
     # Se buscan números de lineas de hyperref
-    initconf_data = open(initconffile)
-    initconf_data.read()
-    l_tdate, d_tdate = find_line(initconf_data, 'Template.Date', True)
-    l_thash, d_thash = find_line(initconf_data, 'Template.Version.Hash', True)
-    l_ttype, d_ttype = find_line(initconf_data, 'Template.Type', True)
-    l_tvdev, d_tvdev = find_line(initconf_data, 'Template.Version.Dev', True)
-    l_tvrel, d_tvrel = find_line(initconf_data, 'Template.Version.Release', True)
-    l_vcmtd, d_vcmtd = find_line(initconf_data, 'pdfproducer', True)
-    initconf_data.close()
+    initconf_data = file_to_list(initconffile)
+    l_tdate, d_tdate = find_line_str(initconf_data, 'Template.Date', True)
+    l_thash, d_thash = find_line_str(initconf_data, 'Template.Version.Hash', True)
+    l_ttype, d_ttype = find_line_str(initconf_data, 'Template.Type', True)
+    l_tvdev, d_tvdev = find_line_str(initconf_data, 'Template.Version.Dev', True)
+    l_tvrel, d_tvrel = find_line_str(initconf_data, 'Template.Version.Release', True)
+    l_vcmtd, d_vcmtd = find_line_str(initconf_data, 'pdfproducer', True)
 
     # Se actualizan líneas de hyperref
     d_tdate = replace_argument(d_tdate, 1, dia)
@@ -415,8 +432,8 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         export_normal.save()
 
         # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\universitydepartment')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\universitydepartmentimage')
+        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\\universitydepartment')
+        fl_pos_im_mainfile = find_line(data_mainfile, '\def\\universitydepartmentimage')
 
         # Se recorre cada versión y se genera el .zip
         for m in DEPTOS:
@@ -520,13 +537,10 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     configfile = 'src/config.tex'
 
     # Constantes
-    main_data = open(mainfile)
-    main_data.read()
-    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    main_data = file_to_list(mainfile)
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionhead = '% Versión:      {0} ({1})\n'
-    main_data.close()
 
     # Se obtiene el día
     dia = time.strftime('%d/%m/%Y')
@@ -588,6 +602,12 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra, rb = find_block(files[fl], 'equationrestart', True)
     nconf = replace_argument(files[fl][ra], 1, 'none')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'stylecitereferences', True)
+    nconf = replace_argument(files[fl][ra], 1, 'bibtex')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'natbibrefstyle', True)
+    nconf = replace_argument(files[fl][ra], 1, 'ieeetr').replace('%', '   %')
+    files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'pagemargintop', True)
     nconf = replace_argument(files[fl][ra], 1, '2.3').replace('  %', '%')
     files[fl][ra] = nconf
@@ -618,7 +638,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
                                    white_end_block=True)
 
     ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
-    rb, _ = find_block(files[fl], '% \usepackage{subfigure}', True)
+    rb, _ = find_block(files[fl], '% \\usepackage{subfigure}', True)
     files[fl] = del_block_from_list(files[fl], ra, rb + 1)
 
     # -------------------------------------------------------------------------
@@ -722,16 +742,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = find_delete_block(files[fl], '% Imagen de prueba tikz', white_end_block=True)
 
     # Cambia encabezado archivos
-    for fl in files.keys():
-        data = files[fl]
-        # noinspection PyCompatibility,PyBroadException
-        try:
-            data[0] = '% Template:     Auxiliar LaTeX\n'
-            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
-            data[headerversionpos] = versionhead
-        except:
-            print('Error en archivo ' + fl)
+    change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
 
     # Se obtiene la cantidad de líneas de código
     lc = 0
@@ -866,13 +877,10 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     configfile = 'src/config.tex'
 
     # Constantes
-    main_data = open(mainfile)
-    main_data.read()
-    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    main_data = file_to_list(mainfile)
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionhead = '% Versión:      {0} ({1})\n'
-    main_data.close()
 
     # Se obtiene el día
     dia = time.strftime('%d/%m/%Y')
@@ -957,16 +965,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files[fl].pop(ra)
 
     # Cambia encabezado archivos
-    for fl in files.keys():
-        # noinspection PyBroadException
-        try:
-            data = files[fl]
-            data[0] = '% Template:     Controles LaTeX\n'
-            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
-            data[headerversionpos] = versionhead
-        except:
-            print('Fallo carga de archivo ' + fl)
+    change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
 
     # Se obtiene la cantidad de líneas de código
     lc = 0
@@ -1093,6 +1092,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
+    files['library.bib'] = file_to_list('library.bib')
+    files['natnumurl.bst'] = file_to_list('natnumurl.bst')
     mainfile = release['MAINFILE']
     examplefile = 'src/etc/example.tex'
     subrlfolder = release['ROOT']
@@ -1101,13 +1102,10 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     distfolder = release['DIST']
 
     # Constantes
-    main_data = open(mainfile)
-    main_data.read()
-    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    main_data = file_to_list(mainfile)
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionhead = '% Versión:      {0} ({1})\n'
-    main_data.close()
 
     # Se obtiene el día
     dia = time.strftime('%d/%m/%Y')
@@ -1206,7 +1204,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
     ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
-    rb, _ = find_block(files[fl], '% \usepackage{subfigure}', True)
+    rb, _ = find_block(files[fl], '% \\usepackage{subfigure}', True)
     files[fl] = del_block_from_list(files[fl], ra, rb + 1)
 
     ra, _ = find_block(files[fl], '% Desde v6.2.8 se debe cargar al final para evitar errores:', True)
@@ -1294,16 +1292,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl].pop(ra)
 
     # Cambia encabezado archivos
-    for fl in files.keys():
-        data = files[fl]
-        # noinspection PyCompatibility,PyBroadException
-        try:
-            data[0] = '% Template:     Reporte LaTeX\n'
-            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
-            data[headerversionpos] = versionhead
-        except:
-            print('Error en archivo ' + fl)
+    change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
 
     # Se obtiene la cantidad de líneas de código
     lc = 0
@@ -1318,14 +1307,15 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
             fl = open(subrlfolder + f, 'w')
 
             # Se escribe el header
-            data = files[f]
-            kline = 0
-            for d in data:
-                if kline < headersize:
-                    fl.write(d)
-                else:
-                    break
-                kline += 1
+            if '.tex' in f:
+                data = files[f]
+                kline = 0
+                for d in data:
+                    if kline < headersize:
+                        fl.write(d)
+                    else:
+                        break
+                    kline += 1
 
             # Strip
             dostrip = False
@@ -1368,8 +1358,8 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         data_mainfile = file_to_list(subrlfolder + mainfile)
 
         # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\universitydepartment')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\universitydepartmentimage')
+        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\\universitydepartment')
+        fl_pos_im_mainfile = find_line(data_mainfile, '\def\\universitydepartmentimage')
 
         # Se recorre cada versión y se genera el .zip
         for m in DEPTOS:
@@ -1470,6 +1460,8 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
+    files['library.bib'] = file_to_list('library.bib')
+    files['natnumurl.bst'] = file_to_list('natnumurl.bst')
     mainfile = release['MAINFILE']
     examplefile = 'src/etc/example.tex'
     subrlfolder = release['ROOT']
@@ -1477,13 +1469,10 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     configfile = 'src/config.tex'
 
     # Constantes
-    main_data = open(mainfile)
-    main_data.read()
-    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    main_data = file_to_list(mainfile)
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionhead = '% Versión:      {0} ({1})\n'
-    main_data.close()
 
     # Se obtiene el día
     dia = time.strftime('%d/%m/%Y')
@@ -1520,12 +1509,6 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'fontdocument', True)
     nconf = replace_argument(files[fl][ra], 1, 'libertine').replace('  %', '%')
-    files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'natbibrefstyle', True)
-    nconf = replace_argument(files[fl][ra], 1, 'natsimpleurl').replace('      %', '%')
-    files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'stylecitereferences', True)
-    nconf = replace_argument(files[fl][ra], 1, 'natbib')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'documentinterline', True)
     nconf = replace_argument(files[fl][ra], 1, '1').replace('%', '    %')
@@ -1647,16 +1630,7 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     files[fl] = find_delete_block(files[fl], '% Actualiza headers', white_end_block=True, jadd=-1)
 
     # Cambia encabezado archivos
-    for fl in files.keys():
-        data = files[fl]
-        # noinspection PyCompatibility,PyBroadException
-        try:
-            data[0] = '% Template:     Articulo LaTeX\n'
-            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
-            data[headerversionpos] = versionhead
-        except:
-            print('Error en archivo ' + fl)
+    change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
 
     # Se obtiene la cantidad de líneas de código
     lc = 0
@@ -1671,14 +1645,15 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
             fl = open(subrlfolder + f, 'w')
 
             # Se escribe el header
-            data = files[f]
-            kline = 0
-            for d in data:
-                if kline < headersize:
-                    fl.write(d)
-                else:
-                    break
-                kline += 1
+            if '.tex' in f:
+                data = files[f]
+                kline = 0
+                for d in data:
+                    if kline < headersize:
+                        fl.write(d)
+                    else:
+                        break
+                    kline += 1
 
             # Strip
             dostrip = False
@@ -1786,6 +1761,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
+    files['library.bib'] = file_to_list('library.bib')
     mainfile = release['MAINFILE']
     examplefile = 'src/etc/example.tex'
     subrlfolder = release['ROOT']
@@ -1794,13 +1770,10 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     distfolder = release['DIST']
 
     # Constantes
-    main_data = open(mainfile)
-    main_data.read()
-    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    main_data = file_to_list(mainfile)
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionhead = '% Versión:      {0} ({1})\n'
-    main_data.close()
 
     # Se obtiene el día
     dia = time.strftime('%d/%m/%Y')
@@ -1917,6 +1890,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, rb = find_block(files[fl], 'sourcecodefonts', True)
     nconf = replace_argument(files[fl][ra], 1, '\\footnotesize').replace(' {', '{').replace('      %', '%')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'stylecitereferences', True)
+    nconf = replace_argument(files[fl][ra], 1, 'bibtex')
+    files[fl][ra] = nconf
 
     ra, _ = find_block(files[fl], 'stylecitereferences', True)
     files[fl][ra] = '\\def\\stylecitereferences {bibtex}  % Estilo cita/ref {bibtex,custom}\n'
@@ -1986,7 +1962,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = replace_block_from_list(files[fl], nl, ra, rb - 3)
 
     ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
-    rb, _ = find_block(files[fl], '% \usepackage{subfigure}', True)
+    rb, _ = find_block(files[fl], '% \\usepackage{subfigure}', True)
     files[fl] = del_block_from_list(files[fl], ra, rb + 1)
 
     # -------------------------------------------------------------------------
@@ -2156,16 +2132,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl].pop(ra)
 
     # Cambia encabezado archivos
-    for fl in files.keys():
-        data = files[fl]
-        # noinspection PyCompatibility,PyBroadException
-        try:
-            data[0] = '% Template:     Presentación LaTeX\n'
-            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
-            data[headerversionpos] = versionhead
-        except:
-            print('Error en archivo ' + fl)
+    change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
 
     # Se obtiene la cantidad de líneas de código
     lc = 0
@@ -2180,14 +2147,15 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             fl = open(subrlfolder + f, 'w')
 
             # Se escribe el header
-            data = files[f]
-            kline = 0
-            for d in data:
-                if kline < headersize:
-                    fl.write(d)
-                else:
-                    break
-                kline += 1
+            if '.tex' in f:
+                data = files[f]
+                kline = 0
+                for d in data:
+                    if kline < headersize:
+                        fl.write(d)
+                    else:
+                        break
+                    kline += 1
 
             # Strip
             dostrip = False
@@ -2230,8 +2198,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
         data_mainfile = file_to_list(subrlfolder + mainfile)
 
         # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\universitydepartment')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\universitydepartmentimage')
+        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\\universitydepartment')
+        fl_pos_im_mainfile = find_line(data_mainfile, '\def\\universitydepartmentimage')
 
         # Se recorre cada versión y se genera el .zip
         for m in DEPTOS:
@@ -2267,149 +2235,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
 
     # Retorna a root
     os.chdir(mainroot)
-
-
-# noinspection PyBroadException
-def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
-              plotstats=False, doclean=True, addstat=True, savepdf=True,
-              mainroot=None, backtoroot=False, statsroot=None):
-    """
-    Exporta Professional-CV.
-
-    :param addstat: Añade estadísticas
-    :param backtoroot: Devuelve al root
-    :param doclean: Limpia las variables al terminar
-    :param docompile: Indica si compila
-    :param dosave: Indica si guarda
-    :param mainroot: Carpeta principal de Export-Subtemplate
-    :param plotstats: Plotea estadísticas
-    :param printfun: Función para imprimir
-    :param savepdf: Guarda el pdf
-    :param statsroot: Carpeta de estadísticas
-    :param version: Versión del template
-    :param versiondev: Versión de desarrollo del template
-    :param versionhash: Hash de la versión
-    :return: None
-    """
-    # Tipo release
-    reltag = REL_PROFESSIONALCV
-    release = RELEASES[reltag]
-
-    # Se cambia de carpeta
-    os.chdir(release['ROOT'])
-
-    # Obtiene archivos
-    configfile = 'src/config.tex'
-    files = release['FILES']
-    initconffile = 'src/initconf.tex'
-    mainfile = release['MAINFILE']
-    stat = release['STATS']
-
-    # Constantes
-    main_data = open(mainfile)
-    main_data.read()
-    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
-    headersize = find_line(main_data, '% Licencia MIT:') + 2
-    headerversionpos = find_line(main_data, '% Versión:      ')
-    versionheader = '% Versión:      {0} ({1})\n'
-    main_data.close()
-
-    # Se obtiene el día
-    dia = time.strftime('%d/%m/%Y')
-
-    # Se crea el header de la versión
-    versionhead = versionheader.format(version, dia)
-
-    # Se buscan números de lineas de hyperref
-    initconf_data = open(initconffile)
-    initconf_data.read()
-    l_tdate, d_tdate = find_line(initconf_data, 'Template.Date', True)
-    l_thash, d_thash = find_line(initconf_data, 'Template.Version.Hash', True)
-    l_ttype, d_ttype = find_line(initconf_data, 'Template.Type', True)
-    l_tvdev, d_tvdev = find_line(initconf_data, 'Template.Version.Dev', True)
-    l_tvrel, d_tvrel = find_line(initconf_data, 'Template.Version.Release', True)
-    l_vcmtd, d_vcmtd = find_line(initconf_data, 'pdfproducer', True)
-    initconf_data.close()
-
-    # Se actualizan líneas de hyperref
-    d_tdate = replace_argument(d_tdate, 1, dia)
-    d_thash = replace_argument(d_thash, 1, versionhash)
-    d_ttype = replace_argument(d_ttype, 1, 'Normal')
-    d_tvdev = replace_argument(d_tvdev, 1, versiondev)
-    d_tvrel = replace_argument(d_tvrel, 1, version)
-    d_vcmtd = replace_argument(d_vcmtd, 1, release['VERLINE'].format(version))
-
-    # Carga los archivos y cambian las versiones
-    t = time.time()
-    if dosave:
-        printfun(MSG_GEN_FILE, end='')
-    else:
-        printfun(MSG_UPV_FILE, end='')
-    for f in files.keys():
-        data = files[f]
-        # noinspection PyBroadException
-        try:
-            fl = open(f)
-            for line in fl:
-                data.append(line)
-            fl.close()
-        except:
-            printfun('Error al cargar el archivo {0}'.format(f))
-
-        # Se cambia la versión
-        data[headerversionpos] = versionhead
-
-        # Se actualiza la versión en initconf
-        if f == initconffile:
-            data[l_tdate] = d_tdate
-            data[l_thash] = d_thash
-            data[l_ttype] = d_ttype
-            data[l_tvdev] = d_tvdev
-            data[l_tvrel] = d_tvrel
-            data[l_vcmtd] = d_vcmtd
-
-        # Se reescribe el archivo
-        if dosave:
-            newfl = open(f, 'w')
-            for j in data:
-                newfl.write(j)
-            newfl.close()
-
-    # Se obtiene la cantidad de líneas de código
-    lc = 0
-    for f in files.keys():
-        lc += len(files[f])
-
-    if dosave:
-        # Mueve el archivo de configuraciones
-        copyfile(configfile, 'template_config.tex')
-
-        # Ensambla el archivo del template
-        assemble_template_file(files['source_template.tex'], configfile, '', headersize, files)
-
-    printfun(MSG_FOKTIMER.format(time.time() - t))
-
-    # Compila el archivo
-    if docompile and dosave:
-        compile_template(None, printfun, mainfile, savepdf, addstat, statsroot,
-                         release, version, stat, versiondev, dia, lc, versionhash, plotstats)
-
-    # Se exporta el proyecto normal
-    if dosave:
-        czip = release['ZIP']['NORMAL']
-        export_normal = Zip(mainroot + czip['FILE'])
-        export_normal.add_excepted_file(czip['EXCEPTED'])
-        export_normal.add_file(czip['ADD']['FILES'])
-        export_normal.add_folder(czip['ADD']['FOLDER'])
-        export_normal.save()
-
-    # Se borra la información generada en las listas
-    if doclean:
-        clear_dict(RELEASES[reltag], 'FILES')
-
-    # Se cambia a carpeta root
-    if backtoroot:
-        os.chdir(mainroot)
 
 
 # noinspection PyUnboundLocalVariable
@@ -2473,6 +2298,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
+    files['library.bib'] = file_to_list('library.bib')
+    files['natnumurl.bst'] = file_to_list('natnumurl.bst')
     mainfile = release['MAINFILE']
     examplefile = 'src/etc/example.tex'
     subrlfolder = release['ROOT']
@@ -2481,13 +2308,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     distfolder = release['DIST']
 
     # Constantes
-    main_data = open(mainfile)
-    main_data.read()
-    # initdocumentline = find_line(main_data, '\\usepackage[utf8]{inputenc}') + 1
+    main_data = file_to_list(mainfile)
     headersize = find_line(main_data, '% Licencia MIT:') + 2
     headerversionpos = find_line(main_data, '% Versión:      ')
     versionhead = '% Versión:      {0} ({1})\n'
-    main_data.close()
 
     # Se obtiene el día
     dia = time.strftime('%d/%m/%Y')
@@ -2574,12 +2398,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
-    # ra, _ = find_block(files[fl], 'natbibrefstyle', True)
-    # nconf = replace_argument(files[fl][ra], 1, 'plainnat').replace('  %', '%')
-    # files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'stylecitereferences', True)
-    nconf = replace_argument(files[fl][ra], 1, 'natbib')
-    files[fl][ra] = nconf
     # ra, _ = find_block(files[fl], 'addindextobookmarks', True)
     # nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     # files[fl][ra] = nconf
@@ -2648,7 +2466,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl][a] = files[fl][a].replace('{apacite}', '[nosectionbib]{apacite}')
 
     ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
-    rb, _ = find_block(files[fl], '% \usepackage{subfigure}', True)
+    rb, _ = find_block(files[fl], '% \\usepackage{subfigure}', True)
     files[fl] = del_block_from_list(files[fl], ra, rb + 1)
 
     ra, _ = find_block(files[fl], '% Desde v6.2.8 se debe cargar al final para evitar errores:', True)
@@ -2820,16 +2638,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                                   white_end_block=True)
 
     # Cambia encabezado archivos
-    for fl in files.keys():
-        data = files[fl]
-        # noinspection PyCompatibility,PyBroadException
-        try:
-            data[0] = '% Template:     Tesis LaTeX\n'
-            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
-            data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
-            data[headerversionpos] = versionhead
-        except:
-            print('Error en archivo ' + fl)
+    change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
 
     # Se obtiene la cantidad de líneas de código
     lc = 0
@@ -2843,14 +2652,15 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
             fl = open(subrlfolder + f, 'w')
 
             # Se escribe el header
-            data = files[f]
-            kline = 0
-            for d in data:
-                if kline < headersize:
-                    fl.write(d)
-                else:
-                    break
-                kline += 1
+            if '.tex' in f:
+                data = files[f]
+                kline = 0
+                for d in data:
+                    if kline < headersize:
+                        fl.write(d)
+                    else:
+                        break
+                    kline += 1
 
             # Strip
             dostrip = False
@@ -2893,8 +2703,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
         data_mainfile = file_to_list(subrlfolder + mainfile)
 
         # Se buscan las líneas del departamento y de la imagen
-        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\universitydepartment')
-        fl_pos_im_mainfile = find_line(data_mainfile, '\def\universitydepartmentimage')
+        fl_pos_dp_mainfile = find_line(data_mainfile, '\def\\universitydepartment')
+        fl_pos_im_mainfile = find_line(data_mainfile, '\def\\universitydepartmentimage')
 
         # Se recorre cada versión y se genera el .zip
         for m in DEPTOS:
@@ -2930,3 +2740,141 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
     # Retorna a root
     os.chdir(mainroot)
+
+
+# noinspection PyBroadException
+def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, docompile=True,
+              plotstats=False, doclean=True, addstat=True, savepdf=True,
+              mainroot=None, backtoroot=False, statsroot=None):
+    """
+    Exporta Professional-CV.
+
+    :param addstat: Añade estadísticas
+    :param backtoroot: Devuelve al root
+    :param doclean: Limpia las variables al terminar
+    :param docompile: Indica si compila
+    :param dosave: Indica si guarda
+    :param mainroot: Carpeta principal de Export-Subtemplate
+    :param plotstats: Plotea estadísticas
+    :param printfun: Función para imprimir
+    :param savepdf: Guarda el pdf
+    :param statsroot: Carpeta de estadísticas
+    :param version: Versión del template
+    :param versiondev: Versión de desarrollo del template
+    :param versionhash: Hash de la versión
+    :return: None
+    """
+    # Tipo release
+    reltag = REL_PROFESSIONALCV
+    release = RELEASES[reltag]
+
+    # Se cambia de carpeta
+    os.chdir(release['ROOT'])
+
+    # Obtiene archivos
+    configfile = 'src/config.tex'
+    files = release['FILES']
+    initconffile = 'src/initconf.tex'
+    mainfile = release['MAINFILE']
+    stat = release['STATS']
+
+    # Constantes
+    main_data = file_to_list(mainfile)
+    headersize = find_line(main_data, '% Licencia MIT:') + 2
+    headerversionpos = find_line(main_data, '% Versión:      ')
+    versionheader = '% Versión:      {0} ({1})\n'
+
+    # Se obtiene el día
+    dia = time.strftime('%d/%m/%Y')
+
+    # Se crea el header de la versión
+    versionhead = versionheader.format(version, dia)
+
+    # Se buscan números de lineas de hyperref
+    initconf_data = file_to_list(initconffile)
+    l_tdate, d_tdate = find_line_str(initconf_data, 'Template.Date', True)
+    l_thash, d_thash = find_line_str(initconf_data, 'Template.Version.Hash', True)
+    l_ttype, d_ttype = find_line_str(initconf_data, 'Template.Type', True)
+    l_tvdev, d_tvdev = find_line_str(initconf_data, 'Template.Version.Dev', True)
+    l_tvrel, d_tvrel = find_line_str(initconf_data, 'Template.Version.Release', True)
+    l_vcmtd, d_vcmtd = find_line_str(initconf_data, 'pdfproducer', True)
+
+    # Se actualizan líneas de hyperref
+    d_tdate = replace_argument(d_tdate, 1, dia)
+    d_thash = replace_argument(d_thash, 1, versionhash)
+    d_ttype = replace_argument(d_ttype, 1, 'Normal')
+    d_tvdev = replace_argument(d_tvdev, 1, versiondev)
+    d_tvrel = replace_argument(d_tvrel, 1, version)
+    d_vcmtd = replace_argument(d_vcmtd, 1, release['VERLINE'].format(version))
+
+    # Carga los archivos y cambian las versiones
+    t = time.time()
+    if dosave:
+        printfun(MSG_GEN_FILE, end='')
+    else:
+        printfun(MSG_UPV_FILE, end='')
+    for f in files.keys():
+        data = files[f]
+        # noinspection PyBroadException
+        try:
+            fl = open(f)
+            for line in fl:
+                data.append(line)
+            fl.close()
+        except:
+            printfun('Error al cargar el archivo {0}'.format(f))
+
+        # Se cambia la versión
+        data[headerversionpos] = versionhead
+
+        # Se actualiza la versión en initconf
+        if f == initconffile:
+            data[l_tdate] = d_tdate
+            data[l_thash] = d_thash
+            data[l_ttype] = d_ttype
+            data[l_tvdev] = d_tvdev
+            data[l_tvrel] = d_tvrel
+            data[l_vcmtd] = d_vcmtd
+
+        # Se reescribe el archivo
+        if dosave:
+            newfl = open(f, 'w')
+            for j in data:
+                newfl.write(j)
+            newfl.close()
+
+    # Se obtiene la cantidad de líneas de código
+    lc = 0
+    for f in files.keys():
+        lc += len(files[f])
+
+    if dosave:
+        # Mueve el archivo de configuraciones
+        copyfile(configfile, 'template_config.tex')
+
+        # Ensambla el archivo del template
+        assemble_template_file(files['source_template.tex'], configfile, '', headersize, files)
+
+    printfun(MSG_FOKTIMER.format(time.time() - t))
+
+    # Compila el archivo
+    if docompile and dosave:
+        compile_template(None, printfun, mainfile, savepdf, addstat, statsroot,
+                         release, version, stat, versiondev, dia, lc, versionhash, plotstats)
+
+    # Se exporta el proyecto normal
+    if dosave:
+        czip = release['ZIP']['NORMAL']
+        export_normal = Zip(mainroot + czip['FILE'])
+        export_normal.add_excepted_file(czip['EXCEPTED'])
+        export_normal.add_file(czip['ADD']['FILES'])
+        export_normal.add_folder(czip['ADD']['FOLDER'])
+        export_normal.save()
+
+    # Se borra la información generada en las listas
+    if doclean:
+        clear_dict(RELEASES[reltag], 'FILES')
+
+    # Se cambia a carpeta root
+    if backtoroot:
+        os.chdir(mainroot)

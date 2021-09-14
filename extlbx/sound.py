@@ -27,22 +27,45 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = [
+    'DO',
+    'DOm',
+    'FA',
+    'FAm',
+    'LA',
+    'LAm',
+    'MI',
+    'RE',
+    'REm',
+    'SI',
+    'SOL',
+    'SOLm',
+    'Sound'
+]
+
 # Importación de librerías
 import math
-import winsound
+
+WINSOUND_EXISTS = True
+
+try:
+    # noinspection PyUnresolvedReferences
+    import winsound
+except ImportError:
+    WINSOUND_EXISTS = False
 
 # Constantes
 DO = 65.406
-DO_ = 69.296
+DOm = 69.296
 RE = 73.416
-RE_ = 77.782
+REm = 77.782
 MI = 82.407
 FA = 87.307
-FA_ = 92.499
+FAm = 92.499
 SOL = 97.999
-SOL_ = 103.826
+SOLm = 103.826
 LA = 110
-LA_ = 116.541
+LAm = 116.541
 SI = 123.471
 
 
@@ -83,6 +106,8 @@ class Sound(object):
         Sonido de alerta
         :return:
         """
+        if not WINSOUND_EXISTS:
+            return
         winsound.MessageBeep(winsound.MB_OK)
 
     @staticmethod
@@ -94,6 +119,8 @@ class Sound(object):
         :param time: Tiempo
         :return:
         """
+        if not WINSOUND_EXISTS:
+            return
         winsound.Beep(freq, time)
 
 

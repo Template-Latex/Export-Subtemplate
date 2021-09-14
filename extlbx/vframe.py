@@ -27,15 +27,17 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = ['VerticalScrolledFrame']
+
 # noinspection PyCompatibility
-from Tkinter import Frame, Scrollbar, Canvas, NW, BOTH, TRUE, LEFT, RIGHT, VERTICAL, FALSE, Y
+from tkinter import Frame, Scrollbar, Canvas, NW, BOTH, TRUE, LEFT, RIGHT, VERTICAL, FALSE, Y
 
 
 # noinspection PyUnusedLocal
-class VerticalScrolledFrame(object, Frame):
+class VerticalScrolledFrame(Frame):
     """
     Frame Vertical con Scroll.
-    http://tkinter.unpythonic.net/wiki/VerticalScrolledFrame
+    https://tkinter.unpythonic.net/wiki/VerticalScrolledFrame
     """
 
     def __init__(self, parent, *args, **kw):

@@ -1,5 +1,4 @@
-﻿#!python2
-# coding=utf-8
+﻿# coding=utf-8
 """
 EXPORT-SUBTEMPLATE
 Genera distintos sub-releases y exporta los templates
@@ -28,15 +27,39 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = ['CreateVersion']
+
 # Importación de librerías
-from extlbx import *
 from extlbx import __author__, __version__
+from extlbx.releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, \
+    RELEASES, REL_REPORTE, REL_TESIS, REL_ARTICULO, REL_PRESENTACION
+from extlbx.convert import *
+from extlbx.version import *
+from extlbx.sound import Sound
+from extlbx.resources import *
+from extlbx.utils import *
+
+import tkinter as tk
+from tkinter import font
+from tkinter import messagebox
+from extlbx.vframe import VerticalScrolledFrame
+
+from pyperclip import copy as extlbcbpaste
 from functools import partial
-from PIL import ImageTk
+
 import json
 import logging
+import os
 import signal
 import traceback
+
+PIL_EXIST = True
+
+try:
+    # noinspection PyUnresolvedReferences
+    from PIL import ImageTk
+except ImportError:
+    PIL_EXIST = False
 
 # Constantes
 GITHUB_PDF_COMMIT = 'Se agrega pdf v{0} de {1}'
@@ -76,7 +99,7 @@ TITLE_LOADING = '{0} | Espere ...'
 TITLE_UPLOADING = '{0} | Cargando a GitHub ...'
 
 
-# noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal
+# noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal,PyShadowingBuiltins
 class CreateVersion(object):
     """
     Pide la versión al usuario y genera releases.
@@ -84,14 +107,14 @@ class CreateVersion(object):
 
     def __init__(self):
 
-        def _checkver(sv):
+        def _checkver(*args):
             """
             Función auxiliar que chequea que la versión ingresada sea correcta.
 
             :param sv: String var de la versión
             :return:
             """
-            ver = sv.get()
+            ver = self._versionstr.get()
             try:
                 v, dev, h = mk_version(ver)
                 if not validate_ver(dev, self._lastloadedv):
@@ -99,7 +122,8 @@ class CreateVersion(object):
                 self._startbutton.configure(state='normal', cursor='hand2')
                 self._versiontxt.bind('<Return>', self._start)
                 self._validversion = True
-            except:
+            except Exception as exc:
+                print(exc)
                 self._startbutton.configure(state='disabled', cursor='arrow')
                 self._versiontxt.bind('<Return>')
                 self._validversion = False
@@ -173,7 +197,7 @@ class CreateVersion(object):
             """
 
             def _oskill():
-                if os.name is 'nt':
+                if is_windows():
                     os.system('taskkill /PID {0} /F'.format(str(os.getpid())))
                 else:
                     os.kill(os.getpid(), signal.SIGKILL)
@@ -239,7 +263,7 @@ class CreateVersion(object):
             :param paramvalue: Valor del parámetro
             :return:
             """
-            if paramvalue is '!':
+            if paramvalue == '!':
                 self._configs[paramname]['VALUE'] = not self._configs[paramname]['VALUE']
             else:
                 self._configs[paramname]['VALUE'] = paramvalue
@@ -281,7 +305,7 @@ class CreateVersion(object):
             """
             self._clearconsole(-1)
             self._print('AYUDA')
-            keys = HELP.keys()
+            keys = list(HELP.keys())
             keys.sort()
             for k in keys:
                 self._print('\t{0}: {1}'.format(k, HELP[k]), scrolldir=-1)
@@ -311,7 +335,7 @@ class CreateVersion(object):
                     self._log('CHANGED', text=[RELEASES[j]['NAME'], v])
                     return
 
-        self._root = Tk()
+        self._root = tk.Tk()
         self._root.protocol('WM_DELETE_WINDOW', _kill)
         self._root.tk.call('tk', 'scaling', 1.35)
 
@@ -338,70 +362,80 @@ class CreateVersion(object):
         # Estilo ventana
         self._root.title(TITLE)
         self._root.iconbitmap(EXTLBX_ICON)
-        fonts = [tkFont.Font(family='Courier', size=8),
-                 tkFont.Font(family='Verdana', size=6),
-                 tkFont.Font(family='Times', size=10),
-                 tkFont.Font(family='Times', size=10, weight=tkFont.BOLD),
-                 tkFont.Font(family='Verdana', size=6, weight=tkFont.BOLD),
-                 tkFont.Font(family='Verdana', size=10),
-                 tkFont.Font(family='Verdana', size=7)]
+        fonts = [font.Font(family='Courier', size=13),
+                 font.Font(family='Verdana', size=6),
+                 font.Font(family='Times', size=10),
+                 font.Font(family='Times', size=10, weight=font.BOLD),
+                 font.Font(family='Verdana', size=6, weight=font.BOLD),
+                 font.Font(family='Verdana', size=10),
+                 font.Font(family='Verdana', size=7)]
 
-        f1 = Frame(self._root, border=5)
-        f1.pack(fill=X)
-        f2 = Frame(self._root)
-        f2.pack(fill=BOTH)
+        f1 = tk.Frame(self._root, border=5)
+        f1.pack(fill=tk.X)
+        f2 = tk.Frame(self._root)
+        f2.pack(fill=tk.BOTH)
 
         # Selección versión a compilar
         rels = []
         p = 1
-        ky = RELEASES.keys()
+        ky = list(RELEASES.keys())
         ky.sort()
         for b in ky:
             rels.append(RELEASES[b]['NAME'])
             self._root.bind('<Control-Key-{0}>'.format(p), partial(_set_templatever, RELEASES[b]['NAME']))
             p += 1
-        self._release = StringVar(self._root)
+        self._release = tk.StringVar(self._root)
         self._release.set('Seleccione template')
-        w = apply(OptionMenu, (f1, self._release) + tuple(rels))
-        w['width'] = 20
-        w['relief'] = GROOVE
-        w['anchor'] = W
+        w = tk.OptionMenu(f1, self._release, *tuple(rels))
+        w['width'] = 17
+        w['relief'] = tk.GROOVE
+        w['anchor'] = tk.W
         w['cursor'] = 'hand2'
-        w.pack(side=LEFT)
+        w.pack(side=tk.LEFT)
         self._release.trace('w', _update_ver)
 
         # Campo de texto para versión
-        Label(f1, text='Nueva versión:').pack(side=LEFT, padx=5)
-        self._versionstr = StringVar()
-        self._versionstr.trace('w', lambda name, index, mode, sv=self._versionstr: _checkver(sv))
-        self._versiontxt = Entry(f1, relief=GROOVE, width=9, font=fonts[5], textvariable=self._versionstr)
+        tk.Label(f1, text='Nueva versión:').pack(side=tk.LEFT, padx=5)
+        self._checkver = _checkver
+        self._versionstr = tk.StringVar(self._root)
+        self._versiontrace = self._versionstr.trace('w', self._checkver)
+        self._versiontxt = tk.Entry(f1, relief=tk.GROOVE, width=5, font=fonts[5], textvariable=self._versionstr)
         self._versiontxt.configure(state='disabled')
-        self._versiontxt.pack(side=LEFT, padx=5, pady=2)
+        self._versiontxt.pack(side=tk.LEFT, padx=5, pady=2)
         self._versiontxt.focus()
         self._validversion = False
         self._lastloadedv = ''
 
         # Botón iniciar
-        self._startbutton = Button(f1, text='Iniciar', state='disabled', relief=GROOVE, command=self._start)
-        self._startbutton.pack(side=LEFT, padx=5, anchor=W)
+        self._startbutton = tk.Button(f1, text='Iniciar', state='disabled', relief=tk.GROOVE, command=self._start)
+        self._startbutton.pack(side=tk.LEFT, padx=3, anchor=tk.W)
 
         # Uploads
-        upimg = ImageTk.PhotoImage(file=EXTLBX_BTN_UPLOAD)
-        self._uploadbutton = Button(f1, image=upimg, relief=GROOVE, height=20, width=20,
-                                    command=self._upload_github, border=0)
-        self._uploadbutton.image = upimg
-        self._uploadbutton.pack(side=RIGHT, padx=2, anchor=E)
+        if PIL_EXIST:
+            self._upload_imgs = [
+                ImageTk.PhotoImage(file=EXTLBX_BTN_UPLOAD),
+                ImageTk.PhotoImage(file=EXTLBX_BTN_UPLOAD_DISABLED)
+            ]
+            self._uploadbutton = tk.Button(f1, image=self._upload_imgs[0], relief=tk.GROOVE, height=20, width=20,
+                                           command=self._upload_github, border=0)
+        else:
+            self._uploadbutton = tk.Button(f1, relief=tk.GROOVE, height=20, width=20,
+                                           command=self._upload_github, border=0)
+            self._upload_imgs = None
+        self._uploadbutton.pack(side=tk.RIGHT, padx=2, anchor=tk.E)
         self._uploadstatebtn('off')
         self._checkuploaded()
 
         # Consola
         self._info_slider = VerticalScrolledFrame(f2)
         self._info_slider.canv.config(bg='#000000')
-        self._info_slider.pack(pady=2, anchor=NE, fill=BOTH, padx=1)
-        self._info = Label(self._info_slider.interior, text='', justify=LEFT, anchor=NW, bg='black', fg='white',
-                           wraplength=self._configs['WINDOW_SIZE']['WIDTH'], font=fonts[0], relief=FLAT, border=2,
-                           cursor='arrow')
-        self._info.pack(anchor=NW, fill=BOTH)
+        self._info_slider.pack(pady=2, anchor=tk.NE, fill=tk.BOTH, padx=1)
+        self._info = tk.Label(self._info_slider.interior, text='', justify=tk.LEFT, anchor=tk.NW, bg='black',
+                              fg='white',
+                              wraplength=self._configs['WINDOW_SIZE']['WIDTH'],
+                              font=fonts[0], relief=tk.FLAT, border=2,
+                              cursor='arrow')
+        self._info.pack(anchor=tk.NW, fill=tk.BOTH)
         self._info_slider.scroller.pack_forget()
         self._console = []
         self._cnextnl = False
@@ -593,7 +627,7 @@ class CreateVersion(object):
 
             # Se comprueba versiones
             if not validate_ver(versiondev, lastv):
-                tkMessageBox.showerror('Error', 'La versión nueva debe ser superior a la actual ({0}).'.format(lastv))
+                messagebox.showerror('Error', 'La versión nueva debe ser superior a la actual ({0}).'.format(lastv))
                 self._print('ERROR: VERSIÓN INCORRECTA')
             else:
                 try:
@@ -601,48 +635,48 @@ class CreateVersion(object):
                     self._log('CREATE_V', text=[versiondev, relnm])
                     if t == 1:
                         try:
-                            convert.export_informe(ver, versiondev, versionhash,
-                                                   printfun=self._print,
-                                                   doclean=True,
-                                                   dosave=self._getconfig('SAVE'),
-                                                   docompile=self._getconfig('COMPILE'),
-                                                   addstat=self._getconfig('SAVE_STAT'),
-                                                   backtoroot=True,
-                                                   plotstats=self._getconfig('PLOT_STAT'),
-                                                   mainroot=self._getconfig('MAIN_ROOT'),
-                                                   informeroot=self._getconfig('INFORME_ROOT'),
-                                                   statsroot=self._getconfig('STATS_ROOT'))
+                            export_informe(ver, versiondev, versionhash,
+                                           printfun=self._print,
+                                           doclean=True,
+                                           dosave=self._getconfig('SAVE'),
+                                           docompile=self._getconfig('COMPILE'),
+                                           addstat=self._getconfig('SAVE_STAT'),
+                                           backtoroot=True,
+                                           plotstats=self._getconfig('PLOT_STAT'),
+                                           mainroot=self._getconfig('MAIN_ROOT'),
+                                           informeroot=self._getconfig('INFORME_ROOT'),
+                                           statsroot=self._getconfig('STATS_ROOT'))
                         except:
                             logging.exception('Error al generar informe')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                     elif t == 2:
                         try:
-                            convert.export_auxiliares(ver, versiondev, versionhash,
-                                                      printfun=self._print,
-                                                      dosave=self._getconfig('SAVE'),
-                                                      docompile=self._getconfig('COMPILE'),
-                                                      addstat=self._getconfig('SAVE_STAT'),
-                                                      plotstats=self._getconfig('PLOT_STAT'),
-                                                      savepdf=self._getconfig('SAVE_PDF'),
-                                                      mainroot=self._getconfig('MAIN_ROOT'),
-                                                      informeroot=self._getconfig('INFORME_ROOT'),
-                                                      statsroot=self._getconfig('STATS_ROOT'))
+                            export_auxiliares(ver, versiondev, versionhash,
+                                              printfun=self._print,
+                                              dosave=self._getconfig('SAVE'),
+                                              docompile=self._getconfig('COMPILE'),
+                                              addstat=self._getconfig('SAVE_STAT'),
+                                              plotstats=self._getconfig('PLOT_STAT'),
+                                              savepdf=self._getconfig('SAVE_PDF'),
+                                              mainroot=self._getconfig('MAIN_ROOT'),
+                                              informeroot=self._getconfig('INFORME_ROOT'),
+                                              statsroot=self._getconfig('STATS_ROOT'))
                         except:
                             logging.exception('Error al generar auxiliares')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                             clear_dict(RELEASES[REL_AUXILIAR], 'FILES')
                     elif t == 3:
                         try:
-                            convert.export_controles(ver, versiondev, versionhash,
-                                                     printfun=self._print,
-                                                     dosave=self._getconfig('SAVE'),
-                                                     docompile=self._getconfig('COMPILE'),
-                                                     addstat=self._getconfig('SAVE_STAT'),
-                                                     plotstats=self._getconfig('PLOT_STAT'),
-                                                     savepdf=self._getconfig('SAVE_PDF'),
-                                                     mainroot=self._getconfig('MAIN_ROOT'),
-                                                     informeroot=self._getconfig('INFORME_ROOT'),
-                                                     statsroot=self._getconfig('STATS_ROOT'))
+                            export_controles(ver, versiondev, versionhash,
+                                             printfun=self._print,
+                                             dosave=self._getconfig('SAVE'),
+                                             docompile=self._getconfig('COMPILE'),
+                                             addstat=self._getconfig('SAVE_STAT'),
+                                             plotstats=self._getconfig('PLOT_STAT'),
+                                             savepdf=self._getconfig('SAVE_PDF'),
+                                             mainroot=self._getconfig('MAIN_ROOT'),
+                                             informeroot=self._getconfig('INFORME_ROOT'),
+                                             statsroot=self._getconfig('STATS_ROOT'))
                         except:
                             logging.exception('Error al generar controles')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
@@ -650,74 +684,74 @@ class CreateVersion(object):
                             clear_dict(RELEASES[REL_CONTROLES], 'FILES')
                     elif t == 4:
                         try:
-                            convert.export_cv(ver, versiondev, versionhash, printfun=self._print,
-                                              dosave=self._getconfig('SAVE'),
-                                              docompile=self._getconfig('COMPILE'),
-                                              addstat=self._getconfig('SAVE_STAT'),
-                                              plotstats=self._getconfig('PLOT_STAT'),
-                                              savepdf=self._getconfig('SAVE_PDF'),
-                                              mainroot=self._getconfig('MAIN_ROOT'),
-                                              statsroot=self._getconfig('STATS_ROOT'),
-                                              backtoroot=True)
+                            export_cv(ver, versiondev, versionhash, printfun=self._print,
+                                      dosave=self._getconfig('SAVE'),
+                                      docompile=self._getconfig('COMPILE'),
+                                      addstat=self._getconfig('SAVE_STAT'),
+                                      plotstats=self._getconfig('PLOT_STAT'),
+                                      savepdf=self._getconfig('SAVE_PDF'),
+                                      mainroot=self._getconfig('MAIN_ROOT'),
+                                      statsroot=self._getconfig('STATS_ROOT'),
+                                      backtoroot=True)
                         except:
                             logging.exception('Error al generar cv')
                             clear_dict(RELEASES[REL_PROFESSIONALCV], 'FILES')
                     elif t == 5:
                         try:
-                            convert.export_reporte(ver, versiondev, versionhash, printfun=self._print,
-                                                   dosave=self._getconfig('SAVE'),
-                                                   docompile=self._getconfig('COMPILE'),
-                                                   addstat=self._getconfig('SAVE_STAT'),
-                                                   plotstats=self._getconfig('PLOT_STAT'),
-                                                   savepdf=self._getconfig('SAVE_PDF'),
-                                                   mainroot=self._getconfig('MAIN_ROOT'),
-                                                   statsroot=self._getconfig('STATS_ROOT'),
-                                                   informeroot=self._getconfig('INFORME_ROOT'))
+                            export_reporte(ver, versiondev, versionhash, printfun=self._print,
+                                           dosave=self._getconfig('SAVE'),
+                                           docompile=self._getconfig('COMPILE'),
+                                           addstat=self._getconfig('SAVE_STAT'),
+                                           plotstats=self._getconfig('PLOT_STAT'),
+                                           savepdf=self._getconfig('SAVE_PDF'),
+                                           mainroot=self._getconfig('MAIN_ROOT'),
+                                           statsroot=self._getconfig('STATS_ROOT'),
+                                           informeroot=self._getconfig('INFORME_ROOT'))
                         except:
                             logging.exception('Error al generar reporte')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                             clear_dict(RELEASES[REL_REPORTE], 'FILES')
                     elif t == 6:
                         try:
-                            convert.export_tesis(ver, versiondev, versionhash, printfun=self._print,
-                                                 dosave=self._getconfig('SAVE'),
-                                                 docompile=self._getconfig('COMPILE'),
-                                                 addstat=self._getconfig('SAVE_STAT'),
-                                                 plotstats=self._getconfig('PLOT_STAT'),
-                                                 savepdf=self._getconfig('SAVE_PDF'),
-                                                 mainroot=self._getconfig('MAIN_ROOT'),
-                                                 statsroot=self._getconfig('STATS_ROOT'),
-                                                 informeroot=self._getconfig('INFORME_ROOT'))
+                            export_tesis(ver, versiondev, versionhash, printfun=self._print,
+                                         dosave=self._getconfig('SAVE'),
+                                         docompile=self._getconfig('COMPILE'),
+                                         addstat=self._getconfig('SAVE_STAT'),
+                                         plotstats=self._getconfig('PLOT_STAT'),
+                                         savepdf=self._getconfig('SAVE_PDF'),
+                                         mainroot=self._getconfig('MAIN_ROOT'),
+                                         statsroot=self._getconfig('STATS_ROOT'),
+                                         informeroot=self._getconfig('INFORME_ROOT'))
                         except:
                             logging.exception('Error al generar tesis')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                             clear_dict(RELEASES[REL_TESIS], 'FILES')
                     elif t == 7:
                         try:
-                            convert.export_presentacion(ver, versiondev, versionhash, printfun=self._print,
-                                                        dosave=self._getconfig('SAVE'),
-                                                        docompile=self._getconfig('COMPILE'),
-                                                        addstat=self._getconfig('SAVE_STAT'),
-                                                        plotstats=self._getconfig('PLOT_STAT'),
-                                                        savepdf=self._getconfig('SAVE_PDF'),
-                                                        mainroot=self._getconfig('MAIN_ROOT'),
-                                                        statsroot=self._getconfig('STATS_ROOT'),
-                                                        informeroot=self._getconfig('INFORME_ROOT'))
+                            export_presentacion(ver, versiondev, versionhash, printfun=self._print,
+                                                dosave=self._getconfig('SAVE'),
+                                                docompile=self._getconfig('COMPILE'),
+                                                addstat=self._getconfig('SAVE_STAT'),
+                                                plotstats=self._getconfig('PLOT_STAT'),
+                                                savepdf=self._getconfig('SAVE_PDF'),
+                                                mainroot=self._getconfig('MAIN_ROOT'),
+                                                statsroot=self._getconfig('STATS_ROOT'),
+                                                informeroot=self._getconfig('INFORME_ROOT'))
                         except:
                             logging.exception('Error al generar presentacion')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                             clear_dict(RELEASES[REL_PRESENTACION], 'FILES')
                     elif t == 8:
                         try:
-                            convert.export_articulo(ver, versiondev, versionhash, printfun=self._print,
-                                                    dosave=self._getconfig('SAVE'),
-                                                    docompile=self._getconfig('COMPILE'),
-                                                    addstat=self._getconfig('SAVE_STAT'),
-                                                    plotstats=self._getconfig('PLOT_STAT'),
-                                                    savepdf=self._getconfig('SAVE_PDF'),
-                                                    mainroot=self._getconfig('MAIN_ROOT'),
-                                                    statsroot=self._getconfig('STATS_ROOT'),
-                                                    informeroot=self._getconfig('INFORME_ROOT'))
+                            export_articulo(ver, versiondev, versionhash, printfun=self._print,
+                                            dosave=self._getconfig('SAVE'),
+                                            docompile=self._getconfig('COMPILE'),
+                                            addstat=self._getconfig('SAVE_STAT'),
+                                            plotstats=self._getconfig('PLOT_STAT'),
+                                            savepdf=self._getconfig('SAVE_PDF'),
+                                            mainroot=self._getconfig('MAIN_ROOT'),
+                                            statsroot=self._getconfig('STATS_ROOT'),
+                                            informeroot=self._getconfig('INFORME_ROOT'))
                         except:
                             logging.exception('Error al generar articulo')
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
@@ -731,19 +765,18 @@ class CreateVersion(object):
                     if self._lastsav:
                         self._uploadstatebtn('on')
                 except Exception as e:
-                    tkMessageBox.showerror('Error fatal', 'Ocurrio un error inesperado al procesar la solicitud.')
+                    messagebox.showerror('Error fatal', 'Ocurrio un error inesperado al procesar la solicitud.')
                     self._log('OTHER', text=str(e), mode='ERROR')
                     self._print('ERROR: EXCEPCIÓN INESPERADA')
                     self._print(str(e))
                     self._print(traceback.format_exc())
                     self._sounds.alert()
 
-                # Vuelve a cargar librerías
-                reload_extlbx()
-
             self._root.configure(cursor='arrow')
             self._root.title(TITLE)
-            self._versiontxt.delete(0, 'end')
+            self._versionstr.trace_vdelete('w', self._versiontrace)
+            self._versionstr.set('')
+            self._versiontrace = self._versionstr.trace('w', self._checkver)
             self._root.update()
             self._root.after(50, _scroll)
             self._log('CREATE_V_COMPLETE')
@@ -766,12 +799,19 @@ class CreateVersion(object):
         :param state: Estado
         :return:
         """
-        if state is 'on':
+        if state == 'on':
             self._uploadbutton.configure(state='normal')
             self._uploadbutton.configure(cursor='hand2')
+            if self._upload_imgs:
+                self._uploadbutton.configure(image=self._upload_imgs[0])
+                self._uploadbutton.image = self._upload_imgs[0]
         else:
             self._uploadbutton.configure(state='disabled')
             self._uploadbutton.configure(cursor='arrow')
+            if self._upload_imgs:
+                self._uploadbutton.configure(image=self._upload_imgs[1])
+                self._uploadbutton.image = self._upload_imgs[1]
+        self._uploadbutton.update()
 
     def _upload_github(self, *args):
         """
@@ -807,9 +847,9 @@ class CreateVersion(object):
                 t = time.time()
                 with open(os.devnull, 'w') as FNULL:
                     with Cd(RELEASES[jver]['GIT']):
-                        call(['git', 'add', '--all'], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
-                        call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
-                        call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
+                        call(['git', 'add', '--all'], stdout=FNULL)
+                        call(['git', 'commit', '-m', cmsg], stdout=FNULL)
+                        call(['git', 'push'], stdout=FNULL, stderr=FNULL)
 
                 # Se sube archivo pdf
                 pdf_file = RELEASES[jver]['PDF_FOLDER'].format(lastvup)
@@ -818,18 +858,17 @@ class CreateVersion(object):
                     with open(os.devnull, 'w') as FNULL:
                         with Cd(self._getconfig('PDF_ROOT')):
                             pdf_file = pdf_file.replace(self._getconfig('PDF_ROOT'), '')
-                            call(['git', 'add', pdf_file], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
-                            call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
-                            call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
+                            call(['git', 'add', pdf_file], stdout=FNULL)
+                            call(['git', 'commit', '-m', cmsg], stdout=FNULL)
+                            call(['git', 'push'], stdout=FNULL, stderr=FNULL)
 
                 # Se sube estadísticas
                 cmsg = GITHUB_STAT_COMMIT.format(lastv, RELEASES[jver]['NAME'])
                 with open(os.devnull, 'w') as FNULL:
                     with Cd(self._getconfig('STATS_ROOT') + 'stats/'):
-                        call(['git', 'add', RELEASES[jver]['STATS']['GIT_ADD']], stdout=FNULL,
-                             creationflags=CREATE_NO_WINDOW)
-                        call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
-                        call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
+                        call(['git', 'add', RELEASES[jver]['STATS']['GIT_ADD']], stdout=FNULL)
+                        call(['git', 'commit', '-m', cmsg], stdout=FNULL)
+                        call(['git', 'push'], stdout=FNULL, stderr=FNULL)
 
                 # Se guarda la versión
                 self._uploaded[jver] = lastv
@@ -839,16 +878,15 @@ class CreateVersion(object):
                 # cmsg = GITHUB_UPDATE_COMMIT
                 # with open(os.devnull, 'w') as FNULL:
                 #     with Cd(self._getconfig('MAIN_ROOT')):
-                #         call(['git', 'add', EXTLBX_UPLOAD], stdout=FNULL,
-                #              creationflags=CREATE_NO_WINDOW)
-                #         call(['git', 'commit', '-m', cmsg], stdout=FNULL, creationflags=CREATE_NO_WINDOW)
-                #         call(['git', 'push'], stdout=FNULL, stderr=FNULL, creationflags=CREATE_NO_WINDOW)
+                #         call(['git', 'add', EXTLBX_UPLOAD], stdout=FNULL)
+                #         call(['git', 'commit', '-m', cmsg], stdout=FNULL)
+                #         call(['git', 'push'], stdout=FNULL, stderr=FNULL)
 
                 # Se muestra tiempo de subida y se termina el proceso
                 self._print(MSG_FOKTIMER.format((time.time() - t)))
                 self._uploadstatebtn('off')
             except Exception as e:
-                tkMessageBox.showerror('Error fatal', 'Ocurrio un error inesperado al procesar la solicitud.')
+                messagebox.showerror('Error fatal', 'Ocurrio un error inesperado al procesar la solicitud.')
                 self._log('OTHER', text=str(e), mode='ERROR')
                 self._print('ERROR: EXCEPCIÓN INESPERADA')
                 self._print(str(e))

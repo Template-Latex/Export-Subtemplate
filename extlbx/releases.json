@@ -28,6 +28,7 @@
     "MAINFILE": "main.tex",
     "MESSAGE": "\nCREANDO TEMPLATE-ARTICULO v{0}",
     "NAME": "Template-Articulo",
+    "NAME_HEADER": "Artículo LaTeX",
     "PDF_FOLDER": "../pdf-version/Articulo/Template-Articulo v{0}.pdf",
     "ROOT": "../Template-Articulo/",
     "STATS": {
@@ -50,7 +51,7 @@
             "template.tex",
             "template_config.tex",
             "library.bib",
-            "natsimpleurl.bst"
+            "natnumurl.bst"
           ],
           "FOLDER": [
             "img"
@@ -104,6 +105,7 @@
     "MAINFILE": "main.tex",
     "MESSAGE": "\nCREANDO TEMPLATE-AUXILIARES v{0}",
     "NAME": "Template-Auxiliares",
+    "NAME_HEADER": "Auxiliar LaTeX",
     "PDF_FOLDER": "../pdf-version/Auxiliares/Template-Auxiliares v{0}.pdf",
     "ROOT": "../Template-Auxiliares/",
     "STATS": {
@@ -163,6 +165,7 @@
     "MAINFILE": "main.tex",
     "MESSAGE": "\nCREANDO TEMPLATE-CONTROLES v{0}",
     "NAME": "Template-Controles",
+    "NAME_HEADER": "Control LaTeX",
     "PDF_FOLDER": "../pdf-version/Controles/Template-Controles v{0}.pdf",
     "ROOT": "../Template-Controles/",
     "STATS": {
@@ -229,6 +232,7 @@
     "MAINFILE": "main.tex",
     "MESSAGE": "\nCREANDO TEMPLATE-INFORME v{0}",
     "NAME": "Template-Informe",
+    "NAME_HEADER": "Informe LaTeX",
     "PDF_FOLDER": "../../pdf-version/Informe/Template-Informe v{0}.pdf",
     "ROOT": "",
     "STATS": {
@@ -249,7 +253,9 @@
             "dist/example.tex",
             "dist/main.tex",
             "dist/template.tex",
-            "dist/template_config.tex"
+            "dist/template_config.tex",
+            "library.bib",
+            "natnumurl.bst"
           ],
           "FOLDER": [
             "img"
@@ -307,6 +313,7 @@
     "MAINFILE": "main.tex",
     "MESSAGE": "\nCREANDO TEMPLATE-PRESENTACION v{0}",
     "NAME": "Template-Presentacion",
+    "NAME_HEADER": "Presentación LaTeX",
     "PDF_FOLDER": "../pdf-version/Presentacion/Template-Presentacion v{0}.pdf",
     "ROOT": "../Template-Presentacion/",
     "STATS": {
@@ -375,6 +382,7 @@
     "MAINFILE": "cv.tex",
     "MESSAGE": "\nCREANDO PROFESSIONAL-CV v{0}",
     "NAME": "Professional-CV",
+    "NAME_HEADER": "CV LaTeX",
     "PDF_FOLDER": "../pdf-version/Professional-CV/Professional-CV v{0}.pdf",
     "ROOT": "../Professional-CV/",
     "STATS": {
@@ -436,6 +444,7 @@
     "MAINFILE": "main.tex",
     "MESSAGE": "\nCREANDO TEMPLATE-REPORTE v{0}",
     "NAME": "Template-Reporte",
+    "NAME_HEADER": "Reporte LaTeX",
     "PDF_FOLDER": "../pdf-version/Reporte/Template-Reporte v{0}.pdf",
     "ROOT": "../Template-Reporte/",
     "STATS": {
@@ -456,7 +465,9 @@
             "example.tex",
             "main.tex",
             "template.tex",
-            "template_config.tex"
+            "template_config.tex",
+            "library.bib",
+            "natnumurl.bst"
           ],
           "FOLDER": [
             "img"
@@ -516,6 +527,7 @@
     "MAINFILE": "main.tex",
     "MESSAGE": "\nCREANDO TEMPLATE-TESIS v{0}",
     "NAME": "Template-Tesis",
+    "NAME_HEADER": "Tesis LaTeX",
     "PDF_FOLDER": "../pdf-version/Tesis/Template-Tesis v{0}.pdf",
     "ROOT": "../Template-Tesis/",
     "STATS": {
@@ -537,7 +549,8 @@
             "main.tex",
             "template.tex",
             "template_config.tex",
-            "library.bib"
+            "library.bib",
+            "natnumurl.bst"
           ],
           "FOLDER": [
             "img"

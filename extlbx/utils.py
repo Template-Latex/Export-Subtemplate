@@ -27,17 +27,68 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = [
+    'add_block_from_list',
+    'call',
+    'Cd',
+    'clear_dict',
+    'del_block_from_list',
+    'extract_block_from_list',
+    'file_to_list',
+    'find_line_str',
+    'get_file_from_input',
+    'is_osx',
+    'is_windows',
+    'LIST_END_LINE',
+    'natural_keys',
+    'replace_block_from_list',
+    'save_list_to_file',
+    'search_append_line',
+    'split_str'
+]
+
 # Importación de librerías
 import os
 import re
+import time
+from subprocess import call as _call
 
 # Constantes
+CREATE_NO_WINDOW = 0x08000000
 LIST_END_LINE = -1
 POS_IZQ = 1
 POS_DER = 2
 
 
+def call(cmds, stdout, stderr=None):
+    """
+    Llama a una instrucción en consola.
+
+    :param cmds: Lista de comandos
+    :param stdout: Salida estandar
+    :param stderr: Salida de errores
+    :return: Tiempo de ejecución
+    :rtype: float
+    """
+    t = time.time()
+    if stderr:
+        if is_windows():
+            _call(cmds, stdout=stdout, stderr=stderr, creationflags=CREATE_NO_WINDOW)
+        else:
+            _call(cmds, stdout=stdout, stderr=stderr)
+    else:
+        if is_windows():
+            _call(cmds, stdout=stdout, creationflags=CREATE_NO_WINDOW)
+        else:
+            _call(cmds, stdout=stdout)
+    return time.time() - t
+
+
 class Cd(object):
+    """
+    Cambia directorio y ejecuta comandos.
+    """
+
     def __init__(self, new_path):
         self.apply = new_path is not None
         if self.apply:
@@ -55,7 +106,7 @@ class Cd(object):
         os.chdir(self.savedPath)
 
 
-def find_line(data, line, returnline=False):
+def find_line_str(data, line, returnline=False):
     """
     Encuentra la linea en un archivo y devuelve su ubicación.
 
@@ -91,7 +142,7 @@ def split_str(s, t):
     s = s.split(t)
     e = list()
     for k in s:
-        if k is not '':
+        if k != '':
             e.append(k)
     return e
 
@@ -183,7 +234,7 @@ def search_append_line(data, search_line, append_line, iadd=0):
     :param iadd: Numero linea a a{ador
     :return:
     """
-    ra, _ = find_line(data, search_line, True)
+    ra, _ = find_line_str(data, search_line, True)
     ra += iadd
     nl = [data[ra], append_line]
     return replace_block_from_list(data, nl, ra, ra - 1)
@@ -195,13 +246,9 @@ def file_to_list(filename):
 
     :param filename: Nombre del archivo
     :return: Lista
+    :rtype: list[str]
     """
-    data = []
-    filedata = open(filename)
-    for k in filedata:
-        data.append(k)
-    filedata.close()
-    return data
+    return open(filename).readlines()
 
 
 def is_windows():
@@ -257,7 +304,7 @@ def clear_dict(d, entry):
 def natural_keys(text):
     """
     alist.sort(key=natural_keys) sorts in human order
-    http://nedbatchelder.com/blog/200712/human_sorting.html
+    https://nedbatchelder.com/blog/200712/human_sorting.html
     (See Toothy's implementation in the comments).
 
     :param text: Lista

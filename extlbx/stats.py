@@ -27,10 +27,22 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = [
+    'add_stat',
+    'generate_statline',
+    'plot_stats'
+]
+
 # Importación de librerías
-from __future__ import print_function
-from scipy import stats
-from utils import split_str
+from extlbx.utils import split_str
+
+SCIPY = True
+
+try:
+    # noinspection PyUnresolvedReferences
+    from scipy import stats
+except (ImportError, ModuleNotFoundError):
+    SCIPY = False
 
 
 def generate_statline(statid, version, time, date, lc, vh):
@@ -143,7 +155,7 @@ def plot_stats(statfile, statplotctime, statplotlcode):
         k += 1
     nlen = len(numcomp)
     lastid = numcomp[nlen - 1]
-    if nlen >= 3:
+    if nlen >= 3 and SCIPY:
         # Tiempo de compilación
         tme = stats.tmean(timecomp)
         trc = stats.trim_mean(timecomp, 0.15)

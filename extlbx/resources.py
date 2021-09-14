@@ -27,6 +27,15 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = [
+    'EXTLBX_BTN_UPLOAD',
+    'EXTLBX_BTN_UPLOAD_DISABLED',
+    'EXTLBX_CONFIGS',
+    'EXTLBX_ICON',
+    'EXTLBX_LICENSE',
+    'EXTLBX_UPLOAD'
+]
+
 # Importación de librerías
 import os
 
@@ -36,6 +45,7 @@ __respath = __actualpath + 'res/'
 
 # Recursos
 EXTLBX_BTN_UPLOAD = __respath + 'upload2.png'
+EXTLBX_BTN_UPLOAD_DISABLED = __respath + 'upload2_disabled.png'
 EXTLBX_CONFIGS = __respath + 'config.json'
 EXTLBX_ICON = __respath + 'icon.ico'
 EXTLBX_LICENSE = __respath + 'license'

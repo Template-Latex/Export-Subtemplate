@@ -27,6 +27,19 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = [
+    'DEPTOS',
+    'REL_ARTICULO',
+    'REL_AUXILIAR',
+    'REL_CONTROLES',
+    'REL_INFORME',
+    'REL_PRESENTACION',
+    'REL_PROFESSIONALCV',
+    'REL_REPORTE',
+    'REL_TESIS',
+    'RELEASES'
+]
+
 # Importación de librerías
 import json
 import os

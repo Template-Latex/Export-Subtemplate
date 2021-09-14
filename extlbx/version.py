@@ -27,21 +27,19 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = [
+    'get_last_ver',
+    'mk_version',
+    'time',
+    'validate_ver',
+    'v_down',
+    'v_up'
+]
+
 # Importación de librerías
-from __future__ import print_function
-from utils import *
+from extlbx.utils import split_str
 import hashlib
 import time
-
-
-def request_version():
-    """
-    Pide la versión al usuario.
-
-    :return: Version
-    """
-    # noinspection PyCompatibility
-    return raw_input('\nINGRESE NUEVA VERSION: ')
 
 
 # noinspection PyBroadException
@@ -111,15 +109,15 @@ def mk_version(version):
             raise Exception('Formato de version incorrecto')
 
     # Retorna las versiones
-    if versiondev is not '':
+    if versiondev != '':
         versiondev = versionf + '-' + versiondev
     else:
         versiondev = versionf
 
     # Crea el id de compilación
     m = hashlib.md5()
-    m.update(versiondev)
-    m.update(time.strftime('%d/%m/%Y %H:%M:%S'))
+    m.update(versiondev.encode('utf-8'))
+    m.update(time.strftime('%d/%m/%Y %H:%M:%S').encode('utf-8'))
 
     return versionf, versiondev, m.hexdigest().upper()
 

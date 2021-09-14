@@ -27,9 +27,17 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = [
+    'find_block',
+    'find_command',
+    'find_line',
+    'paste_external_tex_into_file',
+    'replace_argument'
+]
+
 # Importación de librerías
-from __future__ import print_function
 import types
+import sys
 
 
 def find_block(data, initstr, blankend=False, altend=None):
@@ -110,7 +118,8 @@ def decodeline(line):
     :param line: Línea
     :return:
     """
-    if isinstance(type(line), types.UnicodeType):
+    # noinspection PyUnresolvedReferences
+    if sys.version_info < (3, 0) and isinstance(type(line), types.UnicodeType):
         return line.encode('utf-8')
     else:
         return str(line)
@@ -193,8 +202,9 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
     else:
         libdata = []
         fld = open(libr, 'r')
-        for i in fld:
-            libdata.append(i)
+        if '.tex' in libr:
+            for i in fld:
+                libdata.append(i)
         fld.close()
 
     # Si tiene END retorna, se borran luego todas las líneas vacías
@@ -205,6 +215,9 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
                 libdata.pop()
             else:
                 break
+
+    if '.tex' not in libr:
+        headersize = 0
 
     for libdatapos in range(headersize, len(libdata)):
         srclin = libdata[libdatapos]
@@ -282,7 +295,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
                         stconfig = True
                         continue
                 comments = srclin.strip().split('%')
-                if comments[0] is '':
+                if comments[0] == '':
                     srclin = ''
                 else:
                     srclin = srclin.replace('%' + comments[1], '')
@@ -290,19 +303,19 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
                         srclin = srclin.strip() + '\n'
                     else:
                         srclin = srclin.strip()
-            elif srclin.strip() is '':
+            elif srclin.strip() == '':
                 srclin = ''
         else:
             if libr == configfile:
                 # noinspection PyBroadException
                 try:
-                    if libdata[libdatapos + 1][0] == '%' and srclin.strip() is '':
+                    if libdata[libdatapos + 1][0] == '%' and srclin.strip() == '':
                         srclin = '\n'
                 except:
                     pass
 
         # Se ecribe la línea
-        if srclin is not '' and srclin.strip() is not '%' and \
+        if srclin != '' and srclin.strip() != '%' and \
                 not (not add_ending_line and srclin.strip() == '' and libdatapos == len(libdata) - 1):
             # Se aplica strip dependiendo del archivo
             if libstrip or dolibstrip or forcestrip:

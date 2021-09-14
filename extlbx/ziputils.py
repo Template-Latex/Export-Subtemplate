@@ -27,6 +27,8 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = ['Zip']
+
 # Importación de librerías
 import os
 import zipfile
