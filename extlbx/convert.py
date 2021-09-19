@@ -194,8 +194,6 @@ def assemble_template_file(templatef, configfile, distfolder, headersize, files)
                     new_template_file.append(jline)
         else:
             new_template_file.append(lined)
-    # tlen = len(new_template_file) - 1
-    # new_template_file[tlen] = new_template_file[tlen].strip()
     save_list_to_file(new_template_file, distfolder + 'template.tex')
 
 
@@ -225,7 +223,7 @@ def change_header_tex_files(files, release, headersize, headerversionpos, versio
 
 
 def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroot,
-                     release, version, stat, versiondev, dia, lc, versionhash, plotstats):
+                     release, version, stat, versiondev, dia, versionhash, plotstats):
     """
     Compila el template.
 
@@ -240,10 +238,10 @@ def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroo
     :param stat: Estadísticas
     :param versiondev: Versión DEV
     :param dia: Día
-    :param lc: LC
     :param versionhash: Hash de la versión
     :param plotstats: Imprime estadísticas
     """
+    lc = 1
     with open(os.devnull, 'w') as FNULL:
         printfun(MSG_DCOMPILE, end='')
         with Cd(subrlfolder):
@@ -251,6 +249,12 @@ def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroo
             t2 = call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL)
             tmean = min(t1, t2)
             printfun(MSG_FOKTIMER.format(tmean))
+
+            # Cuenta el número de líneas
+            f = open('template.tex', 'r')
+            for _ in f:
+                lc += 1
+            f.close()
 
             # Copia a la carpeta pdf_version
             if savepdf:
@@ -476,17 +480,12 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     if dosave:
         copy_assemble_template(files, distfolder, headersize, configfile, mainfile, examplefile)
 
-    # Se obtiene la cantidad de líneas de código
-    lc = 0
-    for f in files.keys():
-        lc += len(files[f])
-
     printfun(MSG_FOKTIMER.format(time.time() - t))
 
     # Compila el archivo
     if docompile and dosave:
         compile_template(distfolder, printfun, mainfile, savepdf, addstat, statsroot,
-                         release, version, stat, versiondev, dia, lc, versionhash, plotstats)
+                         release, version, stat, versiondev, dia, versionhash, plotstats)
 
     # Se exporta el proyecto normal
     if dosave:
@@ -650,8 +649,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     ra = find_line(files[mainfile], 'universitydepartmentimagecfg')
     files[mainfile][ra] = replace_argument(files[mainfile][ra], 1, 'height=1.75cm')
 
-    # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
-
     # -------------------------------------------------------------------------
     # MODIFICA CONFIGURACIONES
     # -------------------------------------------------------------------------
@@ -672,10 +669,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = del_block_from_list(files[fl], ra, rb)
     for cdel in []:
         ra, rb = find_block(files[fl], cdel, True)
-        files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
-    # ra, rb = find_block(files[fl], 'dotaftersnum', True) Desactivado desde v3.3.4
-    # nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
-    # files[fl][ra] = nconf
+        files[fl][ra] = files[fl][ra].replace('   %', '%')
     ra, rb = find_block(files[fl], 'equationrestart', True)
     nconf = replace_argument(files[fl][ra], 1, 'none')
     files[fl][ra] = nconf
@@ -693,7 +687,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'showlinenumbers', True)
     files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1 a style4\n')
-    # files[fl].pop()
 
     # -------------------------------------------------------------------------
     # CAMBIA LAS ECUACIONES
@@ -782,7 +775,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     nl = extract_block_from_list(aux_pageconf, i1 - 1, f1)
     nl.insert(0, '\n')
     files[fl] = add_block_from_list(files[fl], nl, rb)
-    # files[fl].append('\\titleclass{\subsubsubsection}{straight}[\subsection]\n')
 
     # -------------------------------------------------------------------------
     # AUXILIAR FUNCTIONS
@@ -821,11 +813,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
 
-    # Se obtiene la cantidad de líneas de código
-    lc = 0
-    for f in files.keys():
-        lc += len(files[f])
-
     # Guarda los archivos
     os.chdir(mainroot)
     if dosave:
@@ -836,7 +823,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # Compila el archivo
     if docompile and dosave:
         compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroot,
-                         release, version, stat, versiondev, dia, lc, versionhash, plotstats)
+                         release, version, stat, versiondev, dia, versionhash, plotstats)
 
     # Se exporta el proyecto normal
     if dosave:
@@ -946,7 +933,6 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files[mainfile][ra] = '\def\\documenttitle {Título del Control}\n'
     ra = find_line(files[mainfile], 'documentsubject')
     files[mainfile][ra] = '\def\evaluationindication {\\textbf{INDICACIÓN DEL CONTROL}}\n'
-    # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # -------------------------------------------------------------------------
     # CONTROL
@@ -1014,11 +1000,6 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
 
-    # Se obtiene la cantidad de líneas de código
-    lc = 0
-    for f in files.keys():
-        lc += len(files[f])
-
     # Guarda los archivos
     os.chdir(mainroot)
     if dosave:
@@ -1029,7 +1010,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     # Compila el archivo
     if docompile and dosave:
         compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroot,
-                         release, version, stat, versiondev, dia, lc, versionhash, plotstats)
+                         release, version, stat, versiondev, dia, versionhash, plotstats)
 
     # Se exporta el proyecto normal
     if dosave:
@@ -1144,7 +1125,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[mainfile] = add_block_from_list(files[mainfile], main_reporte, ra, addnewline=True)
     ra, _ = find_block(files[mainfile], 'universitydepartmentimagecfg', True)
     files[mainfile].pop(ra)
-    # files[mainfile][len(files[mainfile]) - 1] = files[mainfile][len(files[mainfile]) - 1].strip()
 
     # Cambia las variables del documento principales
     nl = ['% INFORMACIÓN DEL DOCUMENTO\n',
@@ -1172,7 +1152,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     for cdel in ['pagemargintop']:
         ra, rb = find_block(files[fl], cdel, True)
-        files[fl][ra] = files[fl][ra].replace('  %', '%')  # Reemplaza espacio en comentarios de la lista
+        files[fl][ra] = files[fl][ra].replace('  %', '%')
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
                                                 '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
@@ -1311,11 +1291,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
 
-    # Se obtiene la cantidad de líneas de código
-    lc = 0
-    for f in files.keys():
-        lc += len(files[f])
-
     # Guarda los archivos
     os.chdir(mainroot)
     if dosave:
@@ -1326,7 +1301,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     # Compila el archivo
     if docompile and dosave:
         compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroot,
-                         release, version, stat, versiondev, dia, lc, versionhash, plotstats)
+                         release, version, stat, versiondev, dia, versionhash, plotstats)
 
     # Se exporta el proyecto normal
     if dosave:
@@ -1460,7 +1435,7 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     nconf = replace_argument(files[fl][ra], 1, '\\small').replace('%', '     %')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'natbibrefsep', True)
-    nconf = replace_argument(files[fl][ra], 1, '3')
+    nconf = replace_argument(files[fl][ra], 1, '2')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'captiontextbold', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
@@ -1514,10 +1489,6 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
 
-    # Cambia autor
-    # ra, _ = find_block(files[fl], 'pdfauthor={\\pdfmetainfoauthor},', True)
-    # files[fl][ra] = files[fl][ra].replace('pdfmetainfoauthor', 'authorshf')
-
     ra, _ = find_block(files[fl], '% Operaciones especiales Template-Reporte')
     rb, _ = find_block(files[fl], '\\vskip \\titlelinemargin}')
     files[fl] = del_block_from_list(files[fl], ra - 1, rb + 1)
@@ -1563,9 +1534,6 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     # CAMBIO FINALCONF
     # -------------------------------------------------------------------------
     fl = 'src/cfg/final.tex'
-    # final_articulo = file_to_list('src/cfg/final_articulo.tex')
-    # nl = find_extract(final_articulo, '% Define funciones generales', white_end_block=True)
-    # nl[0] = '\t\t' + nl[0]
     ra, _ = find_block(files[fl], '% Define funciones generales')
     rb, _ = find_block(files[fl], '% No se encontró el header-footer, no hace nada')
     nl.pop()
@@ -1574,11 +1542,6 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
 
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
-
-    # Se obtiene la cantidad de líneas de código
-    lc = 0
-    for f in files.keys():
-        lc += len(files[f])
 
     # Guarda los archivos
     os.chdir(mainroot)
@@ -1590,7 +1553,7 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     # Compila el archivo
     if docompile and dosave:
         compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroot,
-                         release, version, stat, versiondev, dia, lc, versionhash, plotstats)
+                         release, version, stat, versiondev, dia, versionhash, plotstats)
 
     # Se exporta el proyecto normal
     if dosave:
@@ -1722,7 +1685,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DE LOS TÍTULOS', white_end_block=True)
     for cdel in ['captionmarginimagesmc', 'captionmarginimages']:
         ra, rb = find_block(files[fl], cdel, True)
-        files[fl][ra] = files[fl][ra].replace('    %', '%')  # Reemplaza espacio en comentarios de la lista
+        files[fl][ra] = files[fl][ra].replace('    %', '%')
     for cdel in ['namemathcol', 'namemathdefn', 'namemathej',
                  'namemathlem', 'namemathobs', 'namemathprp', 'namemaththeorem',
                  'namereferences', 'nomltappendixsection', 'nomltwfigure',
@@ -1750,9 +1713,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     for i in file_to_list('src/config_presentacion.tex'):
         files[fl].append(i)
 
-    # ra, rb = find_block(files[fl], 'cfgpdflayout', True)
-    # nconf = replace_argument(files[fl][ra], 1, 'SinglePage')
-    # files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'cfgpdfpageview', True)
     nconf = replace_argument(files[fl][ra], 1, 'FitBV')
     files[fl][ra] = nconf
@@ -2037,18 +1997,12 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     fl = 'src/cmd/core.tex'
     files[fl] = find_delete_block(files[fl], '\\newcommand{\\bgtemplatetestimg}{')
     files[fl] = find_delete_block(files[fl], '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
-    # files[fl] = find_delete_block(files[fl], '% Cambia los márgenes del documento', white_end_block=True, jadd=1)
     files[fl] = find_delete_block(files[fl], '% Cambia márgenes de las páginas [cm]', white_end_block=True)
     ra, _ = find_block(files[fl], '% Imagen de prueba tikz')
     files[fl].pop(ra)
 
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
-
-    # Se obtiene la cantidad de líneas de código
-    lc = 0
-    for f in files.keys():
-        lc += len(files[f])
 
     # Guarda los archivos
     os.chdir(mainroot)
@@ -2060,7 +2014,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # Compila el archivo
     if docompile and dosave:
         compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroot,
-                         release, version, stat, versiondev, dia, lc, versionhash, plotstats)
+                         release, version, stat, versiondev, dia, versionhash, plotstats)
 
     # Se exporta el proyecto normal
     if dosave:
@@ -2214,7 +2168,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'pagemarginright', True)
     nconf = replace_argument(files[fl][ra], 1, '2').replace('%', '   %')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], '\\pagemargintop', True)  # Por alguna extraña razón requiere el \\
+    ra, _ = find_block(files[fl], '\\pagemargintop', True)
     nconf = replace_argument(files[fl][ra], 1, '2')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'hfstyle', True)
@@ -2223,9 +2177,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'cfgbookmarksopenlevel', True)
     nconf = replace_argument(files[fl][ra], 1, '0')
     files[fl][ra] = nconf
-    # ra, _ = find_block(files[fl], 'cfgpdfsecnumbookmarks', True)
-    # nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
-    # files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'addindexsubtobookmarks', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('{', ' {')
     files[fl][ra] = nconf
@@ -2235,14 +2186,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
-    # ra, _ = find_block(files[fl], 'addindextobookmarks', True)
-    # nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
-    # files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'addindexsubtobookmarks', True)
     nl = ['\\def\\addabstracttobookmarks {true} % Añade el resumen a los marcadores del pdf\n',
           '\\def\\addagradectobookmarks {true}  % Añade el agradecimiento a los marcadores\n',
-          files[fl][ra],
-          # '\\def\\adddedictobookmarks {true}    % Añade la dedicatoria a los marcadores del pdf\n'
+          files[fl][ra]
           ]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra - 1)
     ra, _ = find_block(files[fl], 'namereferences', True)
@@ -2260,7 +2207,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'nameabstract', True)
     nl = [files[fl][ra],
           '\\def\\nameagradec {Agradecimientos}    % Nombre del cap. de agradecimientos\n',
-          # '\\def\\nameadedic {Dedicatoria}         % Nombre de la dedicatoria\n'
           ]
     files[fl] = add_block_from_list(files[fl], nl, ra, True)
 
@@ -2325,11 +2271,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nl.pop(0)
     nl.append(files[fl][ra])
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
-    # ra, _ = find_block(files[fl], 'pdfkeywords', True)
-    # files[fl][ra] = '\tpdfkeywords={pdf, \\universityname, \\universitylocation},\n'
 
     # Elimina referencias en dos columnas
-    # files[fl] = find_delete_block(files[fl], '% Referencias en 2 columnas', True)
     ra, _ = find_block(files[fl], '{\\begin{multicols}{2}[\section*{\\refname}', True)
     files[fl][ra] = '\t{\\begin{multicols}{2}[\\chapter*{\\refname}]\n'
 
@@ -2408,9 +2351,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # -------------------------------------------------------------------------
     fl = 'src/cfg/page.tex'
     page_tesis = file_to_list('src/cfg/page_tesis.tex')
-    # ra, _ = find_block(files[fl], '\\renewcommand{\\refname}', True)
-    # nl = [files[fl][ra], '\\renewcommand{\\bibname}{\\namereferences}\n']
-    # files[fl] = replace_block_from_list(files[fl], nl, ra, ra - 1)
     ra, _ = find_block(files[fl], '\\renewcommand{\\appendixtocname}{\\nameappendixsection}')
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
                                                 '\t\\renewcommand{\chaptername}{\\nomchapter}  % Nombre de los capítulos\n'],
@@ -2462,10 +2402,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'GLOBALsectionalph')
     files[fl][ra] = replace_argument(files[fl][ra], 1, 'false')
 
-    # Reemplaza nueva linea en agradecimientos
-    # ra, _ = find_block(files[fl], '% EMPTYLINE')
-    # files[fl][ra] = '\n'
-
     # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
@@ -2477,11 +2413,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
 
-    # Se obtiene la cantidad de líneas de código
-    lc = 0
-    for f in files.keys():
-        lc += len(files[f])
-
     # Guarda los archivos
     os.chdir(mainroot)
     if dosave:
@@ -2492,7 +2423,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Compila el archivo
     if docompile and dosave:
         compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroot,
-                         release, version, stat, versiondev, dia, lc, versionhash, plotstats)
+                         release, version, stat, versiondev, dia, versionhash, plotstats)
 
     # Se exporta el proyecto normal
     if dosave:
@@ -2608,11 +2539,6 @@ def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, doc
                 newfl.write(j)
             newfl.close()
 
-    # Se obtiene la cantidad de líneas de código
-    lc = 0
-    for f in files.keys():
-        lc += len(files[f])
-
     if dosave:
         # Mueve el archivo de configuraciones
         copyfile(configfile, 'template_config.tex')
@@ -2625,7 +2551,7 @@ def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, doc
     # Compila el archivo
     if docompile and dosave:
         compile_template(None, printfun, mainfile, savepdf, addstat, statsroot,
-                         release, version, stat, versiondev, dia, lc, versionhash, plotstats)
+                         release, version, stat, versiondev, dia, versionhash, plotstats)
 
     # Se exporta el proyecto normal
     if dosave:
