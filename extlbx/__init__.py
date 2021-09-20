@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 EXTLBX
 Toolbox para exportar distintos templates y subtemplates
@@ -27,5 +26,15 @@ Licencia:
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__all__ = [
+    '__author__',
+    '__version__'
+]
+
 __author__ = 'Pablo Pizarro R.'
 __version__ = '4.0.0'  # (14/09/2021)
+
+import sys
+
+if sys.version_info < (3, 7):
+    raise ImportError('extlbx solo soportado en python 3.7+')

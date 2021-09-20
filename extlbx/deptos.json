@@ -1,188 +1,188 @@
 {
-    "DEPTOS": [
-        [
-            "Área de Humanidades",
-            "adh",
-            [
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Postgrado y Postítulo",
-            "postgrado",
-            [
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Astronomía",
-            "das",
-            [
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Ciencias de la Computación",
-            "dcc",
-            [
-                "dcc2",
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Física",
-            "dfi",
-            [
-                "dfi2",
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Geofísica",
-            "dgf",
-            [
-                "dgf2",
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Ingeniería Civil",
-            "dic",
-            [
-                "dic2",
-                "dic3",
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Ingeniería Eléctrica",
-            "die",
-            [
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Ingeniería Industrial",
-            "dii",
-            [
-                "dii2",
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Ingeniería Matemática",
-            "dim",
-            [
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Ingeniería Mecánica",
-            "dimec",
-            [
-                "dimec2",
-                "dimec3",
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Ingeniería Química, Biotecnología y Materiales",
-            "diqbtm",
-            [
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de la Universidad",
-            "fcfm",
-            [
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Geología",
-            "geo",
-            [
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de Ingeniería en Minas",
-            "minas",
-            [
-                "uchile",
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2"
-            ]
-        ],
-        [
-            "Departamento de la Universidad",
-            "uchile",
-            [
-                "uchile2",
-                "uchile3",
-                "fcfm",
-                "fcfm2",
-                "fcfm3",
-                "fcfm4"
-            ]
-        ]
+  "DEPTOS": [
+    [
+      "Área de Humanidades",
+      "adh",
+      [
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Postgrado y Postítulo",
+      "postgrado",
+      [
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Astronomía",
+      "das",
+      [
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Ciencias de la Computación",
+      "dcc",
+      [
+        "dcc2",
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Física",
+      "dfi",
+      [
+        "dfi2",
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Geofísica",
+      "dgf",
+      [
+        "dgf2",
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Ingeniería Civil",
+      "dic",
+      [
+        "dic2",
+        "dic3",
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Ingeniería Eléctrica",
+      "die",
+      [
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Ingeniería Industrial",
+      "dii",
+      [
+        "dii2",
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Ingeniería Matemática",
+      "dim",
+      [
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Ingeniería Mecánica",
+      "dimec",
+      [
+        "dimec2",
+        "dimec3",
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Ingeniería Química, Biotecnología y Materiales",
+      "diqbtm",
+      [
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de la Universidad",
+      "fcfm",
+      [
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Geología",
+      "geo",
+      [
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de Ingeniería en Minas",
+      "minas",
+      [
+        "uchile",
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2"
+      ]
+    ],
+    [
+      "Departamento de la Universidad",
+      "uchile",
+      [
+        "uchile2",
+        "uchile3",
+        "fcfm",
+        "fcfm2",
+        "fcfm3",
+        "fcfm4"
+      ]
     ]
+  ]
 }

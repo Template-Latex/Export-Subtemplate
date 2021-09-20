@@ -1,5 +1,4 @@
-﻿# coding=utf-8
-"""
+﻿"""
 EXPORT-SUBTEMPLATE
 Genera distintos sub-releases y exporta los templates
 
@@ -319,7 +318,9 @@ class CreateVersion(object):
             :return:
             """
             self._versiontxt.focus()
-            self._versiontxt.delete(0, 'end')
+            self._versionstr.trace_vdelete('w', self._versiontrace)
+            self._versionstr.set('')
+            self._versiontrace = self._versionstr.trace('w', self._checkver)
             self._clearconsole()
             for j in RELEASES.keys():
                 if self._release.get() == RELEASES[j]['NAME']:
@@ -368,7 +369,7 @@ class CreateVersion(object):
             self._root.tk.call('wm', 'iconphoto', self._root._w, img)
         else:
             self._root.iconbitmap(EXTLBX_ICON)
-        fonts = [font.Font(family='Courier', size=13),
+        fonts = [font.Font(family='Courier', size=13 if is_osx() else 8),
                  font.Font(family='Verdana', size=6),
                  font.Font(family='Times', size=10),
                  font.Font(family='Times', size=10, weight=font.BOLD),
@@ -393,7 +394,7 @@ class CreateVersion(object):
         self._release = tk.StringVar(self._root)
         self._release.set('Seleccione template')
         w = tk.OptionMenu(f1, self._release, *tuple(rels))
-        w['width'] = 17
+        w['width'] = 17 if is_osx() else 24
         w['relief'] = tk.GROOVE
         w['anchor'] = tk.W
         w['cursor'] = 'hand2'
@@ -405,7 +406,8 @@ class CreateVersion(object):
         self._checkver = _checkver
         self._versionstr = tk.StringVar(self._root)
         self._versiontrace = self._versionstr.trace('w', self._checkver)
-        self._versiontxt = tk.Entry(f1, relief=tk.GROOVE, width=5, font=fonts[5], textvariable=self._versionstr)
+        self._versiontxt = tk.Entry(f1, relief=tk.GROOVE, width=5 if is_osx() else 10,
+                                    font=fonts[5], textvariable=self._versionstr)
         self._versiontxt.configure(state='disabled')
         self._versiontxt.pack(side=tk.LEFT, padx=5, pady=2)
         self._versiontxt.focus()
