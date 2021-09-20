@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 SOUND
 Módulo que maneja eventos de sonidos

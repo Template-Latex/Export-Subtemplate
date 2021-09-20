@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 ZIP UTILS
 Herramientas para el uso de archivos ZIP

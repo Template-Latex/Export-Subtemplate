@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 UTILS
 Funciones utilitarias generales

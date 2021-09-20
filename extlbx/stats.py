@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 STATS
 Estadísticas de compilación

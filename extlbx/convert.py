@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 CONVERT
 Convierte los archivos y exporta versiones

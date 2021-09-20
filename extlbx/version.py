@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 VERSION
 Funciones para pedir versión de cada compilación

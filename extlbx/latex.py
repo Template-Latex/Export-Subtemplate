@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 LATEX
 Funciones utilitarias para el manejo de comandos y código LaTeX

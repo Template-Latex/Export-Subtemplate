@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 VFRAME
 Clase para usar el frame vertical
