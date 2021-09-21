@@ -31,7 +31,7 @@ __all__ = ['CreateVersion']
 # Importación de librerías
 from extlbx import __author__, __version__
 from extlbx.releases import REL_PROFESSIONALCV, REL_INFORME, REL_CONTROLES, REL_AUXILIAR, \
-    RELEASES, REL_REPORTE, REL_TESIS, REL_ARTICULO, REL_PRESENTACION
+    RELEASES, REL_REPORTE, REL_TESIS, REL_ARTICULO, REL_PRESENTACION, REL_POSTER
 from extlbx.convert import *
 from extlbx.version import *
 from extlbx.sound import Sound
@@ -765,6 +765,22 @@ class CreateVersion(object):
                             clear_dict(RELEASES[REL_INFORME], 'FILES')
                             clear_dict(RELEASES[REL_REPORTE], 'FILES')
                             clear_dict(RELEASES[REL_ARTICULO], 'FILES')
+                    elif t == 9:
+                        try:
+                            export_poster(ver, versiondev, versionhash, printfun=self._print,
+                                          dosave=self._getconfig('SAVE'),
+                                          docompile=self._getconfig('COMPILE'),
+                                          addstat=self._getconfig('SAVE_STAT'),
+                                          plotstats=self._getconfig('PLOT_STAT'),
+                                          savepdf=self._getconfig('SAVE_PDF'),
+                                          mainroot=self._getconfig('MAIN_ROOT'),
+                                          statsroot=self._getconfig('STATS_ROOT'),
+                                          informeroot=self._getconfig('INFORME_ROOT'))
+                        except:
+                            logging.exception('Error al generar poster')
+                            clear_dict(RELEASES[REL_INFORME], 'FILES')
+                            clear_dict(RELEASES[REL_PRESENTACION], 'FILES')
+                            clear_dict(RELEASES[REL_POSTER], 'FILES')
                     else:
                         raise Exception('ERROR: ID INCORRECTO')
                     self._lastsav = self._getconfig('SAVE')

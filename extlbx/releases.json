@@ -1,28 +1,7 @@
 {
   "ARTICULO": {
     "DIST": "dist/",
-    "FILES": {
-      "src/cfg/final.tex": [],
-      "src/cfg/init.tex": [],
-      "src/cfg/page.tex": [],
-      "src/cmd/articulo.tex": [],
-      "src/cmd/column.tex": [],
-      "src/cmd/core.tex": [],
-      "src/cmd/equation.tex": [],
-      "src/cmd/image.tex": [],
-      "src/cmd/math.tex": [],
-      "src/cmd/other.tex": [],
-      "src/cmd/title.tex": [],
-      "src/config.tex": [],
-      "src/defs.tex": [],
-      "src/env/environments.tex": [],
-      "src/env/imports.tex": [],
-      "src/etc/example.tex": [],
-      "src/style/code.tex": [],
-      "src/style/color.tex": [],
-      "src/style/other.tex": [],
-      "main.tex": []
-    },
+    "FILES": {},
     "GIT": "../Template-Articulo/",
     "ID": 8,
     "MAINFILE": "main.tex",
@@ -57,20 +36,7 @@
             "img"
           ]
         },
-        "EXCEPTED": [
-          ".aux",
-          ".gitkeep",
-          "auxiliar.tex",
-          "auxiliar_example.tex",
-          "auxiliar_imports.tex",
-          "auxiliar_main.tex",
-          "auxiliar_pageconf.tex",
-          "auxiliar_title.tex",
-          "column.tex",
-          "control_example.tex",
-          "control_pageconf.tex",
-          "greekenum.sty"
-        ],
+        "EXCEPTED": [],
         "FILE": "dist/Template-Articulo.zip",
         "GHOST": "Template-Articulo/"
       },
@@ -81,25 +47,7 @@
     }
   },
   "AUXILIAR": {
-    "FILES": {
-      "src/cfg/init.tex": [],
-      "src/cfg/page.tex": [],
-      "src/cmd/auxiliar.tex": [],
-      "src/cmd/core.tex": [],
-      "src/cmd/equation.tex": [],
-      "src/cmd/image.tex": [],
-      "src/cmd/math.tex": [],
-      "src/cmd/other.tex": [],
-      "src/cmd/column.tex": [],
-      "src/cmd/title.tex": [],
-      "src/config.tex": [],
-      "src/defs.tex": [],
-      "src/env/imports.tex": [],
-      "src/etc/example.tex": [],
-      "src/style/code.tex": [],
-      "src/style/color.tex": [],
-      "src/style/other.tex": []
-    },
+    "FILES": {},
     "GIT": "../Template-Auxiliares/",
     "ID": 2,
     "MAINFILE": "main.tex",
@@ -132,34 +80,14 @@
             "img"
           ]
         },
-        "EXCEPTED": [
-          ".aux"
-        ],
+        "EXCEPTED": [],
         "FILE": "dist/Template-Auxiliares.zip",
         "GHOST": "Template-Auxiliares/"
       }
     }
   },
   "CONTROLES": {
-    "FILES": {
-      "src/cfg/init.tex": [],
-      "src/cfg/page.tex": [],
-      "src/cmd/control.tex": [],
-      "src/cmd/core.tex": [],
-      "src/cmd/equation.tex": [],
-      "src/cmd/image.tex": [],
-      "src/cmd/math.tex": [],
-      "src/cmd/other.tex": [],
-      "src/cmd/column.tex": [],
-      "src/cmd/title.tex": [],
-      "src/config.tex": [],
-      "src/defs.tex": [],
-      "src/env/imports.tex": [],
-      "src/etc/example.tex": [],
-      "src/style/code.tex": [],
-      "src/style/color.tex": [],
-      "src/style/other.tex": []
-    },
+    "FILES": {},
     "GIT": "../Template-Controles/",
     "ID": 3,
     "MAINFILE": "main.tex",
@@ -192,9 +120,7 @@
             "img"
           ]
         },
-        "EXCEPTED": [
-          ".aux"
-        ],
+        "EXCEPTED": [],
         "FILE": "dist/Template-Controles.zip",
         "GHOST": "../Template-Controles/"
       }
@@ -261,20 +187,7 @@
             "img"
           ]
         },
-        "EXCEPTED": [
-          ".aux",
-          ".gitkeep",
-          "auxiliar.tex",
-          "auxiliar_example.tex",
-          "auxiliar_imports.tex",
-          "auxiliar_main.tex",
-          "auxiliar_pageconf.tex",
-          "auxiliar_title.tex",
-          "column.tex",
-          "control_example.tex",
-          "control_pageconf.tex",
-          "greekenum.sty"
-        ],
+        "EXCEPTED": [],
         "FILE": "dist/Template-Informe.zip",
         "GHOST": ""
       },
@@ -285,29 +198,55 @@
       }
     }
   },
+  "POSTER": {
+    "DIST": "dist/",
+    "FILES": {},
+    "GIT": "../Template-Poster/",
+    "ID": 9,
+    "MAINFILE": "main.tex",
+    "MESSAGE": "\nCREANDO TEMPLATE-POSTER v{0}",
+    "NAME": "Template-Poster",
+    "NAME_HEADER": "Poster LaTeX",
+    "PDF_FOLDER": "../pdf-version/Poster/Template-Poster v{0}.pdf",
+    "ROOT": "../Template-Poster/",
+    "STATS": {
+      "CTIME": "",
+      "FILE": "stats/data/poster.txt",
+      "GIT_ADD": "data/poster.txt",
+      "LCODE": ""
+    },
+    "VERLINE": "Template-Poster v{0} | (Pablo Pizarro R.) ppizarror.com",
+    "WEB": {
+      "MANUAL": "https://latex.ppizarror.com/poster",
+      "SOURCE": "https://github.com/Template-Latex/Template-Poster"
+    },
+    "ZIP": {
+      "NORMAL": {
+        "ADD": {
+          "FILES": [
+            "example.tex",
+            "main.tex",
+            "template.tex",
+            "template_config.tex",
+            "library.bib"
+          ],
+          "FOLDER": [
+            "img"
+          ]
+        },
+        "EXCEPTED": [],
+        "FILE": "dist/Template-Poster.zip",
+        "GHOST": "Template-Poster/"
+      },
+      "OTHERS": {
+        "EXPATH": "img/",
+        "NORMAL": "dist/Template-Poster-{0}.zip"
+      }
+    }
+  },
   "PRESENTACION": {
     "DIST": "dist/",
-    "FILES": {
-      "src/cfg/final.tex": [],
-      "src/cfg/init.tex": [],
-      "src/cfg/page.tex": [],
-      "src/cmd/core.tex": [],
-      "src/cmd/equation.tex": [],
-      "src/cmd/image.tex": [],
-      "src/cmd/math.tex": [],
-      "src/cmd/other.tex": [],
-      "src/cmd/column.tex": [],
-      "src/cmd/title.tex": [],
-      "src/config.tex": [],
-      "src/defs.tex": [],
-      "src/env/environments.tex": [],
-      "src/env/imports.tex": [],
-      "src/etc/example.tex": [],
-      "src/style/code.tex": [],
-      "src/style/color.tex": [],
-      "src/style/other.tex": [],
-      "main.tex": []
-    },
+    "FILES": {},
     "GIT": "../Template-Presentacion/",
     "ID": 7,
     "MAINFILE": "main.tex",
@@ -341,20 +280,7 @@
             "img"
           ]
         },
-        "EXCEPTED": [
-          ".aux",
-          ".gitkeep",
-          "auxiliar.tex",
-          "auxiliar_example.tex",
-          "auxiliar_imports.tex",
-          "auxiliar_main.tex",
-          "auxiliar_pageconf.tex",
-          "auxiliar_title.tex",
-          "column.tex",
-          "control_example.tex",
-          "control_pageconf.tex",
-          "greekenum.sty"
-        ],
+        "EXCEPTED": [],
         "FILE": "dist/Template-Presentacion.zip",
         "GHOST": "Template-Presentacion/"
       },
@@ -408,9 +334,7 @@
             "img"
           ]
         },
-        "EXCEPTED": [
-          "other.tex"
-        ],
+        "EXCEPTED": [],
         "FILE": "dist/ProfessionalCV.zip",
         "GHOST": ""
       }
@@ -418,27 +342,7 @@
   },
   "REPORTE": {
     "DIST": "dist/",
-    "FILES": {
-      "src/cfg/final.tex": [],
-      "src/cfg/init.tex": [],
-      "src/cfg/page.tex": [],
-      "src/cmd/core.tex": [],
-      "src/cmd/equation.tex": [],
-      "src/cmd/image.tex": [],
-      "src/cmd/math.tex": [],
-      "src/cmd/other.tex": [],
-      "src/cmd/column.tex": [],
-      "src/cmd/title.tex": [],
-      "src/config.tex": [],
-      "src/defs.tex": [],
-      "src/env/environments.tex": [],
-      "src/env/imports.tex": [],
-      "src/etc/example.tex": [],
-      "src/style/code.tex": [],
-      "src/style/color.tex": [],
-      "src/style/other.tex": [],
-      "main.tex": []
-    },
+    "FILES": {},
     "GIT": "../Template-Reporte/",
     "ID": 5,
     "MAINFILE": "main.tex",
@@ -473,20 +377,7 @@
             "img"
           ]
         },
-        "EXCEPTED": [
-          ".aux",
-          ".gitkeep",
-          "auxiliar.tex",
-          "auxiliar_example.tex",
-          "auxiliar_imports.tex",
-          "auxiliar_main.tex",
-          "auxiliar_pageconf.tex",
-          "auxiliar_title.tex",
-          "column.tex",
-          "control_example.tex",
-          "control_pageconf.tex",
-          "greekenum.sty"
-        ],
+        "EXCEPTED": [],
         "FILE": "dist/Template-Reporte.zip",
         "GHOST": "Template-Reporte/"
       },
@@ -499,29 +390,7 @@
   },
   "TESIS": {
     "DIST": "dist/",
-    "FILES": {
-      "src/cfg/final.tex": [],
-      "src/cfg/init.tex": [],
-      "src/cfg/page.tex": [],
-      "src/cmd/core.tex": [],
-      "src/cmd/equation.tex": [],
-      "src/cmd/image.tex": [],
-      "src/cmd/math.tex": [],
-      "src/cmd/other.tex": [],
-      "src/cmd/column.tex": [],
-      "src/cmd/title.tex": [],
-      "src/config.tex": [],
-      "src/defs.tex": [],
-      "src/env/environments.tex": [],
-      "src/env/imports.tex": [],
-      "src/etc/example.tex": [],
-      "src/page/index.tex": [],
-      "src/page/portrait.tex": [],
-      "src/style/code.tex": [],
-      "src/style/color.tex": [],
-      "src/style/other.tex": [],
-      "main.tex": []
-    },
+    "FILES": {},
     "GIT": "../Template-Tesis/",
     "ID": 6,
     "MAINFILE": "main.tex",
@@ -556,20 +425,7 @@
             "img"
           ]
         },
-        "EXCEPTED": [
-          ".aux",
-          ".gitkeep",
-          "auxiliar.tex",
-          "auxiliar_example.tex",
-          "auxiliar_imports.tex",
-          "auxiliar_main.tex",
-          "auxiliar_pageconf.tex",
-          "auxiliar_title.tex",
-          "column.tex",
-          "control_example.tex",
-          "control_pageconf.tex",
-          "greekenum.sty"
-        ],
+        "EXCEPTED": [],
         "FILE": "dist/Template-Tesis.zip",
         "GHOST": "Template-Tesis/"
       },
