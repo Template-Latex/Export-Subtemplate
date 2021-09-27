@@ -1437,6 +1437,12 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     ra, rb = find_block(files[fl], 'natbibrefsep', True)
     nconf = replace_argument(files[fl][ra], 1, '2')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'apaciterefsep', True)
+    nconf = replace_argument(files[fl][ra], 1, '2')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'bibtexrefsep', True)
+    nconf = replace_argument(files[fl][ra], 1, '2')
+    files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'captiontextbold', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
@@ -1712,7 +1718,13 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
     nconf = replace_argument(files[fl][ra], 1, '12').replace(' %', '%')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'sourcecodenumbersize', True)
-    nconf = replace_argument(files[fl][ra], 1, '\\small').replace(' %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '\\scriptsize').replace(' %', '%').replace(' {', '{')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sourcecodeskipbelow', True)
+    nconf = replace_argument(files[fl][ra], 1, '0.5').replace('  %', '%')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'captiontextsubnumbold', True)
+    nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     files[fl][ra] = nconf
 
     # -------------------------------------------------------------------------
@@ -1742,12 +1754,11 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
         files[fl] = find_delete_block(files[fl], i, iadd=-1, white_end_block=True)
     ra, _ = find_block(files[fl], '% Se activan números en menú marcadores del pdf')
     files[fl].pop(ra + 1)
-    # files[fl].pop(ra + 1)
 
     # Inserta bloques
     for i in ['% Configura las listas',
               '% Configura las ecuaciones',
-              # '% Configura los caption',
+              '% Configura los caption',
               '% Define el tamaño de página']:
         nl = find_extract(init_poster, i, white_end_block=True)
         nl.insert(0, '% -----------------------------------------------------------------------------\n')
@@ -1760,6 +1771,22 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
     fl = 'src/cmd/other.tex'
     ra, _ = find_block(files[fl], '\hbadness=10000 \\vspace{\\baselinestretch\\baselineskip}')
     files[fl][ra] = files[fl][ra].replace('\\baselinestretch', '0.5\\baselinestretch')
+
+    # -------------------------------------------------------------------------
+    # CAMBIO ENVIRONMENTS
+    # -------------------------------------------------------------------------
+    fl = 'src/env/environments.tex'
+    conv = [
+        '\lstnewenvironment{sourcecodep}[4][]{%',
+        '\\newcommand{\importsourcecodep}[5][]{%',
+        '\lstnewenvironment{sourcecode}[3][]{%',
+        '\\newcommand{\importsourcecode}[4][]{%'
+    ]
+    for i in conv:
+        ra, _ = find_block(files[fl], i)
+        number = '#' + i.split('[')[1].split(']')[0]
+        files[fl][ra] += '\t\\vspace{-0.75\\baselineskip}%\n'
+        files[fl][ra + 1] = files[fl][ra + 1].replace(number, number + '\\vspace{-1.1\\baselineskip}')
 
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
