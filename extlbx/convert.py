@@ -658,7 +658,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     cdel = ['addemptypagetwosides', 'nameportraitpage', 'indextitlecolor',
             'portraittitlecolor', 'indexsectionfontsize', 'indexsectionstyle',
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
-            'nomchapter', 'nomnpageof', 'indexforcenewpage', 'predocpageromannumber',
+            'namechapter', 'namepageof', 'indexforcenewpage', 'predocpageromannumber',
             'predocresetpagenumber', 'margineqnindexbottom', 'margineqnindextop',
             'bibtexindexbibliography', 'anumsecaddtocounter', 'predocpageromanupper']
     for cdel in cdel:
@@ -770,7 +770,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     nl = extract_block_from_list(aux_pageconf, i1, f1)
     files[fl] = add_block_from_list(files[fl], nl, len(files[fl]) + 1)
     files[fl].pop()
-    _, rb = find_block(files[fl], '% Configura el nombre del abstract', blankend=True)
+    _, rb = find_block(files[fl], '% Muestra los números de línea', blankend=True)
     i1, f1 = find_block(aux_pageconf, '% Establece el estilo de las sub-sub-sub-secciones', True)
     nl = extract_block_from_list(aux_pageconf, i1 - 1, f1)
     nl.insert(0, '\n')
@@ -1765,6 +1765,22 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
         for j in nl:
             files[fl].append(j)
 
+    # Cambia valores bloques
+    for i in [
+        '% Padding superior alerta',
+        '% Padding izquierdo alerta',
+        '% Padding derecho alerta',
+        '% Padding inferior alerta',
+        '% Margen inferior alerta',
+        '% Padding superior ejemplo',
+        '% Padding izquierdo ejemplo',
+        '% Padding derecho ejemplo',
+        '% Padding inferior ejemplo',
+        '% Margen inferior ejemplo',
+    ]:
+        ra, _ = find_block(files[fl], i)
+        files[fl][ra] = files[fl][ra].replace('\\block', '\\blockae')
+
     # -------------------------------------------------------------------------
     # CAMBIO OTHER
     # -------------------------------------------------------------------------
@@ -1911,14 +1927,14 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
 
     # Configuraciones que se borran
     cdel = ['predocpageromannumber', 'predocpageromanupper', 'predocresetpagenumber',
-            'addemptypagetwosides', 'nomltfigure', 'nomltsrc', 'nomlttable', 'nomltcont', 'nomlteqn',
+            'addemptypagetwosides', 'nameltfigure', 'nameltsrc', 'namelttable', 'nameltcont', 'namelteqn',
             'firstpagemargintop', 'nameportraitpage', 'indextitlecolor', 'portraittitlecolor',
             'pdfcompileversion', 'bibtexenvrefsecnum',
-            'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers', 'pagescolor',
-            'nomnpageof', 'nameappendixsection', 'apacitebothers', 'apaciterefnumber',
+            'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers',
+            'namepageof', 'nameappendixsection', 'apacitebothers', 'apaciterefnumber',
             'apaciterefsep', 'apaciterefcitecharclose', 'apaciterefcitecharopen',
             'apaciteshowurl', 'apacitestyle', 'appendixindepobjnum', 'appendixsectionlastchar',
-            'twocolumnreferences', 'nomchapter', 'anumsecaddtocounter', 'fontsizerefbibl',
+            'twocolumnreferences', 'namechapter', 'anumsecaddtocounter', 'fontsizerefbibl',
             'hfpdashcharstyle', 'nameabstract', 'margineqnindexbottom', 'margineqnindextop',
             'natbibrefcitecharclose', 'natbibrefcitecharopen', 'natbibrefcitecompress',
             'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle',
@@ -1937,8 +1953,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
         files[fl][ra] = files[fl][ra].replace('    %', '%')
     for cdel in ['namemathcol', 'namemathdefn', 'namemathej',
                  'namemathlem', 'namemathobs', 'namemathprp', 'namemaththeorem',
-                 'namereferences', 'nomltappendixsection', 'nomltwfigure',
-                 'nomltwsrc', 'nomltwtable']:
+                 'namereferences', 'nameltappendixsection', 'nameltwfigure',
+                 'nameltwsrc', 'nameltwtable']:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')
     for cdel in ['cfgpdfpageview', 'bibtexstyle', 'marginimagemultright']:
@@ -2178,7 +2194,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Muestra los números de línea', white_end_block=True, iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Estilo citas', white_end_block=True, iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Estilo de títulos', white_end_block=True, iadd=-1)
-    files[fl] = find_delete_block(files[fl], '% Configura el nombre del abstract', white_end_block=True, iadd=-1)
     ra, _ = find_block(files[fl], '% Márgenes de páginas y tablas')
     files[fl][ra] = files[fl][ra].replace('páginas y ', '')
 
@@ -2444,14 +2459,14 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], 'namereferences', True)
     nconf = replace_argument(files[fl][ra], 1, 'Bibliografía').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'nomltcont', True)
+    ra, _ = find_block(files[fl], 'nameltcont', True)
     nconf = replace_argument(files[fl][ra], 1, 'Tabla de Contenido').replace('%', '  %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'footnoterulepage', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'nomltfigure', True)
-    nconf = replace_argument(files[fl][ra], 1, 'Índice de Ilustraciones').replace(' %', '%')
+    ra, _ = find_block(files[fl], 'nameltfigure', True)
+    nconf = replace_argument(files[fl][ra], 1, 'Índice de Ilustraciones').replace(' {', '{')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'nameabstract', True)
     nl = [files[fl][ra],
@@ -2602,14 +2617,11 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     page_tesis = file_to_list('src/cfg/page_tesis.tex')
     ra, _ = find_block(files[fl], '\\renewcommand{\\appendixtocname}{\\nameappendixsection}')
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
-                                                '\t\\renewcommand{\chaptername}{\\nomchapter}  % Nombre de los capítulos\n'],
+                                                '\t\\renewcommand{\chaptername}{\\namechapter}  % Nombre de los capítulos\n'],
                                     ra)
     ra, rb = find_block(files[fl], '% Muestra los números de línea', True)
     nl = find_extract(page_tesis, '% Añade página en blanco')
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
-
-    ra, _ = find_block(files[fl], '% Configura el nombre del abstract', True)
-    files[fl].insert(ra - 1, '\n')
 
     # -------------------------------------------------------------------------
     # ENVIRONMENTS
