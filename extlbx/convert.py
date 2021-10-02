@@ -1464,6 +1464,12 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     ra, rb = find_block(files[fl], '\\ssssectionspacingbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '4')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'charappendixsection', True)
+    nconf = replace_argument(files[fl][ra], 1, '').replace('%', ' %')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'charaftersectionnum', True)
+    nconf = replace_argument(files[fl][ra], 1, '').replace('%', ' %')
+    files[fl][ra] = nconf
 
     ra, rb = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style1').replace('16 estilos', '17 estilos')
@@ -1974,7 +1980,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
                                                 '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
                                     ra, addnewline=True)
 
-    files[fl].pop()
+    # files[fl].pop()
     for i in file_to_list(cfgfile):
         files[fl].append(i)
 
@@ -2075,10 +2081,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Dimensiones y geometría del documento', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Cambia el estilo de los títulos', white_end_block=True)
-    ra, _ = find_block(files[fl], '% Agrega punto a títulos/subtítulos', True)
-    files[fl][ra] = '% Agrega punto a títulos/subtítulos\n\\def\\dotaftersnum {false}\n'
-    for j in range(5):
-        files[fl].pop(ra + 1)
     ra, _ = find_block(files[fl], '\showappendixsecindex')
     nl = ['\\def\\showappendixsecindex {false}\n',
           files[fl][ra]]
@@ -2148,6 +2150,10 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # Color de página
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\pagescolor}{white}}{}{', white_end_block=True,
                                   jadd=-1)
+
+    # Estilo de títulos
+    files[fl] = find_delete_block(files[fl], '% Configura el número de las secciones', white_end_block=True,
+                                  iadd=-1)
 
     # Cambia las bibliografias
     nl = find_extract(init_presentacion, '% Configuración de referencias y citas', white_end_block=True)
@@ -2491,7 +2497,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Añade nuevas entradas
     files[fl] = search_append_line(files[fl], '% CONFIGURACIÓN DE LOS COLORES DEL DOCUMENTO',
                                    '\\def\\chaptercolor {black}          % Color de los capítulos\n')
-    files[fl] = search_append_line(files[fl], 'appendixsectionlastchar',
+    files[fl] = search_append_line(files[fl], 'anumsecaddtocounter',
                                    '\\def\\chapterfontsize {\\huge}       % Tamaño fuente de los capítulos\n')
     files[fl] = search_append_line(files[fl], 'chapterfontsize',
                                    '\\def\\chapterfontstyle {\\bfseries}  % Estilo fuente de los capítulos\n')
