@@ -655,7 +655,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     fl = 'src/config.tex'
 
     # Configuraciones que se borran
-    cdel = ['addemptypagetwosides', 'nameportraitpage', 'indextitlecolor',
+    cdel = ['addemptypagespredoc', 'nameportraitpage', 'indextitlecolor',
             'portraittitlecolor', 'indexsectionfontsize', 'indexsectionstyle',
             'firstpagemargintop', 'romanpageuppercase', 'showappendixsecindex',
             'namechapter', 'namepageof', 'indexforcenewpage', 'predocpageromannumber',
@@ -755,6 +755,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         ra, _ = find_block(files[fl], i)
         files[fl][ra] = '\n' + files[fl][ra]
 
+    files[fl] = find_delete_block(files[fl], '% Modifica comportamiento nuevas páginas en formato twosides', iadd=-1,
+                                  white_end_block=True)
+
     # -------------------------------------------------------------------------
     # PAGECONF
     # -------------------------------------------------------------------------
@@ -802,6 +805,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     nl = find_extract(aux_fun, '% Enumerate en negrita', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+    nl = find_extract(aux_fun, '% Desactiva predoc pages', True)
+    files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     files[fl].pop()
 
     # -------------------------------------------------------------------------
@@ -809,6 +814,13 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # -------------------------------------------------------------------------
     fl = 'src/cmd/core.tex'
     files[fl] = find_delete_block(files[fl], '% Imagen de prueba tikz', white_end_block=True)
+
+    # -------------------------------------------------------------------------
+    # CAMBIO OTHER
+    # -------------------------------------------------------------------------
+    fl = 'src/cmd/other.tex'
+    files[fl] = find_delete_block(files[fl], '% Define cuál función se ejecuta al insertar páginas en blanco',
+                                  white_end_block=True)
 
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
@@ -1145,7 +1157,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     cdel = ['firstpagemargintop', 'portraitstyle', 'predocpageromannumber', 'predocpageromanupper',
             'predocresetpagenumber', 'indexsectionfontsize', 'indexsectionstyle', 'nameportraitpage', 'indextitlecolor',
             'addindextobookmarks', 'portraittitlecolor', 'margineqnindexbottom', 'margineqnindextop',
-            'bibtexindexbibliography', 'addemptypagetwosides']
+            'bibtexindexbibliography', 'addemptypagespredoc']
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -1253,6 +1265,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
         ra, _ = find_block(files[fl], i)
         files[fl][ra] = '\n' + files[fl][ra]
 
+    files[fl] = find_delete_block(files[fl], '% Modifica comportamiento nuevas páginas en formato twosides', iadd=-1,
+                                  white_end_block=True)
+
     # Borra último salto de línea
     files[fl].pop()
 
@@ -1287,6 +1302,23 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl] = find_delete_block(files[fl], '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
     ra, _ = find_block(files[fl], '% Imagen de prueba tikz')
     files[fl].pop(ra)
+
+    # -------------------------------------------------------------------------
+    # FINALCONF
+    # -------------------------------------------------------------------------
+    fl = 'src/cfg/final.tex'
+    files[fl] = find_delete_block(files[fl], '% Agrega páginas dependiendo del formato', iadd=-1, jadd=1)
+    files[fl] = find_delete_block(files[fl], '% Modifica comportamiento nuevas páginas en formato twosides', iadd=-1,
+                                  white_end_block=True)
+    ra, _ = find_block(files[fl], '\setcounter{footnote}{0}')
+    files[fl][ra + 1] = '\t\n'
+
+    # -------------------------------------------------------------------------
+    # CAMBIO OTHER
+    # -------------------------------------------------------------------------
+    fl = 'src/cmd/other.tex'
+    files[fl] = find_delete_block(files[fl], '% Define cuál función se ejecuta al insertar páginas en blanco',
+                                  white_end_block=True)
 
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
@@ -1727,7 +1759,7 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
     nconf = replace_argument(files[fl][ra], 1, '\\scriptsize').replace(' %', '%').replace(' {', '{')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'sourcecodeskipbelow', True)
-    nconf = replace_argument(files[fl][ra], 1, '0.5').replace('  %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '0.5').replace('%', ' %')
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'captiontextsubnumbold', True)
     nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
@@ -1933,7 +1965,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
 
     # Configuraciones que se borran
     cdel = ['predocpageromannumber', 'predocpageromanupper', 'predocresetpagenumber',
-            'addemptypagetwosides', 'nameltfigure', 'nameltsrc', 'namelttable', 'nameltcont', 'namelteqn',
+            'addemptypagespredoc', 'nameltfigure', 'nameltsrc', 'namelttable', 'nameltcont', 'namelteqn',
             'firstpagemargintop', 'nameportraitpage', 'indextitlecolor', 'portraittitlecolor',
             'pdfcompileversion', 'bibtexenvrefsecnum',
             'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers',
@@ -2116,6 +2148,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], 'Se añade listings (código fuente) a tocloft', True, iadd=-2)
     files[fl] = find_delete_block(files[fl], '\pdfminorversion', white_end_block=True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Configuración anexo', white_end_block=True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Modifica comportamiento nuevas páginas en formato twosides', iadd=-1,
+                                  white_end_block=True)
 
     # Borra línea definiciones
     ra, _ = find_block(files[fl], '\checkvardefined{\\universitydepartmentimagecfg}')
@@ -2222,6 +2256,11 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl][ra + 1] = '\t% -------------------------------------------------------------------------\n'
     files[fl] = find_delete_block(files[fl], '% Muestra los números de línea', white_end_block=True, jadd=1,
                                   iadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Agrega páginas dependiendo del formato', iadd=-1, jadd=1)
+    files[fl] = find_delete_block(files[fl], '% Modifica comportamiento nuevas páginas en formato twosides', iadd=-1,
+                                  white_end_block=True)
+    ra, _ = find_block(files[fl], '\setcounter{footnote}{0}')
+    files[fl][ra + 1] = '\t\n'
 
     # -------------------------------------------------------------------------
     # CAMBIA TÍTULOS
@@ -2392,8 +2431,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl] = add_block_from_list(files[fl], nl, ra)
 
     # Modifica configuraciones
-    ra, _ = find_block(files[fl], 'addemptypagetwosides', True)
-    files[fl][ra] = '\\def\\addemptypagespredoc {false}   % Añade pag. en blanco después de portada,etc.\n'
     ra, _ = find_block(files[fl], 'showsectioncaptioncode', True)
     nconf = replace_argument(files[fl][ra], 1, 'chap')
     files[fl][ra] = nconf
@@ -2585,6 +2622,13 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                                    '\\chaptertitlefont{\\color{\\chaptercolor} \\chapterfontsize \\chapterfontstyle \\selectfont}\n')
 
     # -------------------------------------------------------------------------
+    # CAMBIO FINALCONF
+    # -------------------------------------------------------------------------
+    fl = 'src/cfg/final.tex'
+    ra, _ = find_block(files[fl], '% \coretriggeronpage{')
+    files[fl][ra] = files[fl][ra].replace('% \\', '\\')
+
+    # -------------------------------------------------------------------------
     # ÍNDICE
     # -------------------------------------------------------------------------
     fl = 'src/page/index.tex'
@@ -2595,9 +2639,11 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nl = find_extract(index_tesis, '% Inicio índice, desactiva espacio entre objetos', True)
     files[fl] = add_block_from_list(files[fl], nl, ra - 2)
 
-    ra, _ = find_block(files[fl], 'Se añade una página en blanco', True)
+    ra, _ = find_block(files[fl], '% Termina el bloque de índice', True)
     nl = find_extract(index_tesis, '% Final del índice, restablece el espacio', True)
-    files[fl] = add_block_from_list(files[fl], nl, ra - 2)
+    files[fl] = add_block_from_list(files[fl], nl, ra + 4)
+    files[fl][ra + 3] += '\t'
+    files[fl][ra + 8] += '\t'
 
     for j in ['% Inicio índice, desactiva espacio entre objetos', '% Final del índice, restablece el espacio']:
         ra, _ = find_block(files[fl], j, True)
