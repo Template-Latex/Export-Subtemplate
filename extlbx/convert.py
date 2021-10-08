@@ -685,6 +685,15 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'showlinenumbers', True)
     files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1 a style4\n')
+    ra, _ = find_block(files[fl], '\\sssectionfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace('    %', '%').replace(' {', '{')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], '\\ssectionfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\large')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], '\\sectionfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\Large')
+    files[fl][ra] = nconf
 
     # -------------------------------------------------------------------------
     # CAMBIA LAS ECUACIONES
