@@ -63,7 +63,7 @@ def generate_statline(statid, version, time, date, lc, vh):
     lc = str(lc).ljust(10)
     vh = str(vh).ljust(0)
 
-    return '{0}{1}{2}{3}{4}{5}'.format(statid, version, time, date, lc, vh)
+    return f'{statid}{version}{time}{date}{lc}{vh}'
 
 
 # noinspection PyBroadException,PyUnboundLocalVariable
@@ -103,7 +103,7 @@ def add_stat(statfile, version, time, date, lc, vh, test=False):
             lastverid = 0
             lastver = lastentry[1]
 
-        dataarr[lastentrypos] = '{0}\n'.format(dataarr[lastentrypos])
+        dataarr[lastentrypos] = f'{dataarr[lastentrypos]}\n'
     else:
         lastid = 0
         lastver = ''
@@ -113,7 +113,7 @@ def add_stat(statfile, version, time, date, lc, vh, test=False):
 
     # Se comprueba que la version sea distinta
     if version == lastver:
-        version = '{0}.{1}'.format(version, lastverid + 1)
+        version = f'{version}.{lastverid + 1}'
 
     # Se crea una nueva línea
     newentry = generate_statline(lastid + 1, version, str(time)[0:5], date,
@@ -163,9 +163,9 @@ def plot_stats(statfile, statplotctime, statplotlcode):
         fig, ax = plt.subplots()
         ax.plot(numcomp, timecomp, 'c', label=u'Tiempo compilación (s)')
         ax.plot([numcomp[0], numcomp[nlen - 1]], [tme, tme], 'r--',
-                label=u'Tiempo medio ({0:.3g}s)'.format(tme))
+                label=f'Tiempo medio ({tme:.3g}s)')
         ax.plot([numcomp[0], numcomp[nlen - 1]], [tme, tme], 'b--',
-                label=u'Media acotada ({0:.3g}s)'.format(trc))
+                label=f'Media acotada ({trc:.3g}s)')
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax.set_xlabel(u'Número de compilación')
         ax.set_ylabel(u'Tiempo de compilación [s]')

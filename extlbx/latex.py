@@ -71,7 +71,7 @@ def find_block(data, initstr, blankend=False, altend=None):
                 break
         j += 1
     if i == -1:
-        raise ValueError('No se encontró la cadena {0}'.format(initstr))
+        raise ValueError(f'No se encontró la cadena {initstr}')
     return i, f
 
 

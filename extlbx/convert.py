@@ -214,8 +214,8 @@ def change_header_tex_files(files, release, headersize, headerversionpos, versio
         data = files[fl]
         # noinspection PyCompatibility,PyBroadException
         try:
-            data[0] = '% Template:     {0}\n'.format(release['NAME_HEADER'])
-            data[headersize - 3] = '% Manual template: [{0}]\n'.format(release['WEB']['MANUAL'])
+            data[0] = f"% Template:     {release['NAME_HEADER']}\n"
+            data[headersize - 3] = f"% Manual template: [{release['WEB']['MANUAL']}]\n"
             data[headersize - 2] = '% Licencia MIT:    [https://opensource.org/licenses/MIT]\n'
             data[headerversionpos] = versionhead
         except:
@@ -458,7 +458,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
                 data.append(line)
             fl.close()
         except:
-            printfun('Error al cargar el archivo {0}'.format(f))
+            printfun(f'Error al cargar el archivo {f}')
 
         # Se cambia la versión
         data[headerversionpos] = versionhead
@@ -2805,7 +2805,7 @@ def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, doc
                 data.append(line)
             fl.close()
         except:
-            printfun('Error al cargar el archivo {0}'.format(f))
+            printfun(f'Error al cargar el archivo {f}')
 
         # Se cambia la versión
         data[headerversionpos] = versionhead

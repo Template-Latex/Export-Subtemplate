@@ -59,8 +59,8 @@ def get_last_ver(statfile):
         vtime = lastline[3]
         if ver.count('.') == 3:
             ver = ver.split('.')
-            ver = '{0}.{1}.{2}-{3}'.format(ver[0], ver[1], ver[2], ver[3])
-        lastver = '{0} ({1})'.format(ver, vtime)
+            ver = f'{ver[0]}.{ver[1]}.{ver[2]}-{ver[3]}'
+        lastver = f'{ver} ({vtime})'
         data.close()
     except:
         return '0.0.0 (NO_DATE)'
