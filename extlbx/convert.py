@@ -245,7 +245,7 @@ def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroo
     with open(os.devnull, 'w') as FNULL:
         printfun(MSG_DCOMPILE, end='')
         with Cd(subrlfolder):
-            print(subrlfolder, mainfile)
+            # print(subrlfolder, mainfile)
             t1 = call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL)
             t2 = call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL)
             tmean = min(t1, t2)
