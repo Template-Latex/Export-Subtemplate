@@ -331,3 +331,51 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
 
     if libr != configfile and add_ending_line or 'imports' in libr:
         fl.write('\n')  # Se agrega espacio vacío
+
+
+def find_extract(data, element, white_end_block=False):
+    """
+    Encuentra el bloque determinado por <element> y retorna el bloque.
+
+    :param element: Elemento a buscar
+    :param data: Lista.
+    :param white_end_block: Indica si el bloque termina en espacio en blanco o con llave
+    :return: Retorna la lista que contiene el elemento
+    """
+    ia, ja = find_block(data, element, white_end_block)
+    return extract_block_from_list(data, ia, ja)
+
+
+def find_replace_block(data, block, newblock, white_end_block=False, iadd=0, jadd=0, verbose=False):
+    """
+    Busca el bloque en una lista de datos y reemplaza por un bloque <newblock>.
+
+    :param data: Datos
+    :param block: Bloque a buscar
+    :param newblock: Bloque a reemplazar
+    :param iadd: Agrega líneas al inicio del bloque
+    :param jadd: Agrega líneas al término del bloque
+    :param verbose: Escribe en la línea de comandos los resultados
+    :param white_end_block: Indica si el bloque termina en espacio en blanco o con llave
+    :return: Lista
+    """
+    i, j = find_block(data, block, white_end_block)
+    if verbose:
+        print(i, j)
+    return replace_block_from_list(data, newblock, i + iadd, j + jadd)
+
+
+def find_delete_block(data, block, white_end_block=False, iadd=0, jadd=0, altending=None):
+    """
+    Busca el bloque en una lista de datos y lo elimina.
+
+    :param data: Datos
+    :param block: Bloque a buscar
+    :param iadd: Agrega líneas al inicio del bloque
+    :param jadd: Agrega líneas al término del bloque
+    :param white_end_block: Indica si el bloque termina en espacio en blanco o con llave
+    :param altending: Final alternativo bloque
+    :return: Lista
+    """
+    ra, rb = find_block(data, block, blankend=white_end_block, altend=altending)
+    return del_block_from_list(data, ra + iadd, rb + jadd)

@@ -60,14 +60,6 @@ STRIP_ALL_GENERATED_FILES = False  # Aplica strip a todos los archivos en dist/
 STRIP_TEMPLATE_FILE = False  # Elimina comentarios y aplica strip a archivo del template
 
 
-# noinspection PyUnusedLocal
-def nonprint(arg, *args, **kwargs):
-    """
-    Desactiva el printing.
-    """
-    pass
-
-
 def find_extract(data, element, white_end_block=False):
     """
     Encuentra el bloque determinado por <element> y retorna el bloque.
@@ -100,45 +92,6 @@ def find_replace_block(data, block, newblock, white_end_block=False, iadd=0, jad
     return replace_block_from_list(data, newblock, i + iadd, j + jadd)
 
 
-def find_delete_block_recursive(data, block, white_end_block=False, iadd=0, jadd=0, altending=None):
-    """
-    Busca el bloque en una lista de datos y lo elimina.
-
-    :param data: Datos
-    :param block: Bloque a buscar
-    :param iadd: Agrega líneas al inicio del bloque
-    :param jadd: Agrega líneas al término del bloque
-    :param white_end_block: Indica si el bloque termina en espacio en blanco o con llave
-    :param altending: Final alternativo bloque
-    :return: Data
-    """
-    rdata = data
-    while True:
-        ra, rb = find_block(rdata, block, blankend=white_end_block, altend=altending)
-        if ra == -1 or rb == -1:
-            return rdata
-        rdata = del_block_from_list(rdata, ra + iadd, rb + jadd)
-
-
-def find_delete_line_recursive(data, line, replace=''):
-    """
-    Busca el bloque en una lista de datos y lo elimina.
-
-    :param data: Datos
-    :param line: Linea a buscar
-    :param replace: Linea a reemplazar
-    :return: None
-    """
-    rdata = data
-    while True:
-        r = find_line(rdata, line)
-        if r == -1:
-            return rdata
-        rdata = del_block_from_list(rdata, r, r)
-        if replace != '':
-            rdata = add_block_from_list(rdata, [replace], r)
-
-
 def find_delete_block(data, block, white_end_block=False, iadd=0, jadd=0, altending=None):
     """
     Busca el bloque en una lista de datos y lo elimina.
@@ -153,6 +106,22 @@ def find_delete_block(data, block, white_end_block=False, iadd=0, jadd=0, altend
     """
     ra, rb = find_block(data, block, blankend=white_end_block, altend=altending)
     return del_block_from_list(data, ra + iadd, rb + jadd)
+
+
+def find_remove_recursive_line(data, line):
+    """
+    Elimina de manera recursiva.
+
+    :param data: Datos
+    :param line: Bloque a buscar
+    :return:
+    """
+    while True:
+        try:
+            ra, _ = find_block(data, line)
+            data.pop(ra)
+        except ValueError:
+            break
 
 
 def assemble_template_file(templatef, configfile, distfolder, headersize, files):
@@ -598,7 +567,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files['src/cmd/image.tex'] = copy.copy(mainf['src/cmd/image.tex'])
     files['src/cmd/math.tex'] = copy.copy(mainf['src/cmd/math.tex'])
     files['src/cmd/other.tex'] = copy.copy(mainf['src/cmd/other.tex'])
-    files['src/cmd/title.tex'] = file_to_list('src/cmd/auxiliar_title.tex')
+    files['src/cmd/title.tex'] = copy.copy(mainf['src/cmd/title.tex'])
     files['src/config.tex'] = copy.copy(mainf['src/config.tex'])
     files['src/defs.tex'] = copy.copy(mainf['src/defs.tex'])
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
@@ -813,6 +782,27 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     nl = find_extract(aux_fun, '% Enumerate en negrita', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     files[fl].pop()
+
+    # -------------------------------------------------------------------------
+    # TITLE
+    # -------------------------------------------------------------------------
+    fl = 'src/cmd/title.tex'
+    files[fl] = find_delete_block(files[fl], '% Insertar un título sin número y sin indexar', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título sin número sin cambiar el título del header',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl],
+                                  '% Insertar un título sin número, sin indexar y sin cambiar el título del header',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un subtítulo sin número y sin indexar', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un sub-subtítulo sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un sub-sub-subtítulo sin número y sin indexar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título en un índice, sin número de página',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un título en un índice, con número de página',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Crea una sección en el índice y en el header', white_end_block=True)
 
     # -------------------------------------------------------------------------
     # CORE FUN
@@ -2314,16 +2304,34 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
                                   white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Insertar un título sin número sin cambiar el título del header',
                                   white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Activa la numeración en las secciones',
+                                  white_end_block=True)
+
+    find_remove_recursive_line(files[fl], '\coreintializetitlenumbering')
+    find_remove_recursive_line(files[fl], '\GLOBALchapternumenabled')
+    find_remove_recursive_line(files[fl], '\GLOBALsectionanumenabled')
+    find_remove_recursive_line(files[fl], '\GLOBALsubsectionanumenabled')
+    find_remove_recursive_line(files[fl], '\GLOBALsubsubsectionanumenabled')
 
     # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
     fl = 'src/cmd/core.tex'
     files[fl] = find_delete_block(files[fl], '\\newcommand{\\bgtemplatetestimg}{')
+    files[fl] = find_delete_block(files[fl], '% Definición de formato de secciones', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '\def\\bgtemplatetestcode {d0g3}', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Cambia márgenes de las páginas [cm]', white_end_block=True)
     ra, _ = find_block(files[fl], '% Imagen de prueba tikz')
     files[fl].pop(ra)
+
+    find_remove_recursive_line(files[fl], '\GLOBALchapternumenabled')
+    find_remove_recursive_line(files[fl], '\GLOBALsectionanumenabled')
+    find_remove_recursive_line(files[fl], '\GLOBALsubsectionanumenabled')
+    find_remove_recursive_line(files[fl], '\GLOBALsubsubsectionanumenabled')
+
+    ra, rb = find_block(files[fl], '% Definición de variables globales', blankend=True)
+    for i in range(ra, rb):
+        files[fl][i] = files[fl][i].replace('    %', '%')
 
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
@@ -2504,6 +2512,12 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'showappendixsecindex', True)
     nconf = replace_argument(files[fl][ra], 1, 'false')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'formatnumapchapter', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\Alph').replace('%', '  %')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'formatnumapsection', True)
+    nconf = replace_argument(files[fl][ra], 1, '\\arabic').replace('  %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
@@ -2718,10 +2732,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl][ra] = '\t\t\t\\counterwithin{lstlisting}{chapter}\n'
     ra, _ = find_block(files[fl], 'counterwithin{table}')
     files[fl][ra] = '\t\t\t\\counterwithin{table}{chapter}\n'
-
-    # Cambia valor de anexos sección
-    ra, _ = find_block(files[fl], 'GLOBALsectionalph')
-    files[fl][ra] = replace_argument(files[fl][ra], 1, 'false')
 
     # -------------------------------------------------------------------------
     # CORE FUN

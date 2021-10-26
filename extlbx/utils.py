@@ -40,6 +40,7 @@ __all__ = [
     'is_windows',
     'LIST_END_LINE',
     'natural_keys',
+    'nonprint',
     'replace_block_from_list',
     'save_list_to_file',
     'search_append_line',
@@ -397,3 +398,11 @@ def save_list_to_file(lst, filename):
     for j in lst:
         o.write(j)
     o.close()
+
+
+# noinspection PyUnusedLocal
+def nonprint(arg, *args, **kwargs):
+    """
+    Desactiva el printing.
+    """
+    pass
