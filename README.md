@@ -5,7 +5,7 @@
 <p align="center">Aplicación que permite generar subtemplates a partir de Template-Informe</p>
 <div align="center"><a href="https://ppizarror.com"><img alt="@ppizarror" src="https://latex.ppizarror.com/res/badges/autor.svg" /></a>
 <a href="https://opensource.org/licenses/MIT/"><img alt="Licencia MIT" src="https://latex.ppizarror.com/res/badges/licenciamit.svg" /></a>
-<a href="https://www.python.org/downloads/"><img alt="Python 2.7" src="https://latex.ppizarror.com/res/badges/python27.svg" /></a>
+<a href="https://www.python.org/downloads/"><img alt="Python 2.7+/3.6+" src="https://img.shields.io/badge/Python-2.7+/3.6+-red.svg" /></a>
 <br>
 
 <a href="https://github.com/Template-Latex/Template-Articulo/"><img alt="Template-Artículo" src="https://latex.ppizarror.com/res/badges/articulo.svg" /></a>
@@ -21,7 +21,7 @@
 </div><br>
 
 <p align="center">
-  <img src="https://latex.ppizarror.com/res/other/export-subtemplate.PNG" width="40%" />
+  <img src="https://latex.ppizarror.com/res/other/export-subtemplate.PNG" width="50%" />
 </p>
 
 ## Licencia

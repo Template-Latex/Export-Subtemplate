@@ -1484,6 +1484,18 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     ra, rb = find_block(files[fl], 'charaftersectionnum', True)
     nconf = replace_argument(files[fl][ra], 1, '').replace('%', ' %')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmargini {', True)
+    nconf = replace_argument(files[fl][ra], 1, '20')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmarginii {', True)
+    nconf = replace_argument(files[fl][ra], 1, '17')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmarginiii {', True)
+    nconf = replace_argument(files[fl][ra], 1, '0').replace('%', '   %')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmarginiv {', True)
+    nconf = replace_argument(files[fl][ra], 1, '0').replace('%', ' %')
+    files[fl][ra] = nconf
 
     ra, rb = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style1').replace('16 estilos', '17 estilos')
@@ -1745,6 +1757,15 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'captiontextsubnumbold', True)
     nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmargini {', True)
+    nconf = replace_argument(files[fl][ra], 1, '92').replace('%', '  %')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmarginii {', True)
+    nconf = replace_argument(files[fl][ra], 1, '50.6')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmarginiii {', True)
+    nconf = replace_argument(files[fl][ra], 1, '43').replace('%', '  %')
     files[fl][ra] = nconf
 
     # -------------------------------------------------------------------------
@@ -2057,6 +2078,18 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl][ra] = nconf
     ra, rb = find_block(files[fl], 'stylecitereferences', True)
     nconf = replace_argument(files[fl][ra], 1, 'bibtex')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmargini {', True)
+    nconf = replace_argument(files[fl][ra], 1, '21.9').replace('  %', '%')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmarginii {', True)
+    nconf = replace_argument(files[fl][ra], 1, '21.9').replace('  %', '%')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmarginiii {', True)
+    nconf = replace_argument(files[fl][ra], 1, '21.9')
+    files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'sitemsmarginiv {', True)
+    nconf = replace_argument(files[fl][ra], 1, '0').replace('%', ' %')
     files[fl][ra] = nconf
 
     ra, _ = find_block(files[fl], 'stylecitereferences', True)
