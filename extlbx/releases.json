@@ -131,6 +131,7 @@
     "FILES": {
       "src/cfg/final.tex": [],
       "src/cfg/init.tex": [],
+      "src/cfg/unicode.tex": [],
       "src/cfg/page.tex": [],
       "src/cmd/core.tex": [],
       "src/cmd/equation.tex": [],
@@ -301,7 +302,8 @@
       "src/imports.tex": [],
       "src/initconf.tex": [],
       "src/pageconf.tex": [],
-      "src/styles.tex": []
+      "src/styles.tex": [],
+      "src/unicode.tex": []
     },
     "GIT": "../Professional-CV/",
     "ID": 4,

@@ -560,6 +560,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files['main.tex'] = copy.copy(mainf['main.tex'])
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/cfg/unicode.tex'] = copy.copy(mainf['src/cfg/unicode.tex'])
     files['src/cmd/auxiliar.tex'] = file_to_list('src/cmd/auxiliar.tex')
     files['src/cmd/column.tex'] = copy.copy(mainf['src/cmd/column.tex'])
     files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
@@ -684,10 +685,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = find_replace_block(files[fl], '\ifthenelse{\equal{\showappendixsecindex}', nl, jadd=-1,
                                    white_end_block=True)
 
-    ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
-    rb, _ = find_block(files[fl], '% \\usepackage{subfigure}', True)
-    files[fl] = del_block_from_list(files[fl], ra, rb + 1)
-
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
@@ -721,9 +718,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
 
     # Elimina subtitulo
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\documentsubtitle}{}}{', jadd=1)
-
-    ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
-    files[fl].pop(ra)
 
     # Agrega saltos de líneas
     for i in ['% Crea referencias enumeradas en apacite', '% Desactiva la URL de apacite',
@@ -888,6 +882,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files['main.tex'] = copy.copy(mainf['main.tex'])
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/cfg/unicode.tex'] = copy.copy(mainf['src/cfg/unicode.tex'])
     files['src/cmd/column.tex'] = copy.copy(mainf['src/cmd/column.tex'])
     files['src/cmd/control.tex'] = copy.copy(mainf['src/cmd/auxiliar.tex'])
     files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
@@ -1076,6 +1071,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/cfg/unicode.tex'] = copy.copy(mainf['src/cfg/unicode.tex'])
     files['src/cmd/column.tex'] = copy.copy(mainf['src/cmd/column.tex'])
     files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
     files['src/cmd/equation.tex'] = copy.copy(mainf['src/cmd/equation.tex'])
@@ -1199,14 +1195,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
-    ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
-    rb, _ = find_block(files[fl], '% \\usepackage{subfigure}', True)
-    files[fl] = del_block_from_list(files[fl], ra, rb + 1)
-
-    ra, _ = find_block(files[fl], '% Desde v6.2.8 se debe cargar al final para evitar errores:', True)
-    rb, _ = find_block(files[fl], '% Desde v6.5.6 se carga después de las referencias ', True)
-    files[fl] = del_block_from_list(files[fl], ra, rb)
-
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
@@ -1242,9 +1230,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Elimina cambio del indice en bibtex
     files[fl] = find_delete_block(files[fl], '\\ifthenelse{\\equal{\\bibtexindexbibliography}{true}}{')
-
-    ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
-    files[fl].pop(ra)
 
     # Agrega saltos de líneas
     for i in ['% Crea referencias enumeradas en apacite', '% Desactiva la URL de apacite',
@@ -1368,6 +1353,7 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/cfg/unicode.tex'] = copy.copy(mainf['src/cfg/unicode.tex'])
     files['src/cmd/articulo.tex'] = file_to_list('src/cmd/articulo.tex')
     files['src/cmd/column.tex'] = copy.copy(mainf['src/cmd/column.tex'])
     files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
@@ -1651,6 +1637,7 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
     files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/cfg/unicode.tex'] = copy.copy(mainf['src/cfg/unicode.tex'])
     files['src/cmd/column.tex'] = copy.copy(mainf['src/cmd/column.tex'])
     files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
     files['src/cmd/equation.tex'] = copy.copy(mainf['src/cmd/equation.tex'])
@@ -1916,6 +1903,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/cfg/unicode.tex'] = copy.copy(mainf['src/cfg/unicode.tex'])
     files['src/cmd/column.tex'] = copy.copy(mainf['src/cmd/column.tex'])
     files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
     files['src/cmd/equation.tex'] = copy.copy(mainf['src/cmd/equation.tex'])
@@ -2136,14 +2124,10 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl].pop()
     files[fl].append('\\usefonttheme{professionalfonts}\n\\usepackage{transparent}\n')
 
-    ra, _ = find_block(files[fl], '% Desde v6.2.8 se debe cargar al final para evitar errores:')
+    ra, _ = find_block(files[fl], '% Referencias')
     rb, _ = find_block(files[fl], '% Anexos/Apéndices')
-    nl = ['\\usepackage[pdfencoding=auto,psdextra]{hyperref}\n']
+    nl = ['% Referencias\n\\usepackage[pdfencoding=auto,psdextra]{hyperref}\n']
     files[fl] = replace_block_from_list(files[fl], nl, ra, rb - 3)
-
-    ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
-    rb, _ = find_block(files[fl], '% \\usepackage{subfigure}', True)
-    files[fl] = del_block_from_list(files[fl], ra, rb + 1)
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
@@ -2203,9 +2187,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, _ = find_block(files[fl], '% Configuración de referencias y citas')
     _, rb = find_block(files[fl], '% Referencias en 2 columnas', blankend=True)
     files[fl] = replace_block_from_list(files[fl], nl, ra, rb - 1)
-
-    ra, _ = find_block(files[fl], 'Sloppy arruina portadas al exigir', True)
-    files[fl].pop(ra)
 
     ra, _ = find_block(files[fl], '\\setcounter{secnumdepth}{4}', True)
     files[fl][ra] += '\n'
@@ -2405,6 +2386,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files['src/cfg/final.tex'] = copy.copy(mainf['src/cfg/final.tex'])
     files['src/cfg/init.tex'] = copy.copy(mainf['src/cfg/init.tex'])
     files['src/cfg/page.tex'] = copy.copy(mainf['src/cfg/page.tex'])
+    files['src/cfg/unicode.tex'] = copy.copy(mainf['src/cfg/unicode.tex'])
     files['src/cmd/column.tex'] = copy.copy(mainf['src/cmd/column.tex'])
     files['src/cmd/core.tex'] = copy.copy(mainf['src/cmd/core.tex'])
     files['src/cmd/equation.tex'] = copy.copy(mainf['src/cmd/equation.tex'])
@@ -2583,14 +2565,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl].pop()
     a, _ = find_block(files[fl], '\\usepackage{apacite}', True)
     files[fl][a] = files[fl][a].replace('{apacite}', '[nosectionbib]{apacite}')
-
-    ra, _ = find_block(files[fl], '% En v6.3.7 se desactiva cellspace', True)
-    rb, _ = find_block(files[fl], '% \\usepackage{subfigure}', True)
-    files[fl] = del_block_from_list(files[fl], ra, rb + 1)
-
-    ra, _ = find_block(files[fl], '% Desde v6.2.8 se debe cargar al final para evitar errores:', True)
-    rb, _ = find_block(files[fl], '% Desde v6.5.6 se carga después de las referencias ', True)
-    files[fl] = del_block_from_list(files[fl], ra, rb)
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF

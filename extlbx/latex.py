@@ -38,6 +38,8 @@ __all__ = [
 import types
 import sys
 
+from extlbx.utils import del_block_from_list, extract_block_from_list, replace_block_from_list
+
 
 def find_block(data, initstr, blankend=False, altend=None):
     """
