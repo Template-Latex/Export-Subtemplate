@@ -1745,6 +1745,9 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
     ra, rb = find_block(files[fl], 'sitemsmarginiii {', True)
     nconf = replace_argument(files[fl][ra], 1, '43').replace('%', '  %')
     files[fl][ra] = nconf
+    ra, rb = find_block(files[fl], 'marginimagemultright', True)
+    nconf = replace_argument(files[fl][ra], 1, '1.25')
+    files[fl][ra] = nconf
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
