@@ -1962,7 +1962,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'natbibrefcitecharclose', 'natbibrefcitecharopen', 'natbibrefcitecompress',
             'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle',
             'paragcolor', 'paragsubcolor', 'sectioncolor', 'ssectioncolor', 'sssectioncolor',
-            'ssssectioncolor', 'backrefpagecite'
+            'ssssectioncolor', 'backrefpagecite', 'indentfirstpar'
             ]
     for cdel in cdel:
         ra, rb = find_block(files[fl], cdel, True)
@@ -2114,6 +2114,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Dimensiones y geometría del documento', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Cambia el estilo de los títulos', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Indentación del primer párrafo', white_end_block=True)
     ra, _ = find_block(files[fl], '\showappendixsecindex')
     nl = ['\\def\\showappendixsecindex {false}\n',
           files[fl][ra]]
