@@ -2309,12 +2309,35 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
                                   white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Activa la numeración en las secciones',
                                   white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Chequea si los capítulos han sido iniciados',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Chequea si una sección han sido iniciada',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Chequea si una subsección han sido iniciada',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Chequea si una subsubsección han sido iniciada',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Parcha sub-sub-subsecciones',
+                                  white_end_block=True)
+
+    ra, _ = find_block(files[fl], '% Parcha el formato de capítulos')
+    files[fl].pop(ra - 1)
 
     find_remove_recursive_line(files[fl], '\coreintializetitlenumbering')
     find_remove_recursive_line(files[fl], '\GLOBALchapternumenabled')
     find_remove_recursive_line(files[fl], '\GLOBALsectionanumenabled')
     find_remove_recursive_line(files[fl], '\GLOBALsubsectionanumenabled')
     find_remove_recursive_line(files[fl], '\GLOBALsubsubsectionanumenabled')
+    find_remove_recursive_line(files[fl], '\GLOBALtitlerequirechapter')
+    find_remove_recursive_line(files[fl], '\GLOBALtitleinitchapter')
+    find_remove_recursive_line(files[fl], '\GLOBALtitleinitsection')
+    find_remove_recursive_line(files[fl], '\GLOBALtitleinitsubsection')
+    find_remove_recursive_line(files[fl], '\GLOBALtitleinitsubsubsection')
+    find_remove_recursive_line(files[fl], '\GLOBALtitleinitsubsubsubsection')
+    find_remove_recursive_line(files[fl], '\corecheckchapterinitialized')
+    find_remove_recursive_line(files[fl], '\corechecksectioninitialized')
+    find_remove_recursive_line(files[fl], '\corechecksubsectioninitialized')
+    find_remove_recursive_line(files[fl], '\corechecksubsubsectioninitialized')
 
     # -------------------------------------------------------------------------
     # CORE FUN
@@ -2728,6 +2751,8 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl][ra] = '\t\t\t\\counterwithin{lstlisting}{chapter}\n'
     ra, _ = find_block(files[fl], 'counterwithin{table}')
     files[fl][ra] = '\t\t\t\\counterwithin{table}{chapter}\n'
+    ra, _ = find_block(files[fl], '\global\def\GLOBALtitlerequirechapter')
+    files[fl][ra] = files[fl][ra].replace('{false}', '{true}')
 
     # -------------------------------------------------------------------------
     # CORE FUN
