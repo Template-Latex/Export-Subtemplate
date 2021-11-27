@@ -739,6 +739,11 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl].pop()
     _, rb = find_block(files[fl], '% Muestra los números de línea', blankend=True)
 
+    i1, f1 = find_block(aux_pageconf, '% Reestablece los valores del estado de los títulos', True)
+    nl = extract_block_from_list(aux_pageconf, i1 - 1, f1)
+    nl.insert(0, '\n')
+    files[fl] = add_block_from_list(files[fl], nl, rb)
+
     i1, f1 = find_block(aux_pageconf, '% Establece el estilo de las sub-sub-sub-secciones', True)
     nl = extract_block_from_list(aux_pageconf, i1 - 1, f1)
     nl.insert(0, '\n')
@@ -843,7 +848,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
                      plotstats=True, addstat=True, savepdf=True,
                      informeroot=None, mainroot=None, statsroot=None):
     """
-    Exporta las auxiliares.
+    Exporta los controles.
 
     :param addstat: Agrega las estadísticas
     :param docompile: Compila automáticamente
@@ -2260,6 +2265,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
                                   jadd=-1, iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Se restablecen headers y footers', white_end_block=True, jadd=-1,
                                   iadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Reestablece los valores del estado de los títulos',
+                                  white_end_block=True, iadd=-1)
     ra, _ = find_block(files[fl], '% Crea funciones para numerar objetos')
     files[fl].pop(ra - 2)
     ra, _ = find_block(files[fl], '% Se restablecen números de página y secciones')
@@ -2751,7 +2758,15 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl][ra] = '\t\t\t\\counterwithin{lstlisting}{chapter}\n'
     ra, _ = find_block(files[fl], 'counterwithin{table}')
     files[fl][ra] = '\t\t\t\\counterwithin{table}{chapter}\n'
-    ra, _ = find_block(files[fl], '\global\def\GLOBALtitlerequirechapter')
+    for _ in range(2):
+        ra, _ = find_block(files[fl], '\global\def\GLOBALtitlerequirechapter {false}')
+        files[fl][ra] = files[fl][ra].replace('{false}', '{true}')
+
+    # -------------------------------------------------------------------------
+    # FINALCONF
+    # -------------------------------------------------------------------------
+    fl = 'src/cfg/final.tex'
+    ra, _ = find_block(files[fl], '\global\def\GLOBALtitlerequirechapter {false}')
     files[fl][ra] = files[fl][ra].replace('{false}', '{true}')
 
     # -------------------------------------------------------------------------
