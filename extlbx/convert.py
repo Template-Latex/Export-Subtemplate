@@ -631,30 +631,30 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             'predocresetpagenumber', 'margineqnindexbottom', 'margineqnindextop',
             'bibtexindexbibliography', 'anumsecaddtocounter', 'predocpageromanupper']
     for cdel in cdel:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     ra, rb = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
     files[fl] = del_block_from_list(files[fl], ra, rb)
     for cdel in []:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')
-    ra, rb = find_block(files[fl], 'equationrestart', True)
+    ra, _ = find_block(files[fl], 'equationrestart', True)
     nconf = replace_argument(files[fl][ra], 1, 'none')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'stylecitereferences', True)
+    ra, _ = find_block(files[fl], 'stylecitereferences', True)
     nconf = replace_argument(files[fl][ra], 1, 'bibtex')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'natbibrefstyle', True)
+    ra, _ = find_block(files[fl], 'natbibrefstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'ieeetr').replace('%', '   %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'pagemargintop', True)
+    ra, _ = find_block(files[fl], 'pagemargintop', True)
     nconf = replace_argument(files[fl][ra], 1, '2.3').replace('  %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'cfgbookmarksopenlevel', True)
+    ra, _ = find_block(files[fl], 'cfgbookmarksopenlevel', True)
     nconf = replace_argument(files[fl][ra], 1, '1')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'showlinenumbers', True)
+    ra, _ = find_block(files[fl], 'showlinenumbers', True)
     files[fl].insert(ra + 1, '\def\\templatestyle {style1}        % Estilo del template: style1 a style4\n')
     ra, _ = find_block(files[fl], '\\sssectionfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace('    %', '%').replace(' {', '{')
@@ -678,7 +678,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     fl = 'src/env/imports.tex'
     idel = ['usepackage{notoccite}', 'ragged2e']
     for idel in idel:
-        ra, rb = find_block(files[fl], idel, True)
+        ra, _ = find_block(files[fl], idel, True)
         files[fl].pop(ra)
     aux_imports = file_to_list('src/env/imports_auxiliar.tex')
     nl = find_extract(aux_imports, '% Anexos/Apéndices', True)
@@ -966,7 +966,7 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files[fl][ra] += '\def\\bolditempto {true}            % Puntaje item en negrita\n'
     cdel = ['templatestyle']
     for cdel in cdel:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
 
     # -------------------------------------------------------------------------
@@ -1147,41 +1147,41 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
             'addindextobookmarks', 'portraittitlecolor', 'margineqnindexbottom', 'margineqnindextop',
             'bibtexindexbibliography']
     for cdel in cdel:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     for cdel in ['pagemargintop']:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('  %', '%')
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
                                                 '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
                                     ra, addnewline=True)
-    ra, rb = find_block(files[fl], 'pagemarginbottom', True)
+    ra, _ = find_block(files[fl], 'pagemarginbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '2.5')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'pagemarginleft', True)
+    ra, _ = find_block(files[fl], 'pagemarginleft', True)
     nconf = replace_argument(files[fl][ra], 1, '3.81')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'pagemarginright', True)
+    ra, _ = find_block(files[fl], 'pagemarginright', True)
     nconf = replace_argument(files[fl][ra], 1, '3.81')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'pagemargintop', True)
+    ra, _ = find_block(files[fl], 'pagemargintop', True)
     nconf = replace_argument(files[fl][ra], 1, '2.5')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'hfstyle', True)
+    ra, _ = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style7')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\\sectionfontsize', True)
+    ra, _ = find_block(files[fl], '\\sectionfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\Large')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\\sssectionfontsize', True)
+    ra, _ = find_block(files[fl], '\\sssectionfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace('    %', '%').replace(' {', '{')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\\ssectionfontsize', True)
+    ra, _ = find_block(files[fl], '\\ssectionfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\large')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'hfwidthwrap', True)
+    ra, _ = find_block(files[fl], 'hfwidthwrap', True)
     files[fl] = replace_block_from_list(files[fl], config_reporte, ra, ra)
 
     ra, _ = find_block(files[fl], '% CONFIGURACIÓN DE LAS LEYENDAS - CAPTION', True)
@@ -1193,7 +1193,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     fl = 'src/env/imports.tex'
     idel = ['ragged2e']
     for idel in idel:
-        ra, rb = find_block(files[fl], idel, True)
+        ra, _ = find_block(files[fl], idel, True)
         files[fl].pop(ra)
     ra, _ = find_block(files[fl], '\showappendixsecindex')
     nl = ['\\def\\showappendixsecindex {false}\n',
@@ -1213,7 +1213,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     cdel = ['\\author{\\pdfmetainfoauthor}', '\\title{\\pdfmetainfotitle}']
     for cdel in cdel:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
 
     # Borra línea definiciones
@@ -1404,87 +1404,91 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
             'titleshowauthor', 'titleshowcourse', 'titleshowdate', 'titlesupmargin',
             'hfwidthcourse', 'hfwidthtitle', 'hfwidthwrap', 'disablehfrightmark']
     for cdel in cdel:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
-    ra, rb = find_block(files[fl], 'pagemarginbottom', True)
+    ra, _ = find_block(files[fl], 'pagemarginbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '1.91').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'pagemarginleft', True)
+    ra, _ = find_block(files[fl], 'pagemarginleft', True)
     nconf = replace_argument(files[fl][ra], 1, '1.27')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'pagemarginright', True)
+    ra, _ = find_block(files[fl], 'pagemarginright', True)
     nconf = replace_argument(files[fl][ra], 1, '1.27')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'pagemargintop', True)
+    ra, _ = find_block(files[fl], 'pagemargintop', True)
     nconf = replace_argument(files[fl][ra], 1, '1.91').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'documentfontsize', True)
+    ra, _ = find_block(files[fl], 'documentfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '9.5').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'fontdocument', True)
+    ra, _ = find_block(files[fl], 'fontdocument', True)
     nconf = replace_argument(files[fl][ra], 1, 'libertine').replace('  %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'documentinterline', True)
+    ra, _ = find_block(files[fl], 'documentinterline', True)
     nconf = replace_argument(files[fl][ra], 1, '1').replace('%', '    %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'fontsizerefbibl', True)
+    ra, _ = find_block(files[fl], 'fontsizerefbibl', True)
     nconf = replace_argument(files[fl][ra], 1, '\\small').replace('%', '     %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'natbibrefsep', True)
+    ra, _ = find_block(files[fl], 'natbibrefsep', True)
     nconf = replace_argument(files[fl][ra], 1, '2')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'apaciterefsep', True)
+    ra, _ = find_block(files[fl], 'apaciterefsep', True)
     nconf = replace_argument(files[fl][ra], 1, '2')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'bibtexrefsep', True)
+    ra, _ = find_block(files[fl], 'bibtexrefsep', True)
     nconf = replace_argument(files[fl][ra], 1, '2')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captiontextbold', True)
+    ra, _ = find_block(files[fl], 'captiontextbold', True)
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captionlrmarginmc', True)
+    ra, _ = find_block(files[fl], 'captionlrmarginmc', True)
     nconf = replace_argument(files[fl][ra], 1, '0.5').replace('  %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'tablenotesfontsize', True)
+    ra, _ = find_block(files[fl], 'tablenotesfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\footnotesize').replace('  %', '%').replace(' {', '{')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\\sectionspacingtop', True)
+    ra, _ = find_block(files[fl], '\\sectionspacingtop', True)
     nconf = replace_argument(files[fl][ra], 1, '15')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\\ssectionspacingbottom', True)
+    ra, _ = find_block(files[fl], '\\ssectionspacingbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '8').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\\sssectionspacingbottom', True)
+    ra, _ = find_block(files[fl], '\\sssectionspacingbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '6')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\\ssssectionspacingbottom', True)
+    ra, _ = find_block(files[fl], '\\ssssectionspacingbottom', True)
     nconf = replace_argument(files[fl][ra], 1, '4')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'charappendixsection', True)
+    ra, _ = find_block(files[fl], 'charappendixsection', True)
     nconf = replace_argument(files[fl][ra], 1, '').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'charaftersectionnum', True)
+    ra, _ = find_block(files[fl], 'charaftersectionnum', True)
     nconf = replace_argument(files[fl][ra], 1, '').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmargini {', True)
+    ra, _ = find_block(files[fl], 'sitemsmargini {', True)
     nconf = replace_argument(files[fl][ra], 1, '20')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmarginii {', True)
+    ra, _ = find_block(files[fl], 'sitemsmarginii {', True)
     nconf = replace_argument(files[fl][ra], 1, '17')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmarginiii {', True)
+    ra, _ = find_block(files[fl], 'sitemsmarginiii {', True)
     nconf = replace_argument(files[fl][ra], 1, '0').replace('%', '   %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmarginiv {', True)
+    ra, _ = find_block(files[fl], 'sitemsmarginiv {', True)
     nconf = replace_argument(files[fl][ra], 1, '0').replace('%', ' %')
     files[fl][ra] = nconf
 
-    ra, rb = find_block(files[fl], 'hfstyle', True)
+    ra, _ = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style1').replace('16 estilos', '17 estilos')
     files[fl][ra] = nconf + '\\def\\titleauthorspacing {0.35}     % Distancia entre autores [cm]\n' \
+                            '\\def\\titleauthormarginbottom {0.3} % Margen inferior autores [cm]\n' \
                             '\\def\\titleauthormaxwidth {0.85}    % Tamaño máximo datos autores [linewidth]\n' \
                             '\\def\\titlebold {true}              % Título en negrita\n' \
                             '\\def\\titlestyle {style1}           % Estilo título (5 estilos)\n'
+    ra, _ = find_block(files[fl], '% CONFIGURACIONES DE OBJETOS', True)
+    files[fl][ra] += '\\def\\abstractmarginbottom {0.5}    % Margen inferior abstract [cm]\n' \
+                     '\\def\\abstractmargintop {0}         % Margen superior abstract [cm]\n'
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
@@ -1506,7 +1510,7 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
             'pdfauthor={\\pdfmetainfoauthor},', 'Course.Code', 'Course.Name', 'Document.Author',
             'Document.Subject', 'University.Department', 'University.Faculty', 'University.Name']
     for cdel in cdel:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
 
     ra, _ = find_block(files[fl], '% Operaciones especiales Template-Reporte')
@@ -1559,6 +1563,12 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     nl.pop()
     files[fl] = replace_block_from_list(files[fl], [], ra, rb)
     files[fl] = find_delete_block(files[fl], '% Actualiza headers', white_end_block=True, jadd=-1)
+
+    # -------------------------------------------------------------------------
+    # CAMBIA ENVIRONMENTS
+    # -------------------------------------------------------------------------
+    fl = 'src/env/environments.tex'
+    files[fl] = find_delete_block(files[fl], '% Crea una sección de resumen', white_end_block=True)
 
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
@@ -1687,88 +1697,88 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
     # Configuraciones que se borran
     cdel = []
     for cdel in cdel:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
 
-    ra, rb = find_block(files[fl], 'documentfontsize', True)
+    ra, _ = find_block(files[fl], 'documentfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '23')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'fontdocument', True)
+    ra, _ = find_block(files[fl], 'fontdocument', True)
     nconf = replace_argument(files[fl][ra], 1, 'ralewaylight').replace('     %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captioncolor', True)
+    ra, _ = find_block(files[fl], 'captioncolor', True)
     nconf = replace_argument(files[fl][ra], 1, 'mitred').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captiontbmarginfigure', True)
+    ra, _ = find_block(files[fl], 'captiontbmarginfigure', True)
     nconf = replace_argument(files[fl][ra], 1, '20').replace('%', '  %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captiontextbold', True)
+    ra, _ = find_block(files[fl], 'captiontextbold', True)
     nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'bibtexstyle', True)
+    ra, _ = find_block(files[fl], 'bibtexstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'ieeetr').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'tablenotesfontsize', True)
+    ra, _ = find_block(files[fl], 'tablenotesfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\scriptsize').replace('  %', '%').replace(' {', '{')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captionfontsize', True)
+    ra, _ = find_block(files[fl], 'captionfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, 'small').replace('%', '       %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\\captionmarginimagesmc', True)
+    ra, _ = find_block(files[fl], '\\captionmarginimagesmc', True)
     nconf = replace_argument(files[fl][ra], 1, '0').replace('%', '    %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\\captionmarginimages', True)
+    ra, _ = find_block(files[fl], '\\captionmarginimages', True)
     nconf = replace_argument(files[fl][ra], 1, '0').replace('%', '    %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'bibtexrefsep', True)
+    ra, _ = find_block(files[fl], 'bibtexrefsep', True)
     nconf = replace_argument(files[fl][ra], 1, '0')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sourcecodefonts', True)
+    ra, _ = find_block(files[fl], 'sourcecodefonts', True)
     nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace('{', ' {').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sourcecodeilfonts', True)
+    ra, _ = find_block(files[fl], 'sourcecodeilfonts', True)
     nconf = replace_argument(files[fl][ra], 1, '\\normalsize').replace(' {', '{').replace('    %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sourcecodenumbersep', True)
+    ra, _ = find_block(files[fl], 'sourcecodenumbersep', True)
     nconf = replace_argument(files[fl][ra], 1, '12').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sourcecodenumbersize', True)
+    ra, _ = find_block(files[fl], 'sourcecodenumbersize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\scriptsize').replace(' %', '%').replace(' {', '{')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sourcecodeskipbelow', True)
+    ra, _ = find_block(files[fl], 'sourcecodeskipbelow', True)
     nconf = replace_argument(files[fl][ra], 1, '0.5').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captiontextsubnumbold', True)
+    ra, _ = find_block(files[fl], 'captiontextsubnumbold', True)
     nconf = replace_argument(files[fl][ra], 1, 'false').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmargini {', True)
+    ra, _ = find_block(files[fl], 'sitemsmargini {', True)
     nconf = replace_argument(files[fl][ra], 1, '85').replace('%', '  %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'itemizeitemcolor', True)
+    ra, _ = find_block(files[fl], 'itemizeitemcolor', True)
     nconf = replace_argument(files[fl][ra], 1, 'mitred').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'enumerateitemcolor', True)
+    ra, _ = find_block(files[fl], 'enumerateitemcolor', True)
     nconf = replace_argument(files[fl][ra], 1, 'mitred').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\sitemizei {', True)
+    ra, _ = find_block(files[fl], '\sitemizei {', True)
     nconf = replace_argument(files[fl][ra], 1, '\iitembsquare').replace('  %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\sitemizeii {', True)
+    ra, _ = find_block(files[fl], '\sitemizeii {', True)
     nconf = replace_argument(files[fl][ra], 1, '\iitembcirc').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\sitemizeiii {', True)
+    ra, _ = find_block(files[fl], '\sitemizeiii {', True)
     nconf = replace_argument(files[fl][ra], 1, '\iitemdash')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], '\sitemizeiv {', True)
+    ra, _ = find_block(files[fl], '\sitemizeiv {', True)
     nconf = replace_argument(files[fl][ra], 1, '\iitemcirc').replace('%', '   %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmarginii {', True)
+    ra, _ = find_block(files[fl], 'sitemsmarginii {', True)
     nconf = replace_argument(files[fl][ra], 1, '50.6')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmarginiii {', True)
+    ra, _ = find_block(files[fl], 'sitemsmarginiii {', True)
     nconf = replace_argument(files[fl][ra], 1, '43').replace('%', '  %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'marginimagemultright', True)
+    ra, _ = find_block(files[fl], 'marginimagemultright', True)
     nconf = replace_argument(files[fl][ra], 1, '1.25')
     files[fl][ra] = nconf
 
@@ -1988,32 +1998,32 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'ssssectioncolor', 'backrefpagecite', 'indentfirstpar'
             ]
     for cdel in cdel:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DEL ÍNDICE', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% MÁRGENES DE PÁGINA', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% CONFIGURACIÓN DE LOS TÍTULOS', white_end_block=True)
     for cdel in ['captionmarginimagesmc', 'captionmarginimages']:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('    %', '%')
     for cdel in ['namemathcol', 'namemathdefn', 'namemathej',
                  'namemathlem', 'namemathobs', 'namemathprp', 'namemaththeorem',
                  'namereferences', 'nameltappendixsection', 'nameltwfigure',
                  'nameltwsrc', 'nameltwtable']:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')
     for cdel in ['cfgpdfpageview', 'bibtexstyle', 'marginimagemultright']:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace(' %', '%')
     for cdel in ['captiontextbold', 'captiontextsubnumbold', 'cfgpdffitwindow']:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('%', ' %')
     for cdel in []:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('%', '  %')
     for cdel in ['documentinterline']:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('%', '    %')
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
     files[fl] = add_block_from_list(files[fl], [files[fl][ra],
@@ -2024,76 +2034,76 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     for i in file_to_list(cfgfile):
         files[fl].append(i)
 
-    ra, rb = find_block(files[fl], 'cfgpdfpageview', True)
+    ra, _ = find_block(files[fl], 'cfgpdfpageview', True)
     nconf = replace_argument(files[fl][ra], 1, 'FitBV')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'documentfontsize', True)
+    ra, _ = find_block(files[fl], 'documentfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '10')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'bibtexstyle', True)
+    ra, _ = find_block(files[fl], 'bibtexstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'apalike')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sourcecodenumbersep', True)
+    ra, _ = find_block(files[fl], 'sourcecodenumbersep', True)
     nconf = replace_argument(files[fl][ra], 1, '4')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'marginimagemulttop', True)
+    ra, _ = find_block(files[fl], 'marginimagemulttop', True)
     nconf = replace_argument(files[fl][ra], 1, '0').replace('%', '   %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sourcecodeskipbelow', True)
+    ra, _ = find_block(files[fl], 'sourcecodeskipbelow', True)
     nconf = replace_argument(files[fl][ra], 1, '1.15')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sourcecodebgmarginleft', True)
+    ra, _ = find_block(files[fl], 'sourcecodebgmarginleft', True)
     nconf = replace_argument(files[fl][ra], 1, '-1').replace(' %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'documentparindent', True)
+    ra, _ = find_block(files[fl], 'documentparindent', True)
     nconf = replace_argument(files[fl][ra], 1, '0').replace('%', ' %')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captionlrmarginmc', True)
+    ra, _ = find_block(files[fl], 'captionlrmarginmc', True)
     nconf = replace_argument(files[fl][ra], 1, '0')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captionlrmargin', True)
+    ra, _ = find_block(files[fl], 'captionlrmargin', True)
     nconf = replace_argument(files[fl][ra], 1, '0')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'documentinterline', True)
+    ra, _ = find_block(files[fl], 'documentinterline', True)
     nconf = replace_argument(files[fl][ra], 1, '1')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captiontextbold', True)
+    ra, _ = find_block(files[fl], 'captiontextbold', True)
     nconf = replace_argument(files[fl][ra], 1, 'true')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captiontextsubnumbold', True)
+    ra, _ = find_block(files[fl], 'captiontextsubnumbold', True)
     nconf = replace_argument(files[fl][ra], 1, 'true')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'cfgpdffitwindow', True)
+    ra, _ = find_block(files[fl], 'cfgpdffitwindow', True)
     nconf = replace_argument(files[fl][ra], 1, 'true')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'marginimagebottom', True)
+    ra, _ = find_block(files[fl], 'marginimagebottom', True)
     nconf = replace_argument(files[fl][ra], 1, '-0.50')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'marginimagemultright', True)
+    ra, _ = find_block(files[fl], 'marginimagemultright', True)
     nconf = replace_argument(files[fl][ra], 1, '0.35')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captionmarginimagesmc', True)
+    ra, _ = find_block(files[fl], 'captionmarginimagesmc', True)
     nconf = replace_argument(files[fl][ra], 1, '-0.04')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'captionmarginimages', True)
+    ra, _ = find_block(files[fl], 'captionmarginimages', True)
     nconf = replace_argument(files[fl][ra], 1, '-0.04')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sourcecodefonts', True)
+    ra, _ = find_block(files[fl], 'sourcecodefonts', True)
     nconf = replace_argument(files[fl][ra], 1, '\\footnotesize').replace(' {', '{').replace('      %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'stylecitereferences', True)
+    ra, _ = find_block(files[fl], 'stylecitereferences', True)
     nconf = replace_argument(files[fl][ra], 1, 'bibtex')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmargini {', True)
+    ra, _ = find_block(files[fl], 'sitemsmargini {', True)
     nconf = replace_argument(files[fl][ra], 1, '21.9').replace('  %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmarginii {', True)
+    ra, _ = find_block(files[fl], 'sitemsmarginii {', True)
     nconf = replace_argument(files[fl][ra], 1, '21.9').replace('  %', '%')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmarginiii {', True)
+    ra, _ = find_block(files[fl], 'sitemsmarginiii {', True)
     nconf = replace_argument(files[fl][ra], 1, '21.9')
     files[fl][ra] = nconf
-    ra, rb = find_block(files[fl], 'sitemsmarginiv {', True)
+    ra, _ = find_block(files[fl], 'sitemsmarginiv {', True)
     nconf = replace_argument(files[fl][ra], 1, '0').replace('%', ' %')
     files[fl][ra] = nconf
 
@@ -2133,7 +2143,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     idel = ['xcolor', 'hyperref', 'sectsty', 'tocloft', 'notoccite', 'titlesec',
             'graphicx']
     for idel in idel:
-        ra, rb = find_block(files[fl], idel, True)
+        ra, _ = find_block(files[fl], idel, True)
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Dimensiones y geometría del documento', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Cambia el estilo de los títulos', white_end_block=True)
@@ -2586,10 +2596,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
             'indexnewpaget', 'showindexofcontents', 'indexsectionfontsize', 'indexsectionstyle', 'indexnewpagee',
             'hfpdashcharstyle', 'portraittitlecolor']
     for cdel in cdel:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
     for cdel in []:
-        ra, rb = find_block(files[fl], cdel, True)
+        ra, _ = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('   %', '%')  # Reemplaza espacio en comentarios de la lista
     ra, _ = find_block(files[fl], '% ESTILO PORTADA Y HEADER-FOOTER', True)
     files[fl][ra] = '% ESTILO HEADER-FOOTER\n'
@@ -2612,7 +2622,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     fl = 'src/env/imports.tex'
     idel = ['ragged2e']
     for idel in idel:
-        ra, rb = find_block(files[fl], idel, True)
+        ra, _ = find_block(files[fl], idel, True)
         files[fl].pop(ra)
     files[fl].pop()
     a, _ = find_block(files[fl], '\\usepackage{apacite}', True)
