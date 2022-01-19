@@ -2614,7 +2614,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl] = search_append_line(files[fl], '% ESTILO HEADER-FOOTER',
                                    '\\def\\chapterstyle {style1}         % Estilo de los capítulos (12 estilos)\n')
     files[fl] = search_append_line(files[fl], '\\senumertiv',
-                                   '\\def\\showabstracttable {false}     % Muestra tabla superior derecha de resumen\n')
+                                   '\\def\\showabstracttable {true}      % Muestra tabla superior derecha de resumen\n')
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
