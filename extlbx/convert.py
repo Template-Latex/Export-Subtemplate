@@ -6,7 +6,7 @@ Autor: Pablo Pizarro R. @ ppizarror.com
 Licencia:
     The MIT License (MIT)
 
-    Copyright 2017-2021 Pablo Pizarro R.
+    Copyright 2017 Pablo Pizarro R.
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -221,7 +221,7 @@ def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroo
             printfun(MSG_FOKTIMER.format(tmean))
 
             # Cuenta el número de líneas
-            f = open('template.tex', 'r')
+            f = open('template.tex', 'r', encoding='utf8')
             for _ in f:
                 lc += 1
             f.close()
@@ -252,7 +252,7 @@ def copy_assemble_template(files, distfolder, headersize, configfile, mainfile, 
     :return: None
     """
     for f in files.keys():
-        fl = open(distfolder + f, 'w')
+        fl = open(distfolder + f, 'w', encoding='utf8')
 
         # Se escribe el header
         if '.tex' in f:
@@ -423,7 +423,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
         data = files[f]
         # noinspection PyBroadException
         try:
-            fl = open(f)
+            fl = open(f, encoding='utf8')
             for line in fl:
                 data.append(line)
             fl.close()
@@ -2336,8 +2336,16 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
                                   white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Parcha sub-sub-subsecciones',
                                   white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Insertar un capítulo sin número',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Configura textos a añadir antes de secciones',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Configura que entornos pueden funcionar',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Parcha el formato de capítulos',
+                                  white_end_block=True)
 
-    ra, _ = find_block(files[fl], '% Parcha el formato de capítulos')
+    ra, _ = find_block(files[fl], '% Parcha el formato de secciones al pasar desde una anum')
     files[fl].pop(ra - 1)
 
     find_remove_recursive_line(files[fl], '\coreintializetitlenumbering')
@@ -2752,10 +2760,13 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     _, rb = find_block(files[fl], '% Crea una sección de dedicatoria', True)
     nl = find_extract(env_tesis, '% Crea una sección de agradecimientos', True)
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
+    _, rb = find_block(files[fl], '\\newenvironment{appendixd}{%', True)
+    nl = find_extract(env_tesis, '% Entorno simple de apéndices', True)
+    files[fl] = add_block_from_list(files[fl], nl, rb, True)
 
     # Agrega saltos de línea
     for w in ['% Llama al entorno de resumen', '% Crea una sección de dedicatoria',
-              '% Crea una sección de agradecimientos']:
+              '% Crea una sección de agradecimientos', '% Entorno simple de apéndices']:
         ra, _ = find_block(files[fl], w, True)
         files[fl][ra] = '\n' + files[fl][ra]
 
@@ -2786,6 +2797,14 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl] = find_delete_block(files[fl], '% Imagen de prueba tikz', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Para la compatibilidad con template-tesis se define el capítulo',
                                   white_end_block=True)
+
+    # -------------------------------------------------------------------------
+    # TITLE
+    # -------------------------------------------------------------------------
+    fl = 'src/cmd/title.tex'
+    ra, _ = find_block(files[fl], 'GLOBALtitlechapterenabled', True)
+    nconf = replace_argument(files[fl][ra], 1, 'true')
+    files[fl][ra] = nconf
 
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
@@ -2890,7 +2909,7 @@ def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, doc
         data = files[f]
         # noinspection PyBroadException
         try:
-            fl = open(f)
+            fl = open(f, encoding='utf8')
             for line in fl:
                 data.append(line)
             fl.close()
@@ -2911,7 +2930,7 @@ def export_cv(version, versiondev, versionhash, printfun=print, dosave=True, doc
 
         # Se reescribe el archivo
         if dosave:
-            newfl = open(f, 'w')
+            newfl = open(f, 'w', encoding='utf8')
             for j in data:
                 newfl.write(j)
             newfl.close()
