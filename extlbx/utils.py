@@ -249,7 +249,7 @@ def file_to_list(filename):
     :return: Lista
     :rtype: list[str]
     """
-    return open(filename).readlines()
+    return open(filename, encoding='utf8').readlines()
 
 
 def is_windows():
@@ -394,7 +394,7 @@ def save_list_to_file(lst, filename):
     :param filename: Archivo
     :type filename: str
     """
-    o = open(filename, 'w')
+    o = open(filename, 'w', encoding='utf8')
     for j in lst:
         o.write(j)
     o.close()

@@ -84,12 +84,12 @@ def add_stat(statfile, version, time, date, lc, vh, test=False):
     # Se carga el archivo y se encuentra la última entrada
     dataarr = []
     try:
-        data = open(statfile)
+        data = open(statfile, encoding='utf8')
         for i in data:
             dataarr.append(i)
         lastentrypos = len(dataarr) - 1
     except:
-        data = open(statfile, 'w')
+        data = open(statfile, 'w', encoding='utf8')
         lastentrypos = -1
     if lastentrypos >= 0:
         lastentry = split_str(dataarr[lastentrypos].strip(), ' ')
@@ -122,7 +122,7 @@ def add_stat(statfile, version, time, date, lc, vh, test=False):
 
     # Se guarda el nuevo archivo
     if not test:
-        data = open(statfile, 'w')
+        data = open(statfile, 'w', encoding='utf8')
         for i in dataarr:
             data.write(i)
         data.close()
@@ -140,7 +140,7 @@ def plot_stats(statfile, statplotctime, statplotlcode):
     import matplotlib.pyplot as plt
     from matplotlib.ticker import MaxNLocator
 
-    data = open(statfile)
+    data = open(statfile, encoding='utf8')
     numcomp = []
     timecomp = []
     lcode = []

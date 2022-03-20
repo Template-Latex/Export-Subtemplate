@@ -50,7 +50,7 @@ def get_last_ver(statfile):
     :return:
     """
     try:
-        data = open(statfile)
+        data = open(statfile, encoding='utf8')
         datal = []
         for d in data:
             datal.append(d.strip())

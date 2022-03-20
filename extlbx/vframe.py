@@ -51,11 +51,12 @@ class VerticalScrolledFrame(Frame):
         canvas.yview_moveto(0)
         self.interior = interior = Frame(canvas)
         interior_id = canvas.create_window(0, 0, window=interior, anchor=NW)
-        self.canv = canvas  # @UndefinedVariable
+        self.canv = canvas
         self.scroller = vscrollbar
 
         def _configure_interior(event):
             size = (interior.winfo_reqwidth(), interior.winfo_reqheight())
+            # noinspection PyTypeChecker
             canvas.config(scrollregion="0 0 %s %s" % size)
             if interior.winfo_reqwidth() != canvas.winfo_width():
                 canvas.config(width=interior.winfo_reqwidth())

@@ -343,7 +343,7 @@ class CreateVersion(object):
         self._sounds = Sound()
 
         # Se obtienen configuraciones
-        with open(EXTLBX_CONFIGS) as json_data:
+        with open(EXTLBX_CONFIGS, encoding='utf8') as json_data:
             d = json.load(json_data)
             self._configs = d
         self._lascpdf = True
@@ -365,7 +365,7 @@ class CreateVersion(object):
         if is_osx():
             self._root.iconbitmap(EXTLBX_ICON_MAC)
             img = tk.Image('photo', file=EXTLBX_ICON_MAC)
-            # noinspection PyProtectedMember
+            # noinspection PyProtectedMember,PyUnresolvedReferences
             self._root.tk.call('wm', 'iconphoto', self._root._w, img)
         else:
             self._root.iconbitmap(EXTLBX_ICON)
@@ -474,7 +474,7 @@ class CreateVersion(object):
 
         :return:
         """
-        with open(EXTLBX_UPLOAD) as json_data:
+        with open(EXTLBX_UPLOAD, encoding='utf8') as json_data:
             self._uploaded = json.load(json_data)
 
         for j in RELEASES.keys():
@@ -589,13 +589,13 @@ class CreateVersion(object):
         """
         try:
             d = time.strftime('%d/%m/%Y %H:%M:%S')
-            with open(LOG_FILE, 'a') as logfile:
+            with open(LOG_FILE, 'a', encoding='utf8') as logfile:
                 if isinstance(text, list):
                     logfile.write('{1} [{0}] {2}\n'.format(d, mode, LOG_MSG[msg].format(*text)))
                 else:
                     logfile.write('{1} [{0}] {2}\n'.format(d, mode, LOG_MSG[msg].format(text)))
         except:
-            dt = open(LOG_FILE, 'w')
+            dt = open(LOG_FILE, 'w', encoding='utf8')
             dt.close()
 
     def _saveupload(self):
@@ -604,7 +604,7 @@ class CreateVersion(object):
 
         :return:
         """
-        with open(EXTLBX_UPLOAD, 'w') as outfile:
+        with open(EXTLBX_UPLOAD, 'w', encoding='utf8') as outfile:
             json.dump(self._uploaded, outfile)
 
     def _start(self, *args):

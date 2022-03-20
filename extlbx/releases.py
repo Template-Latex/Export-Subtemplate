@@ -47,9 +47,9 @@ import os
 # Se carga json
 __actualpath = str(os.path.abspath(os.path.dirname(__file__))).replace('\\', '/') + '/'
 
-with open(__actualpath + 'releases.json', encoding='UTF-8') as json_data:
+with open(__actualpath + 'releases.json', encoding='utf8') as json_data:
     RELEASES = json.load(json_data)
-with open(__actualpath + 'deptos.json', encoding='UTF-8') as json_data:
+with open(__actualpath + 'deptos.json', encoding='utf8') as json_data:
     DEPTOS = json.load(json_data)['DEPTOS']
 
 # Constantes
