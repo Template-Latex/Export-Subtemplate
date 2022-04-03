@@ -2238,6 +2238,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
               '% Configura los bloques',
               '% Definición de entornos beamer',
               '% Reinicia número de subfiguras y subtablas',
+              '% Establece temas custom',
               '% Configura footnotes']:
         nl = find_extract(init_presentacion, i, white_end_block=True)
         nl.insert(0, '% -----------------------------------------------------------------------------\n')
@@ -2563,7 +2564,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('{', ' {')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'showappendixsecindex', True)
-    nconf = replace_argument(files[fl][ra], 1, 'false')
+    nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'formatnumapchapter', True)
     nconf = replace_argument(files[fl][ra], 1, '\\Alph').replace('%', '  %')
@@ -2622,7 +2623,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files[fl] = search_append_line(files[fl], '% ESTILO HEADER-FOOTER',
                                    '\\def\\chapterstyle {style1}         % Estilo de los capítulos (12 estilos)\n')
     files[fl] = search_append_line(files[fl], '\\senumertiv',
-                                   '\\def\\showabstracttable {true}      % Muestra tabla superior derecha de resumen\n')
+                                   '\\def\\showabstracttable {false}     % Muestra tabla superior derecha de resumen\n')
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
