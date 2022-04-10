@@ -1805,7 +1805,7 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
         ra, _ = find_block(files[fl], i)
         files[fl].pop(ra)
     for i in ['% Cambios generales en presentación', '% Se revisa si las variables no han sido borradas',
-              '% Se añade \\xspace a las variables', '% Corrige espaciamiento de itemize']:
+              '% Se añade \\xspace a las variables', '% Corrige espaciamiento de itemize', '% Establece temas custom']:
         files[fl] = find_delete_block(files[fl], i, iadd=-1, white_end_block=True)
     ra, _ = find_block(files[fl], '% Se activan números en menú marcadores del pdf')
     files[fl].pop(ra + 1)
