@@ -1445,6 +1445,9 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     ra, _ = find_block(files[fl], 'captionlrmarginmc', True)
     nconf = replace_argument(files[fl][ra], 1, '0.5').replace('  %', '%')
     files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'marginlinenumbers', True)
+    nconf = replace_argument(files[fl][ra], 1, '6').replace('%', '  %')
+    files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'tablenotesfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\footnotesize').replace('  %', '%').replace(' {', '{')
     files[fl][ra] = nconf
@@ -1986,7 +1989,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'nameltfigure', 'nameltsrc', 'namelttable', 'nameltcont', 'namelteqn',
             'firstpagemargintop', 'nameportraitpage', 'indextitlecolor', 'portraittitlecolor',
             'pdfcompileversion', 'bibtexenvrefsecnum', 'twopagesclearformat',
-            'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers',
+            'bibtexindexbibliography', 'bibtextextalign', 'showlinenumbers', 'linenumbercolor',
             'namepageof', 'nameappendixsection', 'apacitebothers', 'apaciterefnumber',
             'apaciterefsep', 'apaciterefcitecharclose', 'apaciterefcitecharopen',
             'apaciteshowurl', 'apacitestyle', 'appendixindepobjnum',
@@ -1995,7 +1998,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'natbibrefcitecharclose', 'natbibrefcitecharopen', 'natbibrefcitecompress',
             'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle',
             'paragcolor', 'paragsubcolor', 'sectioncolor', 'ssectioncolor', 'sssectioncolor',
-            'ssssectioncolor', 'backrefpagecite', 'indentfirstpar'
+            'ssssectioncolor', 'backrefpagecite', 'indentfirstpar', 'marginlinenumbers'
             ]
     for cdel in cdel:
         ra, _ = find_block(files[fl], cdel, True)
@@ -2153,8 +2156,11 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
           files[fl][ra]]
     files[fl] = replace_block_from_list(files[fl], nl, ra, ra)
 
+    # Agrega variables borradas
     ra, _ = find_block(files[fl], '% Muestra los números de línea')
-    nl = ['}\n\\def\\showlinenumbers {true}\n',
+    nl = ['}\n\\def\\showlinenumbers {true}\n'
+          '\def\marginlinenumbers {7.5}\n'
+          '\def\linenumbercolor {gray}\n',
           '\\ifthenelse{\\equal{\\showlinenumbers}{true}}{ % Muestra los números de línea\n']
     files[fl] = replace_block_from_list(files[fl], nl, ra - 1, ra - 1)
 
@@ -2344,6 +2350,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Configura que entornos pueden funcionar',
                                   white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Parcha el formato de capítulos',
+                                  white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Chequea si los capítulos están activados',
                                   white_end_block=True)
 
     ra, _ = find_block(files[fl], '% Parcha el formato de secciones al pasar desde una anum')
@@ -2751,7 +2759,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     # Reemplaza bloques
     w = '% Crea una sección de referencias solo para bibtex'
     nl = find_extract(env_tesis, w, True)
-    files[fl] = find_replace_block(files[fl], w, nl, True)
+    files[fl] = find_replace_block(files[fl], w, nl, True, jadd=-1)
     w = '% Crea una sección de resumen'
     nl = find_extract(env_tesis, w, True)
     files[fl] = find_replace_block(files[fl], w, nl, True, jadd=-1)
@@ -2764,10 +2772,14 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     _, rb = find_block(files[fl], '\\newenvironment{appendixd}{%', True)
     nl = find_extract(env_tesis, '% Entorno simple de apéndices', True)
     files[fl] = add_block_from_list(files[fl], nl, rb, True)
+    _, rb = find_block(files[fl], '% Entorno simple de apéndices', True)
+    nl = find_extract(env_tesis, '% Entorno capítulos apéndices con título', True)
+    files[fl] = add_block_from_list(files[fl], nl, rb, True)
 
     # Agrega saltos de línea
     for w in ['% Llama al entorno de resumen', '% Crea una sección de dedicatoria',
-              '% Crea una sección de agradecimientos', '% Entorno simple de apéndices']:
+              '% Crea una sección de agradecimientos', '% Entorno simple de apéndices',
+              '% Entorno capítulos apéndices con título']:
         ra, _ = find_block(files[fl], w, True)
         files[fl][ra] = '\n' + files[fl][ra]
 
@@ -2790,6 +2802,10 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     fl = 'src/cfg/final.tex'
     ra, _ = find_block(files[fl], '\global\def\GLOBALtitlerequirechapter {false}')
     files[fl][ra] = files[fl][ra].replace('{false}', '{true}')
+
+    # Borra desactivación de capítulos
+    files[fl] = find_delete_block(files[fl], '% Configura capítulos', white_end_block=True,
+                                  iadd=-1)
 
     # -------------------------------------------------------------------------
     # CORE FUN
