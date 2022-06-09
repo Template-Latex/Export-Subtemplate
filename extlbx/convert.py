@@ -2803,10 +2803,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     ra, _ = find_block(files[fl], '\global\def\GLOBALtitlerequirechapter {false}')
     files[fl][ra] = files[fl][ra].replace('{false}', '{true}')
 
-    # Borra desactivación de capítulos
-    files[fl] = find_delete_block(files[fl], '% Configura capítulos', white_end_block=True,
-                                  iadd=-1)
-
     # -------------------------------------------------------------------------
     # CORE FUN
     # -------------------------------------------------------------------------
