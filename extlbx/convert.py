@@ -1402,7 +1402,9 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     # Configuraciones que se borran
     cdel = ['hfpdashcharstyle', 'titlefontsize', 'titlefontstyle', 'titlelinemargin',
             'titleshowauthor', 'titleshowcourse', 'titleshowdate', 'titlesupmargin',
-            'hfwidthcourse', 'hfwidthtitle', 'hfwidthwrap', 'disablehfrightmark']
+            'hfwidthcourse', 'hfwidthtitle', 'hfwidthwrap', 'disablehfrightmark',
+            'marginequationbottom', 'marginequationtop', 'margingatherbottom',
+            'margingathertop']
     for cdel in cdel:
         ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -1443,7 +1445,16 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'captionlrmarginmc', True)
-    nconf = replace_argument(files[fl][ra], 1, '0.5').replace('  %', '%')
+    nconf = replace_argument(files[fl][ra], 1, '0')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'captionlrmargin', True)
+    nconf = replace_argument(files[fl][ra], 1, '0')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'marginimagebottom', True)
+    nconf = replace_argument(files[fl][ra], 1, '-0.2').replace('%', ' %')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'margingathercapttop', True)
+    nconf = replace_argument(files[fl][ra], 1, '-0.7')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'marginlinenumbers', True)
     nconf = replace_argument(files[fl][ra], 1, '6').replace('%', '  %')
@@ -1492,6 +1503,19 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     ra, _ = find_block(files[fl], '% CONFIGURACIONES DE OBJETOS', True)
     files[fl][ra] += '\\def\\abstractmarginbottom {0.5}    % Margen inferior abstract [cm]\n' \
                      '\\def\\abstractmargintop {0}         % Margen superior abstract [cm]\n'
+
+    # -------------------------------------------------------------------------
+    # CAMBIA IMPORTS
+    # -------------------------------------------------------------------------
+    fl = 'src/env/imports.tex'
+    ra, _ = find_block(files[fl], '% Muestra los números de línea')
+    nl = ['}\n'
+          '\def\marginequationbottom {0}\n'
+          '\def\marginequationtop {0}\n'
+          '\def\margingatherbottom {0}\n'
+          '\def\margingathertop {0}\n',
+          '\\ifthenelse{\\equal{\\showlinenumbers}{true}}{ % Muestra los números de línea\n']
+    files[fl] = replace_block_from_list(files[fl], nl, ra - 1, ra - 1)
 
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
@@ -2029,9 +2053,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
         ra, _ = find_block(files[fl], cdel, True)
         files[fl][ra] = files[fl][ra].replace('%', '    %')
     ra, _ = find_block(files[fl], 'cfgshowbookmarkmenu', True)
-    files[fl] = add_block_from_list(files[fl], [files[fl][ra],
-                                                '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
-                                    ra, addnewline=True)
+    files[fl] = add_block_from_list(
+        files[fl], [files[fl][ra], '\def\indexdepth {4}                % Profundidad de los marcadores\n'],
+        ra, addnewline=True)
 
     files[fl].pop()
     for i in file_to_list(cfgfile):
@@ -2158,7 +2182,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
 
     # Agrega variables borradas
     ra, _ = find_block(files[fl], '% Muestra los números de línea')
-    nl = ['}\n\\def\\showlinenumbers {true}\n'
+    nl = ['}\n'
+          '\def\\showlinenumbers {true}\n'
           '\def\marginlinenumbers {7.5}\n'
           '\def\linenumbercolor {gray}\n',
           '\\ifthenelse{\\equal{\\showlinenumbers}{true}}{ % Muestra los números de línea\n']
@@ -2288,8 +2313,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl].pop(ra - 2)
     ra, _ = find_block(files[fl], '% Se restablecen números de página y secciones')
     files[fl][ra + 1] = '\t% -------------------------------------------------------------------------\n'
-    files[fl] = find_delete_block(files[fl], '% Muestra los números de línea', white_end_block=True, jadd=1,
-                                  iadd=-1)
+    files[fl] = find_delete_block(files[fl], '% Muestra los números de línea', white_end_block=True, jadd=1, iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Agrega páginas dependiendo del formato', iadd=-1, jadd=1)
     files[fl] = find_delete_block(files[fl], '% Reestablece \cleardoublepage', iadd=-1,
                                   white_end_block=True)
