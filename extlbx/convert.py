@@ -725,6 +725,9 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
         ra, _ = find_block(files[fl], i)
         files[fl][ra] = '\n' + files[fl][ra]
 
+    # Elimina documentsubtitle
+    files[fl] = find_delete_block(files[fl], '\ifthenelse{\isundefined{\documentsubtitle}}{', True)
+
     # -------------------------------------------------------------------------
     # PAGECONF
     # -------------------------------------------------------------------------
@@ -1209,7 +1212,7 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     nl.insert(0, '% -----------------------------------------------------------------------------\n')
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
-    files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], '\ifthenelse{\isundefined{\\authortable}}{', True)
 
     cdel = ['\\author{\\pdfmetainfoauthor}', '\\title{\\pdfmetainfotitle}']
     for cdel in cdel:
@@ -2208,7 +2211,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
 
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Agrega compatibilidad de sub-sub-sub-secciones al TOC', True, iadd=-1)
-    files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-2, jadd=-1)
+    files[fl] = find_delete_block(files[fl], '\ifthenelse{\isundefined{\documentsubtitle}}{', True)
     files[fl] = find_delete_block(files[fl], 'Actualización margen títulos', True, iadd=-1)
     files[fl] = find_delete_block(files[fl], 'Se añade listings (código fuente) a tocloft', True, iadd=-2)
     files[fl] = find_delete_block(files[fl], '\pdfminorversion', white_end_block=True, iadd=-1)
@@ -2657,8 +2661,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
                                    '\\def\\chapterfontstyle {\\bfseries}  % Estilo fuente de los capítulos\n')
     files[fl] = search_append_line(files[fl], '% ESTILO HEADER-FOOTER',
                                    '\\def\\chapterstyle {style1}         % Estilo de los capítulos (12 estilos)\n')
-    files[fl] = search_append_line(files[fl], '\\senumertiv',
-                                   '\\def\\showabstracttable {false}     % Muestra tabla superior derecha de resumen\n')
 
     # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
@@ -2679,7 +2681,7 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     init_tesis = file_to_list('src/cfg/init_tesis.tex')
 
     files[fl] = find_delete_block(files[fl], 'Se revisa si se importa tikz', True, iadd=-1)
-    files[fl] = find_delete_block(files[fl], 'Se crean variables si se borraron', True, iadd=-1)
+    files[fl] = find_delete_block(files[fl], '\ifthenelse{\isundefined{\\authortable}}{', True)
     ra, _ = find_block(files[fl], '\checkvardefined{\coursecode}', True)
 
     # Añade bloque de variables definidas

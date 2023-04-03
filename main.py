@@ -267,7 +267,7 @@ class CreateVersion(object):
             else:
                 self._configs[paramname]['VALUE'] = paramvalue
             vl = [paramname, self._configs[paramname]['VALUE']]
-            self._print('SE ESTABLECIO <{0}> EN {1}'.format(*vl))
+            self._print('SE ESTABLECIÓ <{0}> EN {1}'.format(*vl))
             self._log('CONFIG', text=vl, mode='CFG')
 
         def _set_templatever(template_name, *args):
