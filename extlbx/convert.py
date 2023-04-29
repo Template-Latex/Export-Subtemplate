@@ -775,13 +775,17 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     nl = find_extract(aux_fun, '% Inicia código fuente sin parámetros', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
-    nl = find_extract(aux_fun, '% Inserta código fuente sin parámetros', True)
+    nl = find_extract(aux_fun, '% Inserta código fuente sin parámetros', True)  # No borrar...
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     nl = find_extract(aux_fun, '% Importa código fuente desde un archivo sin parámetros', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     nl = find_extract(aux_fun, '% Itemize en negrita', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     nl = find_extract(aux_fun, '% Enumerate en negrita', True)
+    files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+    nl = find_extract(aux_fun, '% Crea una sección de imágenes múltiples', True)
+    files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
+    nl = find_extract(aux_fun, '% Crea una sección de imágenes múltiples completa dentro de un multicol', True)
     files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE, addnewline=True)
     files[fl].pop()
 
