@@ -2143,6 +2143,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, _ = find_block(files[fl], 'sitemsmarginiv {', True)
     nconf = replace_argument(files[fl][ra], 1, '0').replace('%', ' %')
     files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'subcaptionfsize', True)
+    nconf = replace_argument(files[fl][ra], 1, 'scriptsize').replace('%', ' %').replace('{', ' {')
+    files[fl][ra] = nconf
 
     ra, _ = find_block(files[fl], 'stylecitereferences', True)
     files[fl][ra] = '\\def\\stylecitereferences {bibtex}  % Estilo cita/ref {bibtex,custom}\n'
@@ -2279,7 +2282,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
               '% Cambios generales en presentación',
               '% Configura los bloques',
               '% Definición de entornos beamer',
-              '% Reinicia número de subfiguras y subtablas',
               '% Establece temas custom',
               '% Configura footnotes']:
         nl = find_extract(init_presentacion, i, white_end_block=True)
