@@ -2167,6 +2167,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Crea una sección de resumen', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Crea una sección de referencias solo para bibtex', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Crea una sección de anexos', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Crea un entorno para insertar ecuaciones en el índice', white_end_block=True)
 
     # -------------------------------------------------------------------------
     # CAMBIA OTROS
