@@ -1190,6 +1190,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'hfwidthwrap', True)
     files[fl] = replace_block_from_list(files[fl], config_reporte, ra, ra)
+    ra, _ = find_block(files[fl], 'documentfontsize', True)
+    nconf = replace_argument(files[fl][ra], 1, '11')
+    files[fl][ra] = nconf
 
     ra, _ = find_block(files[fl], '% CONFIGURACIÓN DE LAS LEYENDAS - CAPTION', True)
     files[fl][ra] = '\n' + files[fl][ra]
