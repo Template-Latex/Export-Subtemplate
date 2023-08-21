@@ -221,7 +221,7 @@ def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroo
             printfun(MSG_FOKTIMER.format(tmean))
 
             # Cuenta el número de líneas
-            f = open('template.tex', 'r', encoding='utf8')
+            f = open('template.tex', encoding='utf8')
             for _ in f:
                 lc += 1
             f.close()
@@ -1264,17 +1264,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
                                   white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Insertar un título en un índice, sin número de página',
                                   white_end_block=True)
-    files[fl] = find_delete_block(files[fl], '% Insertar un sub-sub-subtítulo sin número y sin indexar',
-                                  white_end_block=True)
-    files[fl] = find_delete_block(files[fl], '% Insertar un sub-subtítulo sin número y sin indexar',
-                                  white_end_block=True)
-    files[fl] = find_delete_block(files[fl], '% Insertar un subtítulo sin número y sin indexar',
-                                  white_end_block=True)
-    files[fl] = find_delete_block(files[fl], '% Insertar un título sin número y sin indexar',
-                                  white_end_block=True)
-    files[fl] = find_delete_block(files[fl],
-                                  '% Insertar un título sin número, sin indexar y sin cambiar el título del header',
-                                  white_end_block=True)
 
     # -------------------------------------------------------------------------
     # CORE FUN
@@ -1501,6 +1490,9 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'sitemsmarginiv {', True)
     nconf = replace_argument(files[fl][ra], 1, '0').replace('%', ' %')
+    files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'footnoterulepage', True)
+    nconf = replace_argument(files[fl][ra], 1, 'true').replace('%', ' %')
     files[fl][ra] = nconf
 
     ra, _ = find_block(files[fl], 'hfstyle', True)
@@ -2032,7 +2024,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'natbibrefcitecharclose', 'natbibrefcitecharopen', 'natbibrefcitecompress',
             'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle',
             'paragcolor', 'paragsubcolor', 'sectioncolor', 'ssectioncolor', 'sssectioncolor',
-            'ssssectioncolor', 'backrefpagecite', 'indentfirstpar', 'marginlinenumbers'
+            'ssssectioncolor', 'backrefpagecite', 'indentfirstpar', 'marginlinenumbers',
+            'footnotetopmargin'
             ]
     for cdel in cdel:
         ra, _ = find_block(files[fl], cdel, True)
