@@ -38,6 +38,7 @@ from extlbx.sound import Sound
 from extlbx.resources import *
 from extlbx.utils import *
 
+import ctypes
 import tkinter as tk
 from tkinter import font
 from tkinter import messagebox
@@ -336,9 +337,14 @@ class CreateVersion(object):
                     self._log('CHANGED', text=[RELEASES[j]['NAME'], v])
                     return
 
+        if os.name == 'nt':
+            # noinspection PyBroadException
+            try:
+                ctypes.windll.shcore.SetProcessDpiAwareness(1)
+            except Exception:
+                ctypes.windll.user32.SetProcessDPIAware()
         self._root = tk.Tk()
         self._root.protocol('WM_DELETE_WINDOW', _kill)
-        self._root.tk.call('tk', 'scaling', 1.35)
 
         self._sounds = Sound()
 
@@ -377,7 +383,7 @@ class CreateVersion(object):
                  font.Font(family='Verdana', size=10),
                  font.Font(family='Verdana', size=7)]
 
-        f1 = tk.Frame(self._root, border=5)
+        f1 = tk.Frame(self._root, border=4)
         f1.pack(fill=tk.X)
         f2 = tk.Frame(self._root)
         f2.pack(fill=tk.BOTH)
@@ -394,7 +400,7 @@ class CreateVersion(object):
         self._release = tk.StringVar(self._root)
         self._release.set('Seleccione template')
         w = tk.OptionMenu(f1, self._release, *tuple(rels))
-        w['width'] = 17 if is_osx() else 24
+        w['width'] = 20
         w['relief'] = tk.GROOVE
         w['anchor'] = tk.W
         w['cursor'] = 'hand2'
@@ -402,11 +408,11 @@ class CreateVersion(object):
         self._release.trace('w', _update_ver)
 
         # Campo de texto para versión
-        tk.Label(f1, text='Nueva versión:').pack(side=tk.LEFT, padx=5)
+        tk.Label(f1, text='Nueva versión:').pack(side=tk.LEFT, padx=(30, 0))
         self._checkver = _checkver
         self._versionstr = tk.StringVar(self._root)
         self._versiontrace = self._versionstr.trace('w', self._checkver)
-        self._versiontxt = tk.Entry(f1, relief=tk.GROOVE, width=5 if is_osx() else 10,
+        self._versiontxt = tk.Entry(f1, relief=tk.GROOVE, width=8,
                                     font=fonts[5], textvariable=self._versionstr)
         self._versiontxt.configure(state='disabled')
         self._versiontxt.pack(side=tk.LEFT, padx=5, pady=2)
@@ -424,13 +430,13 @@ class CreateVersion(object):
                 ImageTk.PhotoImage(file=EXTLBX_BTN_UPLOAD),
                 ImageTk.PhotoImage(file=EXTLBX_BTN_UPLOAD_DISABLED)
             ]
-            self._uploadbutton = tk.Button(f1, image=self._upload_imgs[0], relief=tk.GROOVE, height=20, width=20,
+            self._uploadbutton = tk.Button(f1, image=self._upload_imgs[0], relief=tk.GROOVE, height=30, width=30,
                                            command=self._upload_github, border=0)
         else:
             self._uploadbutton = tk.Button(f1, relief=tk.GROOVE, height=20, width=20,
                                            command=self._upload_github, border=0)
             self._upload_imgs = None
-        self._uploadbutton.pack(side=tk.RIGHT, padx=2, anchor=tk.E)
+        self._uploadbutton.pack(side=tk.RIGHT, padx=0, anchor=tk.E)
         self._uploadstatebtn('off')
         self._checkuploaded()
 

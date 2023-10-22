@@ -26,8 +26,8 @@
   },
   "WINDOW_SIZE": {
     "EVENT": false,
-    "WIDTH": 480,
-    "HEIGHT": 180
+    "WIDTH": 540,
+    "HEIGHT": 220
   },
   "CLIPBOARD_FORMAT": {
     "EVENT": false,
