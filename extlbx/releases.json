@@ -148,7 +148,6 @@
       "src/page/portrait-config.tex": [],
       "src/page/portrait.tex": [],
       "src/style/code.tex": [],
-      "src/style/color.tex": [],
       "src/style/other.tex": [],
       "main.tex": [],
       "template.tex": []
@@ -296,12 +295,12 @@
       "cv.tex": [],
       "source_template.tex": [],
       "src/config.tex": [],
+      "src/defs.tex": [],
       "src/env.tex": [],
       "src/function.tex": [],
       "src/imports.tex": [],
       "src/initconf.tex": [],
-      "src/pageconf.tex": [],
-      "src/styles.tex": []
+      "src/pageconf.tex": []
     },
     "GIT": "../Professional-CV/",
     "ID": 4,

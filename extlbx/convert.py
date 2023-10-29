@@ -573,7 +573,6 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     files['src/etc/example.tex'] = file_to_list('src/etc/example_auxiliar.tex')
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
-    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['template.tex'] = file_to_list('template_auxiliar.tex')
     mainfile = release['MAINFILE']
@@ -906,7 +905,6 @@ def export_controles(version, versiondev, versionhash, printfun=print, dosave=Tr
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     files['src/etc/example.tex'] = file_to_list('src/etc/example_control.tex')
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
-    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['template.tex'] = file_to_list('template_control.tex')
     mainfile = release['MAINFILE']
@@ -1094,7 +1092,6 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     files['src/etc/example.tex'] = file_to_list('src/etc/example_reporte.tex')
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
-    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['template.tex'] = file_to_list('template_reporte.tex')
     mainfile = release['MAINFILE']
@@ -1368,7 +1365,6 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     files['src/etc/example.tex'] = file_to_list('src/etc/example_articulo.tex')
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
-    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['template.tex'] = file_to_list('template_articulo.tex')
     mainfile = release['MAINFILE']
@@ -1691,7 +1687,6 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     files['src/etc/example.tex'] = file_to_list('src/etc/example_poster.tex')
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
-    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['template.tex'] = file_to_list('template_poster.tex')
 
@@ -1977,7 +1972,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files['src/env/imports.tex'] = copy.copy(mainf['src/env/imports.tex'])
     files['src/etc/example.tex'] = file_to_list('src/etc/example_presentacion.tex')
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
-    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['template.tex'] = file_to_list('template_presentacion.tex')
     mainfile = release['MAINFILE']
@@ -2168,11 +2162,18 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Función personalizada \cleardoublepage', white_end_block=True)
 
     # -------------------------------------------------------------------------
+    # CAMBIA DEFS
+    # -------------------------------------------------------------------------
+    fl = 'src/defs.tex'
+    ra, _ = find_block(files[fl], 'xcolor', True)
+    for _ in range(3):
+        files[fl].pop(ra)
+
+    # -------------------------------------------------------------------------
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
     fl = 'src/env/imports.tex'
-    idel = ['xcolor', 'hyperref', 'sectsty', 'tocloft', 'notoccite', 'titlesec',
-            'graphicx']
+    idel = ['hyperref', 'sectsty', 'tocloft', 'notoccite', 'titlesec', 'graphicx']
     for idel in idel:
         ra, _ = find_block(files[fl], idel, True)
         files[fl].pop(ra)
@@ -2508,7 +2509,6 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
     files['src/page/index.tex'] = copy.copy(mainf['src/page/index.tex'])
     files['src/page/portrait.tex'] = file_to_list('src/page/portrait_tesis.tex')
     files['src/style/code.tex'] = copy.copy(mainf['src/style/code.tex'])
-    files['src/style/color.tex'] = copy.copy(mainf['src/style/color.tex'])
     files['src/style/other.tex'] = copy.copy(mainf['src/style/other.tex'])
     files['template.tex'] = file_to_list('template_tesis.tex')
     mainfile = release['MAINFILE']
