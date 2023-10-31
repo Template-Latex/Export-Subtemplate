@@ -73,7 +73,7 @@ def mk_version(version):
     Genera el tag de versión.
 
     :param version: Str de la versión
-    :return:
+    :return: Tupla de versión
     """
     if len(version) == 0:
         exit()
@@ -127,7 +127,7 @@ def validate_ver(newver, lastver):
 
     :param newver: Versión nueva
     :param lastver: Versión anterior
-    :return:
+    :return: True si valido
     """
 
     # noinspection PyUnusedLocal
