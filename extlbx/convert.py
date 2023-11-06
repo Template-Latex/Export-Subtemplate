@@ -2202,6 +2202,11 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     nl = ['% Referencias\n\\usepackage[pdfencoding=auto,psdextra]{hyperref}\n']
     files[fl] = replace_block_from_list(files[fl], nl, ra, rb - 3)
 
+    # Citas post carga de idioma
+    ra, _ = find_block(files[fl], '% Formato citas natbib')
+    rb, _ = find_block(files[fl], '% Formato citas custom')
+    files[fl] = replace_block_from_list(files[fl], [], ra, rb + 1)
+
     # -------------------------------------------------------------------------
     # CAMBIO INITCONF
     # -------------------------------------------------------------------------
