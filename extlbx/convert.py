@@ -2180,6 +2180,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Dimensiones y geometría del documento', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Cambia el estilo de los títulos', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Indentación del primer párrafo', white_end_block=True)
+    files[fl] = find_delete_block(files[fl], '% Referencias', white_end_block=True)
     ra, _ = find_block(files[fl], '\showappendixsecindex')
     nl = ['\\def\\showappendixsecindex {false}\n',
           files[fl][ra]]
@@ -2196,11 +2197,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
 
     files[fl].pop()
     files[fl].append('\\usefonttheme{professionalfonts}\n\\usepackage{transparent}\n')
-
-    ra, _ = find_block(files[fl], '% Referencias')
-    rb, _ = find_block(files[fl], '% Anexos/Apéndices')
-    nl = ['% Referencias\n\\usepackage[pdfencoding=auto,psdextra]{hyperref}\n']
-    files[fl] = replace_block_from_list(files[fl], nl, ra, rb - 3)
 
     # Citas post carga de idioma
     ra, _ = find_block(files[fl], '% Formato citas natbib')
