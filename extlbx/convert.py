@@ -267,7 +267,7 @@ def copy_assemble_template(files, distfolder, headersize, configfile, mainfile, 
 
         # Strip
         dostrip = False
-        if f == configfile or f == mainfile or f == examplefile or '-config' in f:
+        if f == configfile or f == mainfile or f == examplefile or '_config' in f:
             dostrip = False
 
         # Se escribe el documento
@@ -1490,7 +1490,8 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     ra, _ = find_block(files[fl], 'hfstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'style1').replace('16 estilos', '17 estilos')
     files[fl][ra] = nconf + '\\def\\titleauthorspacing {0.35}     % Distancia entre autores [cm]\n' \
-                            '\\def\\titleauthormarginbottom {0.3} % Margen inferior autores [cm]\n' \
+                            '\\def\\titleauthormarginbottom {0.2} % Margen inferior autores [cm]\n' \
+                            '\\def\\titleauthormargintop {0.6}    % Margen superior autores [cm]\n' \
                             '\\def\\titleauthormaxwidth {0.85}    % Tamaño máximo datos autores [linewidth]\n' \
                             '\\def\\titlebold {true}              % Título en negrita\n' \
                             '\\def\\titlestyle {style1}           % Estilo título (5 estilos)\n'
@@ -2012,7 +2013,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'natbibrefcitecharclose', 'natbibrefcitecharopen', 'natbibrefcitecompress',
             'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle',
             'paragcolor', 'paragsubcolor', 'sectioncolor', 'ssectioncolor', 'sssectioncolor',
-            'ssssectioncolor', 'backrefpagecite', 'indentfirstpar', 'marginlinenumbers',
+            'ssssectioncolor', 'backrefpagecite', 'marginlinenumbers',
             'footnotetopmargin'
             ]
     for cdel in cdel:
@@ -2180,7 +2181,6 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
         files[fl].pop(ra)
     files[fl] = find_delete_block(files[fl], '% Dimensiones y geometría del documento', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Cambia el estilo de los títulos', white_end_block=True)
-    files[fl] = find_delete_block(files[fl], '% Indentación del primer párrafo', white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Referencias', white_end_block=True)
     ra, _ = find_block(files[fl], '\showappendixsecindex')
     nl = ['\\def\\showappendixsecindex {false}\n',

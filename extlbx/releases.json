@@ -145,7 +145,7 @@
       "src/env/imports.tex": [],
       "src/etc/example.tex": [],
       "src/page/index.tex": [],
-      "src/page/portrait-config.tex": [],
+      "src/page/portrait_config.tex": [],
       "src/page/portrait.tex": [],
       "src/style/code.tex": [],
       "src/style/other.tex": [],
