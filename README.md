@@ -64,4 +64,4 @@ Formato de línea:
 
 ## Autor
 
-[Pablo Pizarro R.](https://ppizarror.com) | 2017 - 2023
+[Pablo Pizarro R.](https://ppizarror.com) | 2017 - 2024

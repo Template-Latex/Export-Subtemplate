@@ -32,7 +32,7 @@ __all__ = [
 ]
 
 __author__ = 'Pablo Pizarro R.'
-__version__ = '4.0.0'  # (14/09/2021)
+__version__ = '4.0.1'  # (17/04/2024)
 
 import sys
 
