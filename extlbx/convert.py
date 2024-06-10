@@ -60,17 +60,19 @@ STRIP_ALL_GENERATED_FILES = False  # Aplica strip a todos los archivos en dist/
 STRIP_TEMPLATE_FILE = False  # Elimina comentarios y aplica strip a archivo del template
 
 
-def find_extract(data, element, white_end_block=False):
+def find_extract(data, element, white_end_block=False, iadd=0, jadd=0):
     """
     Encuentra el bloque determinado por <element> y retorna el bloque.
 
     :param element: Elemento a buscar
     :param data: Lista.
     :param white_end_block: Indica si el bloque termina en espacio en blanco o con llave
+    :param iadd: Agrega líneas al inicio del bloque
+    :param jadd: Agrega líneas al término del bloque
     :return: Retorna la lista que contiene el elemento
     """
     ia, ja = find_block(data, element, white_end_block)
-    return extract_block_from_list(data, ia, ja)
+    return extract_block_from_list(data, ia + iadd, ja + jadd)
 
 
 def find_replace_block(data, block, newblock, white_end_block=False, iadd=0, jadd=0, verbose=False):
@@ -1724,7 +1726,7 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
     nconf = replace_argument(files[fl][ra], 1, '23')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'fontdocument', True)
-    nconf = replace_argument(files[fl][ra], 1, 'ralewaylight').replace('     %', '%')
+    nconf = replace_argument(files[fl][ra], 1, 'ralewaylight').replace('      %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'captioncolor', True)
     nconf = replace_argument(files[fl][ra], 1, 'mitred').replace(' %', '%')
@@ -1878,6 +1880,12 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
         number = '#' + i.split('[')[1].split(']')[0]
         files[fl][ra] += '\t\\vspace{-0.75\\baselineskip}%\n'
         files[fl][ra + 1] = files[fl][ra + 1].replace(number, number + '\\vspace{-1.1\\baselineskip}')
+
+    # -------------------------------------------------------------------------
+    # PAGECONF
+    # -------------------------------------------------------------------------
+    fl = 'src/cfg/page.tex'
+    files[fl] = find_delete_block(files[fl], '% Configura el tabularframe', white_end_block=True, iadd=-1)
 
     # Cambia encabezado archivos
     change_header_tex_files(files, release, headersize, headerversionpos, versionhead)
@@ -2131,6 +2139,9 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, _ = find_block(files[fl], 'subcaptionfsize', True)
     nconf = replace_argument(files[fl][ra], 1, 'scriptsize').replace('%', ' %').replace('{', ' {')
     files[fl][ra] = nconf
+    ra, _ = find_block(files[fl], 'fontdocument', True)
+    nconf = replace_argument(files[fl][ra], 1, 'roboto').replace('%', ' %')
+    files[fl][ra] = nconf
 
     ra, _ = find_block(files[fl], 'stylecitereferences', True)
     files[fl][ra] = '\\def\\stylecitereferences {bibtex}  % Estilo cita/ref {bibtex,custom}\n'
@@ -2303,8 +2314,13 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     files[fl] = find_delete_block(files[fl], '% Muestra los números de línea', white_end_block=True, iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Estilo citas', white_end_block=True, iadd=-1)
     files[fl] = find_delete_block(files[fl], '% Estilo de títulos', white_end_block=True, iadd=-1)
+    nl = find_extract(aux_pageconf, '% Configura el tabularframe', True, iadd=-1)
+    for _ in range(2):
+        files[fl].pop()
+    files[fl] = add_block_from_list(files[fl], nl, LIST_END_LINE)
     ra, _ = find_block(files[fl], '% Márgenes de páginas y tablas')
     files[fl][ra] = files[fl][ra].replace('páginas y ', '')
+    files[fl].append('}\n')
 
     # -------------------------------------------------------------------------
     # FINALCONF
