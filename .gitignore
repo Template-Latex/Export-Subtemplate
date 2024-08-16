@@ -13,6 +13,7 @@ __pycache__
 # Subreleases
 .old_releases.zip
 dist/*.zip
+extlbx/res/upload.json
 
 # Logs
 *.log
