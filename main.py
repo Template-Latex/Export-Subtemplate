@@ -430,6 +430,7 @@ class CreateVersion(object):
                 ImageTk.PhotoImage(file=EXTLBX_BTN_UPLOAD),
                 ImageTk.PhotoImage(file=EXTLBX_BTN_UPLOAD_DISABLED)
             ]
+            # noinspection PyTypeChecker
             self._uploadbutton = tk.Button(f1, image=self._upload_imgs[0], relief=tk.GROOVE, height=30, width=30,
                                            command=self._upload_github, border=0)
         else:
@@ -480,8 +481,11 @@ class CreateVersion(object):
 
         :return:
         """
-        with open(EXTLBX_UPLOAD, encoding='utf8') as json_data:
-            self._uploaded = json.load(json_data)
+        if os.path.isfile(EXTLBX_UPLOAD):
+            with open(EXTLBX_UPLOAD, encoding='utf8') as json_data:
+                self._uploaded = json.load(json_data)
+        else:
+            self._uploaded = {}
 
         for j in RELEASES.keys():
             if j not in self._uploaded:

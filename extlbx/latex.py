@@ -204,7 +204,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
         libdata = files[libr]  # Datos del import
     else:
         libdata = []
-        fld = open(libr, 'r', encoding='utf8')
+        fld = open(libr, encoding='utf8')
         if '.tex' in libr:
             for i in fld:
                 libdata.append(i)

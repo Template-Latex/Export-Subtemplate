@@ -128,6 +128,7 @@ def add_stat(statfile, version, time, date, lc, vh, test=False):
         data.close()
 
 
+# noinspection PyUnresolvedReferences
 def plot_stats(statfile, statplotctime, statplotlcode):
     """
     Grafica las estadísticas.
