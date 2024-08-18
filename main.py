@@ -44,7 +44,7 @@ from tkinter import font
 from tkinter import messagebox
 from extlbx.vframe import VerticalScrolledFrame
 
-from pyperclip import copy as extlbcbpaste
+from extlbx.pyperclip import copy as extlbcbpaste
 from functools import partial
 
 import json
