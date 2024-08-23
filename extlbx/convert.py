@@ -218,9 +218,16 @@ def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroo
         with Cd(subrlfolder):
             # print(subrlfolder, mainfile)
             t1 = call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL)
+            call(['bibtex', mainfile.replace('.tex', '')], stdout=FNULL)
             t2 = call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL)
             tmean = min(t1, t2)
             printfun(MSG_FOKTIMER.format(tmean))
+
+            # Actualización final para reparar el PDF
+            time.sleep(1)
+            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL)
+            time.sleep(1)
+            call(['pdflatex', '-interaction=nonstopmode', mainfile], stdout=FNULL)
 
             # Cuenta el número de líneas
             f = open('template.tex', encoding='utf8')
@@ -450,7 +457,10 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Se guardan archivos en DIST
     if dosave:
-        copy_assemble_template(files, distfolder, headersize, configfile, mainfile, examplefile)
+        files_dist = files.copy()
+        files_dist['library.bib'] = file_to_list('library.bib')
+        files_dist['natnumurl.bst'] = file_to_list('natnumurl.bst')
+        copy_assemble_template(files_dist, distfolder, headersize, configfile, mainfile, examplefile)
 
     printfun(MSG_FOKTIMER.format(time.time() - t))
 
