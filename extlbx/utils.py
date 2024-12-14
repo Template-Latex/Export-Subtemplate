@@ -316,7 +316,7 @@ def natural_keys(text):
     def atoi(t):
         return int(t) if t.isdigit() else t
 
-    return [atoi(c) for c in re.split('(\d+)', text)]
+    return [atoi(c) for c in re.split(r'(\d+)', text)]
 
 
 def sum_str_to_list_izq(s, lst):
@@ -382,7 +382,7 @@ def get_file_from_input(line):
     :type line: str
     :return: Archivo
     """
-    return line.strip().replace('\input{', '').replace('}', '').split(' ')[0] + '.tex'
+    return line.strip().replace('\\input{', '').replace('}', '').split(' ')[0] + '.tex'
 
 
 def save_list_to_file(lst, filename):

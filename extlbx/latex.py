@@ -263,7 +263,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
         if '% !FILE' in srclin:
 
             # Obtiene el archivo
-            file_libr = srclin.replace('\input{', '').replace('}', '').strip()
+            file_libr = srclin.replace('\\input{', '').replace('}', '').strip()
             file_libr = file_libr.split(' ')[0]
             if '.tex' not in file_libr:
                 file_libr += '.tex'
@@ -289,7 +289,7 @@ def paste_external_tex_into_file(fl, libr, files, headersize, libstrip, libdelco
 
         # Se borran los comentarios
         if deletecoments and libdelcom or forcedelcom:
-            if '%' in srclin and '\%' not in srclin and '}%' not in srclin and '{%' not in srclin:
+            if '%' in srclin and '\\%' not in srclin and '}%' not in srclin and '{%' not in srclin:
                 if libr == configfile:
                     if srclin.upper() == srclin:
                         if stconfig:
