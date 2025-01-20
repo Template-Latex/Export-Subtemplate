@@ -639,7 +639,8 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
             'portraittitlecolor', 'indexsectionfontsize', 'indexsectionstyle',
             'namechapter', 'namepageof', 'predocpageromannumber', 'showappendixsecindex',
             'predocresetpagenumber', 'margineqnindexbottom', 'margineqnindextop',
-            'bibtexindexbibliography', 'anumsecaddtocounter', 'predocpageromanupper']
+            'bibtexindexbibliography', 'anumsecaddtocounter', 'predocpageromanupper',
+            'linkcolorindex']
     for cdel in cdel:
         ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -1156,9 +1157,9 @@ def export_reporte(version, versiondev, versionhash, printfun=print, dosave=True
 
     # Configuraciones que se borran
     cdel = ['firstpagemargintop', 'portraitstyle', 'predocpageromannumber', 'predocpageromanupper',
-            'predocresetpagenumber', 'indexsectionfontsize', 'indexsectionstyle', 'nameportraitpage', 'indextitlecolor',
-            'addindextobookmarks', 'portraittitlecolor', 'margineqnindexbottom', 'margineqnindextop',
-            'bibtexindexbibliography']
+            'predocresetpagenumber', 'indexsectionfontsize', 'indexsectionstyle', 'nameportraitpage',
+            'indextitlecolor', 'addindextobookmarks', 'portraittitlecolor', 'margineqnindexbottom',
+            'margineqnindextop', 'bibtexindexbibliography', 'linkcolorindex']
     for cdel in cdel:
         ra, _ = find_block(files[fl], cdel, True)
         files[fl].pop(ra)
@@ -1846,6 +1847,7 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
     for i in ['% Configura las listas',
               '% Configura las ecuaciones',
               '% Configura los caption',
+              '% Configura los colores',
               '% Define el tamaño de página']:
         nl = find_extract(init_poster, i, white_end_block=True)
         nl.insert(0, '% -----------------------------------------------------------------------------\n')
@@ -2032,7 +2034,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle',
             'paragcolor', 'paragsubcolor', 'sectioncolor', 'ssectioncolor', 'sssectioncolor',
             'ssssectioncolor', 'backrefpagecite', 'marginlinenumbers',
-            'footnotetopmargin'
+            'footnotetopmargin', 'linkcolorindex'
             ]
     for cdel in cdel:
         ra, _ = find_block(files[fl], cdel, True)
@@ -2772,9 +2774,9 @@ def export_tesis(version, versiondev, versionhash, printfun=print, dosave=True, 
 
     ra, _ = find_block(files[fl], '% Termina el bloque de índice', True)
     nl = find_extract(index_tesis, '% Final del índice, restablece el espacio', True)
-    files[fl] = add_block_from_list(files[fl], nl, ra + 4)
-    files[fl][ra + 3] += '\t'
-    files[fl][ra + 8] += '\t'
+    files[fl] = add_block_from_list(files[fl], nl, ra + 13)
+    files[fl][ra + 12] += '\t'
+    files[fl][ra + 17] += '\t'
 
     for j in ['% Inicio índice, desactiva espacio entre objetos', '% Final del índice, restablece el espacio']:
         ra, _ = find_block(files[fl], j, True)
