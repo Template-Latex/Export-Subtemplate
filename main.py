@@ -99,7 +99,7 @@ TITLE_LOADING = '{0} | Espere ...'
 TITLE_UPLOADING = '{0} | Cargando a GitHub ...'
 
 
-# noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal,PyShadowingBuiltins
+# noinspection PyCompatibility,PyBroadException,PyCallByClass,PyUnusedLocal,PyShadowingBuiltins,PyTypeChecker
 class CreateVersion(object):
     """
     Pide la versión al usuario y genera releases.
@@ -319,6 +319,7 @@ class CreateVersion(object):
             :return:
             """
             self._versiontxt.focus()
+            # noinspection PyDeprecation
             self._versionstr.trace_vdelete('w', self._versiontrace)
             self._versionstr.set('')
             self._versiontrace = self._versionstr.trace('w', self._checkver)
@@ -445,11 +446,8 @@ class CreateVersion(object):
         self._info_slider = VerticalScrolledFrame(f2)
         self._info_slider.canv.config(bg='#000000')
         self._info_slider.pack(pady=2, anchor=tk.NE, fill=tk.BOTH, padx=1)
-        self._info = tk.Label(self._info_slider.interior, text='', justify=tk.LEFT, anchor=tk.NW, bg='black',
-                              fg='white',
-                              wraplength=self._configs['WINDOW_SIZE']['WIDTH'],
-                              font=fonts[0], relief=tk.FLAT, border=2,
-                              cursor='arrow')
+        self._info = tk.Label(self._info_slider.interior, justify=tk.LEFT, anchor=tk.NW, bg='black', fg='white', wraplength=self._configs['WINDOW_SIZE']['WIDTH'], font=fonts[0], relief=tk.FLAT,
+                              border=2, cursor='arrow')
         self._info.pack(anchor=tk.NW, fill=tk.BOTH)
         self._info_slider.scroller.pack_forget()
         self._console = []
@@ -627,6 +625,7 @@ class CreateVersion(object):
         def _scroll():
             self._info_slider.canv.yview_scroll(1000, 'units')
 
+        # noinspection PyDeprecation
         def _callback():
             t = 0
             lastv = ''
