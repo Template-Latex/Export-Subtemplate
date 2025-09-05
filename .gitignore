@@ -1,11 +1,14 @@
-# Archivos compilados python
+# Cache
+.DS_Store
 *.pyc
 *._**
 __pycache__
-
-# Pycharm
 .idea/
 .vscode/
+
+# Scripts
+*.bat
+*.sh
 
 # Gráficos
 *.png
