@@ -79,18 +79,15 @@ def mk_version(version):
         exit()
 
     version = version.strip().lower()
-
     if '.' in version or '-' in version or len(version) < 3:
         raise Exception('No pueden existir signos de puntuación')
-
-    if not (version[0].isdigit() and version[1].isdigit() and version[2].isdigit()):
+    elif not (version[0].isdigit() and version[1].isdigit() and version[2].isdigit()):
         raise Exception('Tres primeros caracteres deben ser dígitos')
 
     versionf = version[0] + '.' + version[1] + '.' + version[2]
     versiondev = ''
     if len(version) < 3 or len(version) > 10:
         raise Exception('Minimo 3 digitos, maximo 10')
-
     elif len(version) >= 4:
         if version[3].isdigit():
             versiondev = version[3:]

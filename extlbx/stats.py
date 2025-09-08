@@ -39,7 +39,7 @@ SCIPY = True
 
 try:
     # noinspection PyUnresolvedReferences
-    from scipy import stats
+    from scipy import stats  # type: ignore
 except (ImportError, ModuleNotFoundError):
     SCIPY = False
 
@@ -138,8 +138,8 @@ def plot_stats(statfile, statplotctime, statplotlcode):
     :param statfile: Archivo de estadísticas
     :return:
     """
-    import matplotlib.pyplot as plt
-    from matplotlib.ticker import MaxNLocator
+    import matplotlib.pyplot as plt  # type: ignore
+    from matplotlib.ticker import MaxNLocator  # type: ignore
 
     data = open(statfile, encoding='utf8')
     numcomp = []
