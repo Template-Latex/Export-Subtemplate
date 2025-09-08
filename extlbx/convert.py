@@ -194,7 +194,7 @@ def change_header_tex_files(files, release, headersize, headerversionpos, versio
 
 
 def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroot,
-                     release, version, stat, versiondev, dia, versionhash, plotstats):
+                     release, version, stat, versiondev, dia, versionhash, plotstats, prefixpath=''):
     """
     Compila el template.
 
@@ -211,6 +211,7 @@ def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroo
     :param dia: Día
     :param versionhash: Hash de la versión
     :param plotstats: Imprime estadísticas
+    :param prefixpath: Agrega prefijo al path del pdf
     """
     lc = 1
     with open(os.devnull, 'w') as FNULL:
@@ -237,7 +238,7 @@ def compile_template(subrlfolder, printfun, mainfile, savepdf, addstat, statsroo
 
             # Copia a la carpeta pdf_version
             if savepdf:
-                copyfile(mainfile.replace('.tex', '.pdf'), release['PDF_FOLDER'].format(version))
+                copyfile(mainfile.replace('.tex', '.pdf'), prefixpath + release['PDF_FOLDER'].format(version))
 
     # Se agregan las estadísticas
     if addstat:
@@ -467,7 +468,7 @@ def export_informe(version, versiondev, versionhash, printfun=print, dosave=True
     # Compila el archivo
     if docompile and dosave:
         compile_template(distfolder, printfun, mainfile, savepdf, addstat, statsroot,
-                         release, version, stat, versiondev, dia, versionhash, plotstats)
+                         release, version, stat, versiondev, dia, versionhash, plotstats, prefixpath='../')
 
     # Se exporta el proyecto normal
     if dosave:
@@ -687,7 +688,7 @@ def export_auxiliares(version, versiondev, versionhash, printfun=print, dosave=T
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
     fl = 'src/env/imports.tex'
-    idel = ['usepackage{notoccite}', 'ragged2e']
+    idel = ['notoccite', 'ragged2e', 'totpages']
     for idel in idel:
         ra, _ = find_block(files[fl], idel, True)
         files[fl].pop(ra)
@@ -1501,7 +1502,7 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     files[fl][ra] = nconf
 
     ra, _ = find_block(files[fl], 'hfstyle', True)
-    nconf = replace_argument(files[fl][ra], 1, 'style1').replace('16 estilos', '17 estilos')
+    nconf = replace_argument(files[fl][ra], 1, 'style1').replace('16 estilos', '19 estilos')
     files[fl][ra] = nconf + '\\def\\titleauthorspacing {0.35}     % Distancia entre autores [cm]\n' \
                             '\\def\\titleauthormarginbottom {0.2} % Margen inferior autores [cm]\n' \
                             '\\def\\titleauthormargintop {0.6}    % Margen superior autores [cm]\n' \
@@ -2198,7 +2199,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     # CAMBIA IMPORTS
     # -------------------------------------------------------------------------
     fl = 'src/env/imports.tex'
-    idel = ['hyperref', 'sectsty', 'tocloft', 'notoccite', 'titlesec', 'graphicx']
+    idel = ['hyperref', 'sectsty', 'tocloft', 'notoccite', 'titlesec', 'graphicx', 'totpages']
     for idel in idel:
         ra, _ = find_block(files[fl], idel, True)
         files[fl].pop(ra)

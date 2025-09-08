@@ -158,7 +158,7 @@
     "MESSAGE": "\nCREANDO TEMPLATE-INFORME v{0}",
     "NAME": "Template-Informe",
     "NAME_HEADER": "Informe LaTeX",
-    "PDF_FOLDER": "../../pdf-version/Informe/Template-Informe v{0}.pdf",
+    "PDF_FOLDER": "../pdf-version/Informe/Template-Informe v{0}.pdf",
     "ROOT": "",
     "STATS": {
       "CTIME": "",
