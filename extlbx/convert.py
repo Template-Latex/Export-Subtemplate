@@ -2249,6 +2249,8 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
                                   white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Modifica el formato de nuevas páginas predoc y \\cleardoublepage',
                                   jadd=1)
+    ra, _ = find_block(files[fl], '\\coreintializetitlenumbering')
+    files[fl].pop(ra)
 
     # Borra línea definiciones
     ra, _ = find_block(files[fl], '\\checkvardefined{\\universitydepartmentimagecfg}')
