@@ -1735,7 +1735,7 @@ def export_poster(version, versiondev, versionhash, printfun=print, dosave=True,
         files[fl].pop(ra)
 
     ra, _ = find_block(files[fl], 'documentfontsize', True)
-    nconf = replace_argument(files[fl][ra], 1, '23')
+    nconf = replace_argument(files[fl][ra], 1, '23').replace('%', ' %')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'fontdocument', True)
     nconf = replace_argument(files[fl][ra], 1, 'ralewaylight').replace('      %', '%')
@@ -2078,7 +2078,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     nconf = replace_argument(files[fl][ra], 1, 'FitBV')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'documentfontsize', True)
-    nconf = replace_argument(files[fl][ra], 1, '10')
+    nconf = replace_argument(files[fl][ra], 1, '9.5').replace(' %', '%')
     files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'bibtexstyle', True)
     nconf = replace_argument(files[fl][ra], 1, 'apalike')
