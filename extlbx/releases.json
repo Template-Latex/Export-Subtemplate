@@ -18,7 +18,7 @@
     },
     "VERLINE": "Template-Articulo v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/articulo",
+      "MANUAL": "https://template-latex.github.io/articulo",
       "SOURCE": "https://github.com/Template-Latex/Template-Articulo"
     },
     "ZIP": {
@@ -64,7 +64,7 @@
     },
     "VERLINE": "Template-Auxiliares v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/auxiliares",
+      "MANUAL": "https://template-latex.github.io/auxiliares",
       "SOURCE": "https://github.com/Template-Latex/Template-Auxiliares"
     },
     "ZIP": {
@@ -104,7 +104,7 @@
     },
     "VERLINE": "Template-Controles v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/controles",
+      "MANUAL": "https://template-latex.github.io/controles",
       "SOURCE": "https://github.com/Template-Latex/Template-Controles"
     },
     "ZIP": {
@@ -168,7 +168,7 @@
     },
     "VERLINE": "Template-Informe v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/informe",
+      "MANUAL": "https://template-latex.github.io/informe",
       "SOURCE": "https://github.com/Template-Latex/Template-Informe"
     },
     "ZIP": {
@@ -216,7 +216,7 @@
     },
     "VERLINE": "Template-Poster v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/poster",
+      "MANUAL": "https://template-latex.github.io/poster",
       "SOURCE": "https://github.com/Template-Latex/Template-Poster"
     },
     "ZIP": {
@@ -262,7 +262,7 @@
     },
     "VERLINE": "Template-Presentacion v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/presentacion",
+      "MANUAL": "https://template-latex.github.io/presentacion",
       "SOURCE": "https://github.com/Template-Latex/Template-Presentacion"
     },
     "ZIP": {
@@ -318,7 +318,7 @@
     },
     "VERLINE": "Professional-CV v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/professional-cv",
+      "MANUAL": "https://template-latex.github.io/professional-cv",
       "SOURCE": "https://github.com/Template-Latex/Professional-CV"
     },
     "ZIP": {
@@ -358,7 +358,7 @@
     },
     "VERLINE": "Template-Reporte v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/reporte",
+      "MANUAL": "https://template-latex.github.io/reporte",
       "SOURCE": "https://github.com/Template-Latex/Template-Reporte"
     },
     "ZIP": {
@@ -406,7 +406,7 @@
     },
     "VERLINE": "Template-Tesis v{0} | (Pablo Pizarro R.) ppizarror.com",
     "WEB": {
-      "MANUAL": "https://latex.ppizarror.com/tesis",
+      "MANUAL": "https://template-latex.github.io/tesis",
       "SOURCE": "https://github.com/Template-Latex/Template-Tesis"
     },
     "ZIP": {
