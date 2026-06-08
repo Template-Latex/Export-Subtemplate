@@ -228,33 +228,6 @@ class CreateVersion(object):
                 self._print('\n')
             self._log('PRINTCONFIG')
 
-        def _scroll_console(event):
-            """
-            Función que atrapa el evento del scrolling y mueve los comandos.
-
-            :param event: Evento
-            :return: None
-            """
-            if -175 < event.x < 240 and 38 < event.y < 136:
-                if is_windows():
-                    if -1 * (event.delta / 100) < 0:
-                        move = -1
-                    else:
-                        move = 2
-                elif is_osx():
-                    if -1 * event.delta < 0:
-                        move = -2
-                    else:
-                        move = 2
-                else:
-                    if -1 * (event.delta / 100) < 0:
-                        move = -1
-                    else:
-                        move = 2
-                if len(self._console) < 5 and move < 0:
-                    return
-                self._info_slider.canv.yview_scroll(move, 'units')
-
         def _set_config(paramname, paramvalue, *args):
             """
             Guarda la configuración.
@@ -319,10 +292,9 @@ class CreateVersion(object):
             :return:
             """
             self._versiontxt.focus()
-            # noinspection PyDeprecation
-            self._versionstr.trace_vdelete('w', self._versiontrace)
+            self._versionstr.trace_remove('write', self._versiontrace)
             self._versionstr.set('')
-            self._versiontrace = self._versionstr.trace('w', self._checkver)
+            self._versiontrace = self._versionstr.trace_add('write', self._checkver)
             self._clearconsole()
             for j in RELEASES.keys():
                 if self._release.get() == RELEASES[j]['NAME']:
@@ -362,9 +334,11 @@ class CreateVersion(object):
         # Ajusta tamaño ventana
         size = [self._configs['WINDOW_SIZE']['WIDTH'], self._configs['WINDOW_SIZE']['HEIGHT']]
         self._root.minsize(width=size[0], height=size[1])
-        self._root.geometry('%dx%d+%d+%d' % (size[0], size[1], (self._root.winfo_screenwidth() - size[0]) / 2,
-                                             (self._root.winfo_screenheight() - size[1]) / 2))
-        self._root.resizable(width=False, height=False)
+        self._root.geometry('%dx%d+%d+%d' % (size[0], size[1], (self._root.winfo_screenwidth() - size[0]) // 2,
+                                             (self._root.winfo_screenheight() - size[1]) // 2))
+        # El ancho se mantiene fijo, pero se permite ajustar el alto para que la
+        # consola nunca quede recortada en pantallas/escalados modernos.
+        self._root.resizable(width=False, height=True)
         self._root.focus_force()
 
         # Estilo ventana
@@ -387,7 +361,7 @@ class CreateVersion(object):
         f1 = tk.Frame(self._root, border=4)
         f1.pack(fill=tk.X)
         f2 = tk.Frame(self._root)
-        f2.pack(fill=tk.BOTH)
+        f2.pack(fill=tk.BOTH, expand=True)
 
         # Selección versión a compilar
         rels = []
@@ -406,13 +380,13 @@ class CreateVersion(object):
         w['anchor'] = tk.W
         w['cursor'] = 'hand2'
         w.pack(side=tk.LEFT)
-        self._release.trace('w', _update_ver)
+        self._release.trace_add('write', _update_ver)
 
         # Campo de texto para versión
         tk.Label(f1, text='Nueva versión:').pack(side=tk.LEFT, padx=(30, 0))
         self._checkver = _checkver
         self._versionstr = tk.StringVar(self._root)
-        self._versiontrace = self._versionstr.trace('w', self._checkver)
+        self._versiontrace = self._versionstr.trace_add('write', self._checkver)
         self._versiontxt = tk.Entry(f1, relief=tk.GROOVE, width=8,
                                     font=fonts[5], textvariable=self._versionstr)
         self._versiontxt.configure(state='disabled')
@@ -435,21 +409,23 @@ class CreateVersion(object):
             self._uploadbutton = tk.Button(f1, image=self._upload_imgs[0], relief=tk.GROOVE, height=30, width=30,
                                            command=self._upload_github, border=0)
         else:
-            self._uploadbutton = tk.Button(f1, relief=tk.GROOVE, height=20, width=20,
-                                           command=self._upload_github, border=0)
+            # Sin Pillow no hay ícono: se usa un botón de texto compacto. height y
+            # width en un botón de texto son líneas/caracteres, no píxeles, por lo
+            # que valores grandes generaban un botón gigante que tapaba la ventana.
+            self._uploadbutton = tk.Button(f1, relief=tk.GROOVE, text='⬆',
+                                           command=self._upload_github)
             self._upload_imgs = None
         self._uploadbutton.pack(side=tk.RIGHT, padx=0, anchor=tk.E)
         self._uploadstatebtn('off')
         self._checkuploaded()
 
         # Consola
-        self._info_slider = VerticalScrolledFrame(f2)
-        self._info_slider.canv.config(bg='#000000')
-        self._info_slider.pack(pady=2, anchor=tk.NE, fill=tk.BOTH, padx=1)
+        self._info_slider = VerticalScrolledFrame(f2, scrollbar=False)
+        self._info_slider.canv.config(bg='#000000', height=size[1] - 50)
+        self._info_slider.pack(pady=2, anchor=tk.NE, fill=tk.BOTH, padx=1, expand=True)
         self._info = tk.Label(self._info_slider.interior, justify=tk.LEFT, anchor=tk.NW, bg='black', fg='white', wraplength=self._configs['WINDOW_SIZE']['WIDTH'], font=fonts[0], relief=tk.FLAT,
                               border=2, cursor='arrow')
         self._info.pack(anchor=tk.NW, fill=tk.BOTH)
-        self._info_slider.scroller.pack_forget()
         self._console = []
         self._cnextnl = False
 
@@ -462,13 +438,21 @@ class CreateVersion(object):
         self._root.bind('<F2>', _printconfig)
         self._root.bind('<F3>', _show_about)
         self._root.bind('<F4>', _clear)
-        self._root.bind('<MouseWheel>', _scroll_console)
         self._root.bind('<Return>', self._start)
         self._root.bind('<Up>', _create_ver_u)
         for i in self._configs.keys():
             if self._configs[i]['EVENT']:
                 self._root.bind(self._configs[i]['KEY'], partial(_set_config, i, '!'))
                 HELP[self._configs[i]['KEY'].replace('<', '').replace('>', '')] = 'Activa/Desactiva {0}'.format(i)
+
+        # Ajusta el alto de la ventana al contenido real para que la consola
+        # quede siempre visible, sin importar el escalado o las fuentes del
+        # sistema (en versiones nuevas de Tk el contenido pedía más de 220px y
+        # la consola quedaba fuera de la ventana).
+        self._root.update_idletasks()
+        win_h = max(size[1], self._root.winfo_reqheight())
+        self._root.minsize(width=size[0], height=win_h)
+        self._root.geometry('%dx%d' % (size[0], win_h))
 
         # Se agrega entrada al log
         self._log('OPEN', text=__version__)
@@ -807,9 +791,9 @@ class CreateVersion(object):
 
             self._root.configure(cursor='arrow')
             self._root.title(TITLE)
-            self._versionstr.trace_vdelete('w', self._versiontrace)
+            self._versionstr.trace_remove('write', self._versiontrace)
             self._versionstr.set('')
-            self._versiontrace = self._versionstr.trace('w', self._checkver)
+            self._versiontrace = self._versionstr.trace_add('write', self._checkver)
             self._root.update()
             self._root.after(50, _scroll)
             self._log('CREATE_V_COMPLETE')

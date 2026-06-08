@@ -40,9 +40,14 @@ class VerticalScrolledFrame(Frame):
     """
 
     def __init__(self, parent, *args, **kw):
+        # Opciones propias (no se pasan a tkinter)
+        scrollbar = kw.pop('scrollbar', True)
+        mousewheel = kw.pop('mousewheel', True)
+
         Frame.__init__(self, parent, *args, **kw)
         vscrollbar = Scrollbar(self, orient=VERTICAL)
-        vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
+        if scrollbar:
+            vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
         canvas = Canvas(self, bd=0, highlightthickness=0,
                         yscrollcommand=vscrollbar.set)
         canvas.pack(side=LEFT, fill=BOTH, expand=TRUE)
@@ -55,16 +60,51 @@ class VerticalScrolledFrame(Frame):
         self.scroller = vscrollbar
 
         def _configure_interior(event):
-            size = (interior.winfo_reqwidth(), interior.winfo_reqheight())
+            # El interior nunca debe ser más angosto que el canvas, así el
+            # contenido (la consola) llena todo el ancho disponible.
+            req_h = interior.winfo_reqheight()
             # noinspection PyTypeChecker
-            canvas.config(scrollregion="0 0 %s %s" % size)
-            if interior.winfo_reqwidth() != canvas.winfo_width():
-                canvas.config(width=interior.winfo_reqwidth())
+            canvas.config(scrollregion="0 0 %s %s" % (canvas.winfo_width(), req_h))
 
         interior.bind('<Configure>', _configure_interior)
 
         def _configure_canvas(event):
-            if interior.winfo_reqwidth() != canvas.winfo_width():
-                canvas.itemconfigure(interior_id, width=canvas.winfo_width())
+            # Mantiene el interior con el mismo ancho que el canvas.
+            canvas.itemconfigure(interior_id, width=canvas.winfo_width())
+            canvas.config(scrollregion="0 0 %s %s" % (canvas.winfo_width(),
+                                                      interior.winfo_reqheight()))
 
         canvas.bind('<Configure>', _configure_canvas)
+
+        # Scroll con la rueda del mouse cuando el cursor está sobre la consola.
+        # Reemplaza el antiguo hit-test por coordenadas fijas, que dependía del
+        # tamaño exacto de la ventana.
+        def _on_mousewheel(event):
+            if event.num == 4:  # Linux scroll up
+                canvas.yview_scroll(-2, 'units')
+            elif event.num == 5:  # Linux scroll down
+                canvas.yview_scroll(2, 'units')
+            elif event.delta:  # Windows / macOS
+                step = -1 if event.delta > 0 else 1
+                # En Windows el delta viene en múltiplos de 120
+                if abs(event.delta) >= 120:
+                    step *= 2
+                else:
+                    step *= 2
+                canvas.yview_scroll(step, 'units')
+            return 'break'
+
+        def _bind_wheel(_event=None):
+            canvas.bind_all('<MouseWheel>', _on_mousewheel)
+            canvas.bind_all('<Button-4>', _on_mousewheel)
+            canvas.bind_all('<Button-5>', _on_mousewheel)
+
+        def _unbind_wheel(_event=None):
+            canvas.unbind_all('<MouseWheel>')
+            canvas.unbind_all('<Button-4>')
+            canvas.unbind_all('<Button-5>')
+
+        if mousewheel:
+            canvas.bind('<Enter>', _bind_wheel)
+            canvas.bind('<Leave>', _unbind_wheel)
+            interior.bind('<Enter>', _bind_wheel)

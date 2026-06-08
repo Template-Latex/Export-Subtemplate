@@ -6,10 +6,6 @@ __pycache__
 .idea/
 .vscode/
 
-# Scripts
-*.bat
-*.sh
-
 # Gráficos
 *.png
 

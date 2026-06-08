@@ -1461,9 +1461,6 @@ def export_articulo(version, versiondev, versionhash, printfun=print, dosave=Tru
     ra, _ = find_block(files[fl], 'margingathercapttop', True)
     nconf = replace_argument(files[fl][ra], 1, '-0.7')
     files[fl][ra] = nconf
-    ra, _ = find_block(files[fl], 'marginlinenumbers', True)
-    nconf = replace_argument(files[fl][ra], 1, '6').replace('%', '  %')
-    files[fl][ra] = nconf
     ra, _ = find_block(files[fl], 'tablenotesfontsize', True)
     nconf = replace_argument(files[fl][ra], 1, '\\footnotesize').replace('  %', '%').replace(' {', '{')
     files[fl][ra] = nconf
@@ -2034,7 +2031,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
             'natbibrefcitecharclose', 'natbibrefcitecharopen', 'natbibrefcitecompress',
             'natbibrefcitesepcomma', 'natbibrefcitetype', 'natbibrefsep', 'natbibrefstyle',
             'paragcolor', 'paragsubcolor', 'sectioncolor', 'ssectioncolor', 'sssectioncolor',
-            'ssssectioncolor', 'backrefpagecite', 'marginlinenumbers',
+            'ssssectioncolor', 'backrefpagecite', 'marginlinenumbers', 'linenumberspagereset',
             'footnotetopmargin', 'linkcolorindex'
             ]
     for cdel in cdel:
@@ -2217,6 +2214,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
           '\\def\\showlinenumbers {true}\n'
           '\\def\\marginlinenumbers {7.5}\n'
           '\\def\\linenumbercolor {gray}\n',
+          '\\def\\linenumberspagereset {false}\n'
           '\\ifthenelse{\\equal{\\showlinenumbers}{true}}{ % Muestra los números de línea\n']
     files[fl] = replace_block_from_list(files[fl], nl, ra - 1, ra - 1)
 
