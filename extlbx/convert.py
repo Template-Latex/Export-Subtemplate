@@ -2247,7 +2247,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
                                   white_end_block=True)
     files[fl] = find_delete_block(files[fl], '% Modifica el formato de nuevas páginas predoc y \\cleardoublepage',
                                   jadd=1)
-    ra, _ = find_block(files[fl], '\\coreintializetitlenumbering')
+    ra, _ = find_block(files[fl], '\\COREintializetitlenumbering')
     files[fl].pop(ra)
 
     # Borra línea definiciones
@@ -2420,7 +2420,7 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     ra, _ = find_block(files[fl], '% Parcha el formato de secciones al pasar desde una anum')
     files[fl].pop(ra - 1)
 
-    find_remove_recursive_line(files[fl], '\\coreintializetitlenumbering')
+    find_remove_recursive_line(files[fl], '\\COREintializetitlenumbering')
     find_remove_recursive_line(files[fl], '\\GLOBALchapternumenabled')
     find_remove_recursive_line(files[fl], '\\GLOBALsectionanumenabled')
     find_remove_recursive_line(files[fl], '\\GLOBALsubsectionanumenabled')
@@ -2431,10 +2431,10 @@ def export_presentacion(version, versiondev, versionhash, printfun=print, dosave
     find_remove_recursive_line(files[fl], '\\GLOBALtitleinitsubsection')
     find_remove_recursive_line(files[fl], '\\GLOBALtitleinitsubsubsection')
     find_remove_recursive_line(files[fl], '\\GLOBALtitleinitsubsubsubsection')
-    find_remove_recursive_line(files[fl], '\\corecheckchapterinitialized')
-    find_remove_recursive_line(files[fl], '\\corechecksectioninitialized')
-    find_remove_recursive_line(files[fl], '\\corechecksubsectioninitialized')
-    find_remove_recursive_line(files[fl], '\\corechecksubsubsectioninitialized')
+    find_remove_recursive_line(files[fl], '\\COREcheckchapterinitialized')
+    find_remove_recursive_line(files[fl], '\\COREchecksectioninitialized')
+    find_remove_recursive_line(files[fl], '\\COREchecksubsectioninitialized')
+    find_remove_recursive_line(files[fl], '\\COREchecksubsubsectioninitialized')
 
     # -------------------------------------------------------------------------
     # CORE FUN
