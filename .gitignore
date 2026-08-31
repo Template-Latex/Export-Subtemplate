@@ -3,7 +3,7 @@
 *.pyc
 *._**
 __pycache__
-.idea/
+.git/
 .vscode/
 
 # Gráficos
